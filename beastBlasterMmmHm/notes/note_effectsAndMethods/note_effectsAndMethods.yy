@@ -1,0 +1,11 @@
+{
+  "$GMNotes":"",
+  "%Name":"note_effectsAndMethods",
+  "name":"note_effectsAndMethods",
+  "parent":{
+    "name":"Notes",
+    "path":"folders/Notes.yy",
+  },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"script_createShockHurter",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"script_createShockHurter",
+  "parent":{
+    "name":"bulletsAndWeapons",
+    "path":"folders/Scripts/bulletsAndWeapons.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

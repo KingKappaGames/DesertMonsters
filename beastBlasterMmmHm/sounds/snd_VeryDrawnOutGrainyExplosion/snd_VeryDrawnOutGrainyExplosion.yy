@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_VeryDrawnOutGrainyExplosion",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":12.048,
+  "name":"snd_VeryDrawnOutGrainyExplosion",
+  "parent":{
+    "name":"soundsOfWeapons",
+    "path":"folders/Sounds/soundsOfWeapons.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_VeryDrawnOutGrainyExplosion.mp3",
+  "type":0,
+  "volume":1.0,
+}

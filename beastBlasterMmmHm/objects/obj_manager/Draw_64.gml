@@ -1,0 +1,1 @@
+draw_text(800, 500, fakeRoom);

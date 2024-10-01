@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"script_startAirStrike",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"script_startAirStrike",
+  "parent":{
+    "name":"bulletsAndWeapons",
+    "path":"folders/Scripts/bulletsAndWeapons.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,11 @@
+I also need to make it so
+the bodies and buildings and whatnot get pushed around and broken apart based on the things in question
+rather than just blood spawning where the enemy was. This would be very cool!
+
+So, large clouds of blended white fire that fades to black with gravity and a shockwave of both debris particles
+and an actual shockwave of damage that would knock away and kill enemies or buildings or cars, ect.
+
+I think the first kind of building I should make is actually trees, dead trees or palm trees that wave around
+like they are in wind or bobbing ect and they can get wiggled by bombs and nukes and ect. They would have multiple
+segments that bent together and could break apart into pieces with particles and such to show leaves being knocked
+off or pieces being broken away. These pieces could then fall to the ground and maybe become debris?
