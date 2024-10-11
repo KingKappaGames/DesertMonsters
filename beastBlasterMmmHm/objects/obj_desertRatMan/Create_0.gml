@@ -243,3 +243,91 @@ placeFeetFull = function(dir, spd) {
 #endregion
 
 #endregion
+
+holdingPart = -1;
+clickLogicDebug = function() {
+	live_auto_call
+	holdingPart = -1;
+	if(!ragdolling) {
+		ragdollEnemy(9999999);
+	} else {
+		var _closestPart = -1; // 0:origin, 1:hips, 2:jointLeft, 3:jointRight, 4:footLeft, 5:footRight
+		var _closestDist = 9999;
+		var _thisPartDist = 9999;
+		
+		_thisPartDist = point_distance(mouse_x, mouse_y, footLX, footLY);
+		if(_closestDist > _thisPartDist) {
+			_closestDist = _thisPartDist;
+			_closestPart = 4;
+		}
+		_thisPartDist = point_distance(mouse_x, mouse_y, footRX, footRY);
+		if(_closestDist > _thisPartDist) {
+			_closestDist = _thisPartDist;
+			_closestPart = 5;
+		}
+		_thisPartDist = point_distance(mouse_x, mouse_y, jointRX, jointRY);
+		if(_closestDist > _thisPartDist) {
+			_closestDist = _thisPartDist;
+			_closestPart = 3;
+		}
+		_thisPartDist = point_distance(mouse_x, mouse_y, jointLX, jointLY);
+		if(_closestDist > _thisPartDist) {
+			_closestDist = _thisPartDist;
+			_closestPart = 2;
+		}
+		//_thisPartDist = point_distance(mouse_x, mouse_y, hipsX, hipsY);
+		//if(_closestDist > _thisPartDist) {
+		//	_closestDist = _thisPartDist;
+		//	_closestPart = 1;
+		//}
+		_thisPartDist = point_distance(mouse_x, mouse_y, x, y);
+		if(_closestDist > _thisPartDist) {
+			_closestDist = _thisPartDist;
+			_closestPart = 0;
+		}
+		
+		if(_closestDist < 50) {
+			holdingPart = _closestPart;
+		}
+	}
+	
+}
+
+clickHoldLogicDebug = function() {
+	live_auto_call
+	if(ragdolling) {
+		if(holdingPart != -1) {
+			if(holdingPart == 0) {
+				x = mouse_x;
+				y = mouse_y;
+				xChange = 0;
+				yChange = 0;
+			} else if(holdingPart == 1) {
+				hipsX = mouse_x;
+				hipsY = mouse_y;
+				xChange = 0;
+				yChange = 0;
+			} else if(holdingPart == 2) {
+				jointLX = mouse_x;
+				jointLY = mouse_y;
+				jointLXChange = 0;
+				jointLYChange = 0;
+			} else if(holdingPart == 3) {
+				jointRX = mouse_x;
+				jointRY = mouse_y;
+				jointRXChange = 0;
+				jointRYChange = 0;
+			} else if(holdingPart == 4) {
+				footLX = mouse_x;
+				footLY = mouse_y;
+				footLXChange = 0;
+				footLYChange = 0;
+			} else if(holdingPart == 5) {
+				footRX = mouse_x;
+				footRY = mouse_y;
+				footRXChange = 0;
+				footRYChange = 0;
+			}
+		}
+	}
+}

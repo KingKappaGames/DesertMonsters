@@ -1,2 +1,17 @@
+Created 5/31/24  around 300 hours as of reset 
+
+
 a script that takes a particle and creates a series of them with adjusted directions and speeds, perhaps others too
 maybe I should make a re-set of scripts that sets the size and other things on the fly?
+
+//TODO I want to make ragdolls have more proper push both directions, this would create rigidity without needing to actually calculate and store rotations or weights. But right now a leg can bend straight down... Okay if in the z plane but not always... Look into it!
+What you could do is ascribe a y base to each part of the body and have them fall based on that, aka height resistance and ground height so legs actually hang above the body sometimes and vice versa
+I want to fix and make a proper demonstration of the 3d gear render. This means fixing the issues and getting long attachments and coatings working along with perspective accurate wings and tails and spears and all different kinds of cool things. Basically, if I can picture a use that doesn't work, then there's a problem. 
+3d hit detections and body part damage, I don't expect this to be fleshed out of course but at least laying the groundwork for reporting which parts were hit with what damage seems doable and useful moving forward.
+Fix the transitional states, ragdolls should be able to be pushed around in the ragdoll state, it doesn't make any sense that ragdolls are rigid to further push though... the code only applies that on ragdoll so it makes sense actually. Fix that!
+Standing and getting up needs a more proper animation/framework
+Other misc goals and animations need ways to force skeleton behavior for kneeling, waving, ect. Various stylistic forced animations that coexist with the dynamic logic skeletons.
+Players and such should be able to turn away from where they're moving, aiming, looking, ai uses... It's simple and may already work even but needs to be supported. ADS should point your person regardless of legs. Snipers should have camera scopes and such.
+Fix lag???
+Arms? I think arms are important here and useful for many further additions and especially moving towards main game use but they a little more optional, even in main game arms aren't strictly necessary.
+Maybe add a rudimentary ai for the enemies to flee attacks and have more variance than move at 1 speed towards point..?

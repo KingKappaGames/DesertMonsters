@@ -45,3 +45,21 @@ if(abs(x) + abs(y) > 0) {
 if(keyboard_check_released(vk_alt)) {
 	var _enemy = instance_create_layer(x + irandom_range(-100, 100), y + irandom_range(-100, 100), "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
 }
+
+//if(keyboard_check_released(vk_f1)) { // hey so uh, fun fact, angle difference between two set values is SLOWER than dcos of a value... Honestly, not that surprising but I'm retarded is the point here. Yet another entry in the "just use the right tool for the job and stop trying to be clever" catalogue. ARRHRHRRHHRHG! Side note, the display sorting works :D
+//	show_debug_message(current_time);
+//	var _rand = irandom(360)
+//	var _val = 0;
+//	repeat(10000000) {
+//		_val = dcos(_rand);
+//	}
+//	show_debug_message(current_time);
+//	show_debug_message("BREAK %%%%%%%");
+//	show_debug_message(current_time);
+//	var _rand2 = irandom(360)
+//	var _val2 = 0;
+//	repeat(10000000) {
+//		_val2 = angle_difference(_rand2, 90);
+//	}
+//	show_debug_message(current_time);
+//}

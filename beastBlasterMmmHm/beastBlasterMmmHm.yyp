@@ -97,7 +97,7 @@
     {"name":"sparkOrangeEnd","path":"particlelib/sparkOrangeEnd/sparkOrangeEnd.yy",},
   ],
   "MetaData":{
-    "IDEVersion":"2024.6.1.160",
+    "IDEVersion":"2024.8.1.171",
   },
   "name":"beastBlasterMmmHm",
   "resources":[
@@ -521,6 +521,7 @@
     {"id":{"name":"snd_StubbedExplosion","path":"sounds/snd_StubbedExplosion/snd_StubbedExplosion.yy",},},
     {"id":{"name":"snd_VeryDrawnOutGrainyExplosion","path":"sounds/snd_VeryDrawnOutGrainyExplosion/snd_VeryDrawnOutGrainyExplosion.yy",},},
     {"id":{"name":"spr_backpack","path":"sprites/spr_backpack/spr_backpack.yy",},},
+    {"id":{"name":"spr_bodyVultureCoat","path":"sprites/spr_bodyVultureCoat/spr_bodyVultureCoat.yy",},},
     {"id":{"name":"spr_bombingPlane","path":"sprites/spr_bombingPlane/spr_bombingPlane.yy",},},
     {"id":{"name":"spr_crosshair","path":"sprites/spr_crosshair/spr_crosshair.yy",},},
     {"id":{"name":"spr_dirtCrater","path":"sprites/spr_dirtCrater/spr_dirtCrater.yy",},},

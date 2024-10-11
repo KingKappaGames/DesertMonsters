@@ -20,19 +20,19 @@ if(surfaceTimer > 1200) { // save current debris surface to buffer
 #endregion
 
 #region enemy spawning
-if(instance_count < 50) {
-	if(irandom(1200) == 0) {
-		if(instance_exists(obj_playerParent)) {
-			var _player = global.players[irandom(array_length(global.players) - 1)];
-			var _spawnX = clamp(_player.x + choose(irandom_range(-1200, -camWidth * .6), irandom_range(camWidth * .6, 1200)), -2500, 2500);
-			var _spawnY = clamp(_player.y + choose(irandom_range(-1200, -camHeight * .6), irandom_range(camHeight * .6, 1200)), -2500, 2500);
+//if(instance_count < 50) {
+//	if(irandom(1200) == 0) {
+//		if(instance_exists(obj_playerParent)) {
+//			var _player = global.players[irandom(array_length(global.players) - 1)];
+//			var _spawnX = clamp(_player.x + choose(irandom_range(-1200, -camWidth * .6), irandom_range(camWidth * .6, 1200)), -2500, 2500);
+//			var _spawnY = clamp(_player.y + choose(irandom_range(-1200, -camHeight * .6), irandom_range(camHeight * .6, 1200)), -2500, 2500);
 
-			repeat(power(choose(1, 1, 1, 2, 2, 3), 2)) {
-				var _enemy = instance_create_layer(_spawnX + irandom_range(-100, 100), _spawnY + irandom_range(-100, 100), "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
-			}
-		}
-	}
-}
+//			repeat(power(choose(1, 2, 2, 2, 3, 3), 1)) {
+//				var _enemy = instance_create_layer(_spawnX + irandom_range(-100, 100), _spawnY + irandom_range(-100, 100), "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
+//			}
+//		}
+//	}
+//}
 #endregion
 
 #region ambient sounds
@@ -65,7 +65,7 @@ if (_status.__any_changed)
 
     //Find any obj_playerParent instances for disconnected players and destroy them
     for(var _i = 0; _i < array_length(_status.__new_disconnections); _i++) {
-        var _old_player = _status.__new_connections[_i]; // is this supposed to be disconnections?
+        var _old_player = _status.__new_disconnections[_i];
         with(obj_playerParent) {
             if(playerIndex == _old_player) {
 				instance_destroy();
@@ -81,8 +81,12 @@ if(input_check_released("fullscreen")) { // enter or square or x
 }
 
 if(input_check_released("restart")) { // just clear enemies
-	instance_activate_object(obj_enemy);
-	instance_destroy(obj_enemy);
+	var _player = 0;
+	repeat(4) {
+		input_player_disconnect(_player);
+		_player++;
+	}
+	game_restart();
 }
 
 if(input_check_released("cameraChange")) {

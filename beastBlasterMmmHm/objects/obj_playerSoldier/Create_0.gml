@@ -3,9 +3,11 @@ if (live_call()) return live_result;
 event_inherited();
 
 #region player values
+bodySprite = spr_bodyVultureCoat;
+
 directionFacing = 0;
 
-moveSpeed = .03;
+moveSpeed = .024;
 speedDecay = .98;
 
 xChange = 0;
@@ -243,33 +245,37 @@ bodyComponents = [];
 ///@param distance The distance from the player this item should rotate at unaffected by angle compression
 ///@param xscale The horizontal scale of the image
 ///@param yscale The vertical scale of the image
-///@param viewAngle The direction of the view of the image, for backpacks it would straight out aka 0
+///@param viewAngle The direction of the view of the image, for backpacks it would straight out aka 0, for something that sticks away and scales that way 90 would be "away" and the range 0 - 180 not -90 to 90, depends on the flatness of your perspective
 ///@param viewCompressionMin The minimum horizontal visual scale that can be had based on the view angles, backpacks might be .4 for 40% width at off angle view
-addToBodyComponents = function(sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin) {
-	array_push(bodyComponents, [sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin]);
+addToBodyComponents = function(sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color) {
+	array_push(bodyComponents, [sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color]);
 }
 
 #endregion
 
 #endregion
 
+//var _rand = 0;
+//repeat(24) {
+//	//addToBodyComponents(spr_backpack, irandom(sprite_get_number(spr_backpack) - 1), ir andom(360), random_range(-7, 10), 14, 1, 1, 0, .1);
+//	_rand += 15;
+//	addToBodyComponents(spr_backpack, 0, _rand, 0, 20 + irandom(30), 1, 3, 0, 0, make_color_rgb(_rand / 1.5, _rand / 1.5, _rand / 1.5));
+//}
 
-repeat(3) {
-	addToBodyComponents(spr_backpack, irandom(sprite_get_number(spr_backpack) - 1), irandom(360), random_range(-7, 10), 1, 1, 0, .1);
-}
+addToBodyComponents(spr_feathers, 0, 150, -1, 5, 1, 1, 50, .1, c_black);
+addToBodyComponents(spr_feathers, 1, 160, 3,  5, 1, 1, 60, .1, c_black);
+addToBodyComponents(spr_feathers, 2, 170, 3,  5, 1, 1, 70, .2, c_black);
+addToBodyComponents(spr_feathers, 3, 180, 3,  5, 1, 1, 90, .3, c_black); // feather array
+addToBodyComponents(spr_feathers, 2, 190, 3,  5, 1, 1, 110, .2, c_black);
+addToBodyComponents(spr_feathers, 1, 200, 3,  5, 1, 1, 120, .1, c_black);
+addToBodyComponents(spr_feathers, 0, 210, -1, 5, 1, 1, 130, .1, c_black);
 
-var _featherI = 0;
-var _featherAdd = 1;
-repeat(7) {
-	addToBodyComponents(spr_feathers, _featherI, 180 + _featherI * 10 - 30, -25, _featherAdd, 1, 0, .1);
-	_featherI++;
-	if(_featherI == 3) {
-		_featherAdd = -1;
-	}
-}
-//                  
-//addToBodyComponents(spr_backpack, 0, 180, -3, 1, 1, 0, .4);
-addToBodyComponents(spr_backpack, 8, 180, -6, 1, 1, 0, .1);
-addToBodyComponents(spr_backpack, 0, 180, -6, 1, 1, 0, .4);
+addToBodyComponents(spr_backpack, 10, 205, -6, 8, 3, 3, 90, .12, c_white); // dragon wings
+addToBodyComponents(spr_backpack, 10, 155, -6, 8, 3, 3, 90, .12, c_white);
+
+//addToBodyComponents(spr_backpack, 11, 0, -25, 0, 1, 1, 0, .8, c_white);
+
+addToBodyComponents(spr_backpack, 8, 180, 3, 12, 1, 1, 0, 0, c_white); // ruck sack 2 parts
+addToBodyComponents(spr_backpack, 9, 115, -26, 33, 1, 1, 0, .99, c_white); // not possible with the current scaling of rotation move combined with image scaling, could add a supplement to match them up but... Sigh. Performance is already suffering...
 
 setTurret(1);

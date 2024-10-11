@@ -1,7 +1,7 @@
 if (live_call()) return live_result;
 
 #region movement and move contols
-var _sprint = .75 + input_check("sprint", playerIndex) / 2;
+var _sprint = .75 + input_check("sprint", playerIndex) * .8;
 var _inputs = [input_value("right", playerIndex), input_value("left", playerIndex), input_value("down", playerIndex), input_value("up", playerIndex)];
 var _dirMoveStick = point_direction(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]);
 var _distMoveStick = clamp(point_distance(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]), 0, 1);

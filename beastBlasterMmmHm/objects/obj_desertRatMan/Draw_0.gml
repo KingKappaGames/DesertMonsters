@@ -8,28 +8,18 @@
 
 if (live_call()) return live_result;
 
-if(alive) {
-	draw_circle(hipsX, hipsY, 12, false);
+draw_circle(hipsX, hipsY, 12, false);
 
-	#region draw thigh and calf segments and circle to round the knee and close visual gap
-	draw_line_width(hipRX, hipRY, jointRX, jointRY, 5); // right leg
-	draw_line_width(jointRX, jointRY, footRX, footRY, 3);
+//draw thigh and calf segments and circle to round the knee and close visual gap
+draw_line_width(hipRX, hipRY, jointRX, jointRY, 5); // right leg
+draw_line_width(jointRX, jointRY, footRX, footRY, 3);
 
-	draw_line_width(hipLX, hipLY, jointLX, jointLY, 5); // left leg
-	draw_line_width(jointLX, jointLY, footLX, footLY, 3);
+draw_line_width(hipLX, hipLY, jointLX, jointLY, 5); // left leg
+draw_line_width(jointLX, jointLY, footLX, footLY, 3);
 
-	draw_circle(jointRX, jointRY, 2, false); // both knees
-	draw_circle(jointLX, jointLY, 2, false);
-	#endregion
-} else {
-	draw_circle(hipsX, hipsY, 12, false);
+draw_circle(jointRX, jointRY, 2, false); // both knees
+draw_circle(jointLX, jointLY, 2, false);
 
-	draw_line_width(hipRX, hipRY, jointRX, jointRY, 5); // right leg
-	draw_line_width(jointRX, jointRY, footRX, footRY, 3);
-
-	draw_line_width(hipLX, hipLY, jointLX, jointLY, 5); // left leg
-	draw_line_width(jointLX, jointLY, footLX, footLY, 3);
-}
 
 draw_text(x - 100, y, hipStumbleXChange);
 draw_text(x - 100, y + 20, hipStumbleYChange);
