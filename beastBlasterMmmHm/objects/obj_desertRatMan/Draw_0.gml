@@ -20,9 +20,4 @@ draw_line_width(jointLX, jointLY, footLX, footLY, 3);
 draw_circle(jointRX, jointRY, 2, false); // both knees
 draw_circle(jointLX, jointLY, 2, false);
 
-
-draw_text(x - 100, y, hipStumbleXChange);
-draw_text(x - 100, y + 20, hipStumbleYChange);
-
-draw_text(x - 150, y, hipStumbleX);
-draw_text(x - 150, y + 20, hipStumbleY);
+draw_text(x, y - 100, yChange);

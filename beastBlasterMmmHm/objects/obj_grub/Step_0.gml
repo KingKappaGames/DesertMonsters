@@ -11,4 +11,7 @@ if(alive == 1) {
 	} else if(irandom(300) == 0) {
 		startTravelToPoint(x + choose(irandom_range(-1000, -200), irandom_range(200, 1000)), y + choose(irandom_range(-800, -200), irandom_range(200, 800)))
 	}
+	
+	x += xChange;
+	y += yChange;
 }

@@ -34,6 +34,8 @@ if(alive == 1 && !ragdolling) {
 
 #region leg stuff!!
 if(alive == 1 && !ragdolling) {	// alive stuff
+	x += xChange;
+	y += yChange;
 	#region place legs and feet
 	var _leanAheadX = xChange * 9; // keep consistent i suppose
 	var _leanAheadY = clamp(yChange, 0, 99) * 9; // keep consistent i suppose
@@ -148,27 +150,45 @@ else if(recoveringLimpTimer > 0 || alive == 0) { // ragdolling stuff
 			recoveringStandingTimer = 288;
 		}
 	}
-	var _dirMoving = point_direction(0, 0, xChange, yChange);
+	//var _dirMoving = point_direction(0, 0, xChange, yChange);
 	//directionFacing = _dirMoving;
-	var _cosFacing = dcos(_dirMoving);
-	var _sinFacing = dsin(_dirMoving);
-	
-	hipsX = x;
-	hipsY = y;
-	
-	#region set initial hip left and right positions
-	hipLX = hipsX - _sinFacing * hipWidth;
-	hipLY = hipsY - _cosFacing * hipWidth;
-	hipRX = hipsX + _sinFacing * hipWidth;
-	hipRY = hipsY + _cosFacing * hipWidth;
-	#endregion
+	//var _cosFacing = dcos(_dirMoving);
+	//var _sinFacing = dsin(_dirMoving); // hip stuff that isn't workable right now
 	
 	#region moving with speed and adding gravity
 	footLYChange += fallGravity;
 	footRYChange += fallGravity;
-	jointLYChange += fallGravity;
+	jointLYChange += fallGravity; // add gravities
 	jointRYChange += fallGravity;
 	yChange += fallGravity;
+	
+	#region ground contact for each of the five points in legs (do inbetween adding speeds because otherwise this will get overridden by the change being used later. Prevent movement, don't fix what's already happened. You know the deal.)
+	if(footRY + footRYChange > groundHeight) { // cut all speeds for that piece, all of them
+		footRY = groundHeight;
+		footRYChange *= -.6;
+		footRXChange *= .7;
+	}
+	if(footLY + footLYChange > groundHeight) { // cut all speeds for that piece, all of them
+		footLY = groundHeight;
+		footLYChange *= -.6;
+		footLXChange *= .7;
+	}
+	if(jointLY + jointLYChange > groundHeight) { // cut all speeds for that piece, all of them
+		jointLY = groundHeight;
+		jointLYChange *= -.6;
+		jointLXChange *= .7;
+	}
+	if(jointRY + jointRYChange > groundHeight) { // cut all speeds for that piece, all of them
+		jointRY = groundHeight;
+		jointRYChange *= -.6;
+		jointRXChange *= .7;
+	}
+	if(y + yChange > groundHeight) { // cut all speeds for that piece, all of them
+		y = groundHeight;
+		yChange *= -.6;
+		xChange *= .7;
+	}
+	#endregion
 	
 	footLX += footLXChange; 
 	footLY += footLYChange; 
@@ -178,98 +198,63 @@ else if(recoveringLimpTimer > 0 || alive == 0) { // ragdolling stuff
 	jointLY += jointLYChange;
 	jointRX += jointRXChange;
 	jointRY += jointRYChange;
+	x += xChange;
+	y += yChange;
 	#endregion
 	
-	#region ground contact for each of the five points in legs
-	if(footRY > groundHeight) { // cut all speeds for that piece, all of them
-		//show_debug_message("Right foot on ground");
-		footRY = groundHeight;
-		footRYChange *= -.5;
-		footRXChange *= .7;
-	}
-	if(footLY > groundHeight) { // cut all speeds for that piece, all of them
-		//show_debug_message("Left foot on ground");
-		footLY = groundHeight;
-		footLYChange *= -.5;
-		footLXChange *= .7;
-	}
-	if(jointLY > groundHeight) { // cut all speeds for that piece, all of them
-		//show_debug_message("Left joint on ground");
-		jointLY = groundHeight;
-		jointLYChange *= -.5;
-		jointLXChange *= .7;
-	}
-	if(jointRY > groundHeight) { // cut all speeds for that piece, all of them
-		//show_debug_message("Right joint on ground");
-		jointRY = groundHeight;
-		jointRYChange *= -.5;
-		jointRXChange *= .7;
-	}
-	if(y > groundHeight) { // cut all speeds for that piece, all of them
-		//show_debug_message("torso on ground");
-		y = groundHeight;
-		yChange *= -.5;
-		xChange *= .7;
-	}
+	#region set initial hip left and right positions
+	hipsX = x;
+	hipsY = y;
+	hipLX = hipsX - hipWidth;
+	hipLY = hipsY;
+	hipRX = hipsX + hipWidth;
+	hipRY = hipsY;
 	#endregion
 	
 	#region connecting the five points (distance wise) (4 checks, hip pulls knees in, then knees pull feet
-	var _leftThighDist = point_distance(hipLX, hipLY, jointLX, jointLY);
-	if(_leftThighDist > legSegLen) {
-		var _dir = point_direction(hipLX, hipLY, jointLX, jointLY);
-		jointLX = lerp(jointLX, hipLX, (1 - (1 / (_leftThighDist / legSegLen))) * .8); // it's ticking back and forth between like 80% up the thigh of one leg then 80% up the thigh of the other and not doing a lot else net
-		jointLY = lerp(jointLY, hipLY, (1 - (1 / (_leftThighDist / legSegLen))) * .8);
-		x -= hipLX - jointLX;
-		y -= hipLY - jointLY;
+	var _leftThighDist = point_distance(hipLX, hipLY, jointLX, jointLY) - 34; // over extension distance
+	if(_leftThighDist > 0) {
+		var _dir = point_direction(jointLX, jointLY, hipLX, hipLY);
+		jointLX += dcos(_dir) * _leftThighDist * .8;
+		jointLY -= dsin(_dir) * _leftThighDist * .8;
+		x -= dcos(_dir) * _leftThighDist * .2;
+		y += dsin(_dir) * _leftThighDist * .2;
 	}
-	var _rightThighDist = point_distance(hipRX, hipRY, jointRX, jointRY);
-	if(_rightThighDist > legSegLen) {
-		var _dir = point_direction(hipRX, hipRY, jointRX, jointRY);
-		jointRX = lerp(jointRX, hipRX, (1 - (1 / (_rightThighDist / legSegLen))) * .8);
-		jointRY = lerp(jointRY, hipRY, (1 - (1 / (_rightThighDist / legSegLen))) * .8);
-		x -= hipRX - jointRX;
-		y -= hipRY - jointRY;
+	var _rightThighDist = point_distance(hipRX, hipRY, jointRX, jointRY) - 34;
+	if(_rightThighDist > 0) {
+		var _dir = point_direction(jointRX, jointRY, hipRX, hipRY);
+		jointRX += dcos(_dir) * _rightThighDist * .8;
+		jointRY -= dsin(_dir) * _rightThighDist * .8;
+		x -= dcos(_dir) * _rightThighDist * .2;
+		y += dsin(_dir) * _rightThighDist * .2;
 	}
 	var _distLShin = (point_distance(jointLX, jointLY, footLX, footLY) / legSegLen) - 1; // extension over max 0
 	if(_distLShin > 0) {
-		//show_debug_message($"dist running left shin {_distLShin}");
-		//show_debug_message($"left shin values main {jointLX}, {jointRX}, {footLX}, {footRY}");
 		footLX = lerp(footLX, jointLX, _distLShin / 2);
 		jointLX = lerp(jointLX, footLX, _distLShin / 2);
 		footLY = lerp(footLY, jointLY, _distLShin / 2);
 		jointLY = lerp(jointLY, footLY, _distLShin / 2);
-		
-		jointLXChange *= .5;
-		footLXChange  *= .5;
-		jointLYChange *= .5;
-		footLYChange  *= .5;
 	}
 	var _distRShin = (point_distance(jointRX, jointRY, footRX, footRY) / legSegLen) - 1; // extension over max 0
 	if(_distRShin > 0) {
-		//show_debug_message($"dist running right shin {_distRShin}");
 		footRX = lerp(footRX, jointRX, _distRShin / 2);
 		jointRX = lerp(jointRX, footRX, _distRShin / 2);
 		footRY = lerp(footRY, jointRY, _distRShin / 2);
 		jointRY = lerp(jointRY, footRY, _distRShin / 2);
-		
-		jointRXChange *= .5;
-		footRXChange  *= .5;
-		jointRYChange *= .5;
-		footRYChange  *= .5;
 	}
 	#endregion
 	
 	#region set momentums for joints
-	footLXChange =  (footLX - prevFootLX)   * .2;
-	footLYChange =  (footLY - prevFootLY)   * .2;
-	footRXChange =  (footRX - prevFootRX)   * .2;
-	footRYChange =  (footRY - prevFootRY)   * .2;
-	jointLXChange = (jointLX - prevJointLX) * .2; // simple as yeah?
-	jointLYChange = (jointLY - prevJointLY) * .2;
-	jointRXChange = (jointRX - prevJointRX) * .2;
-	jointRYChange = (jointRY - prevJointRY) * .2;
-	xChange =       (hipsX - prevHipsX)     * .2;
-	yChange =       (hipsY - prevHipsY)     * .2;
+	footLXChange =  (footLX - prevFootLX);
+	footLYChange =  (footLY - prevFootLY);
+	footRXChange =  (footRX - prevFootRX);
+	footRYChange =  (footRY - prevFootRY);
+	jointLXChange = (jointLX - prevJointLX); // simple as yeah?
+	jointLYChange = (jointLY - prevJointLY);
+	jointRXChange = (jointRX - prevJointRX);
+	jointRYChange = (jointRY - prevJointRY);
+	xChange =       (hipsX - prevHipsX);
+	yChange =       (hipsY - prevHipsY);
 	#endregion
 } 
 else if(recoveringStandingTimer > 0) { // standing up
@@ -322,12 +307,12 @@ else if(recoveringStandingTimer > 0) { // standing up
 }
 #endregion
 
-if(mouse_check_button_pressed(mb_left)) {
+/*if(mouse_check_button_pressed(mb_left)) {
 	clickLogicDebug();
 } else if(mouse_check_button(mb_left)) {
 	clickHoldLogicDebug();
-}
+}*/
 
 if(keyboard_check_pressed(vk_home)) {
-	game_set_speed(4, gamespeed_fps);
+	game_set_speed(8, gamespeed_fps);
 }

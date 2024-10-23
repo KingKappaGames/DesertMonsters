@@ -181,7 +181,7 @@ hipWidth = 5;
 hipYBob = 0;
 
 recoveringLimpTimer = 0; // if dead then despawn or draw to surface when this expires other wise switch to standing behavior
-fallGravity = .015; // adds speed to bob y when dead or rag dolling to give collapsing
+fallGravity = .025; // adds speed to bob y when dead or rag dolling to give collapsing
 groundHeight = 0;
 
 hipStumbleDecay = .965;
