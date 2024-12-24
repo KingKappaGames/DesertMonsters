@@ -129,6 +129,7 @@ else if(recoveringLimpTimer > 0 || alive == 0) { // ragdolling stuff
 	if(recoveringLimpTimer == 0) { // fixing their bodies for standing up
 		if(alive == 0) {
 			//dead but recovered... despawn, draw to debris, stay dead but don't move? IDK
+			instance_destroy();
 		} else {
 			footLXChange = 0;
 			footLYChange = 0;
@@ -163,43 +164,61 @@ else if(recoveringLimpTimer > 0 || alive == 0) { // ragdolling stuff
 	yChange += fallGravity;
 	
 	#region ground contact for each of the five points in legs (do inbetween adding speeds because otherwise this will get overridden by the change being used later. Prevent movement, don't fix what's already happened. You know the deal.)
-	if(footRY + footRYChange > groundHeight) { // cut all speeds for that piece, all of them
-		footRY = groundHeight;
+	if(hasRF && (footRY + footRYChange > groundRFHeight)) { // cut all speeds for that piece, all of them
+		footRY = groundRFHeight;
 		footRYChange *= -.6;
 		footRXChange *= .7;
+		groundRFYChange *= .6;
 	}
-	if(footLY + footLYChange > groundHeight) { // cut all speeds for that piece, all of them
-		footLY = groundHeight;
+	if(hasLF && (footLY + footLYChange > groundLFHeight)) { // cut all speeds for that piece, all of them
+		footLY = groundLFHeight;
 		footLYChange *= -.6;
 		footLXChange *= .7;
+		groundLFYChange *= .6;
 	}
-	if(jointLY + jointLYChange > groundHeight) { // cut all speeds for that piece, all of them
-		jointLY = groundHeight;
+	if(hasLJ && (jointLY + jointLYChange > groundLJHeight)) { // cut all speeds for that piece, all of them
+		jointLY = groundLJHeight;
 		jointLYChange *= -.6;
 		jointLXChange *= .7;
+		groundLJYChange *= .6;
 	}
-	if(jointRY + jointRYChange > groundHeight) { // cut all speeds for that piece, all of them
-		jointRY = groundHeight;
+	if(hasRJ && (jointRY + jointRYChange > groundRJHeight)) { // cut all speeds for that piece, all of them
+		jointRY = groundRJHeight;
 		jointRYChange *= -.6;
 		jointRXChange *= .7;
+		groundRJYChange *= .6;
 	}
 	if(y + yChange > groundHeight) { // cut all speeds for that piece, all of them
 		y = groundHeight;
 		yChange *= -.6;
 		xChange *= .7;
+		groundYChange *= .6;
 	}
 	#endregion
 	
-	footLX += footLXChange; 
-	footLY += footLYChange; 
-	footRX += footRXChange; 
-	footRY += footRYChange; 
-	jointLX += jointLXChange;
-	jointLY += jointLYChange;
-	jointRX += jointRXChange;
-	jointRY += jointRYChange;
+	if(hasLF) {
+		footLX += footLXChange;
+		footLY += footLYChange;
+		groundLFHeight += groundLFYChange;
+	}
+	if(hasRF) {
+		footRX += footRXChange; 
+		footRY += footRYChange; 
+		groundRFHeight += groundRFYChange;
+	}
+	if(hasLJ) {
+		jointLX += jointLXChange;
+		jointLY += jointLYChange;
+		groundLJHeight += groundLJYChange;
+	}
+	if(hasRJ) {
+		jointRX += jointRXChange;
+		jointRY += jointRYChange;
+		groundRJHeight += groundRJYChange;
+	}
 	x += xChange;
 	y += yChange;
+	groundHeight += groundYChange;
 	#endregion
 	
 	#region set initial hip left and right positions
@@ -212,68 +231,119 @@ else if(recoveringLimpTimer > 0 || alive == 0) { // ragdolling stuff
 	#endregion
 	
 	#region connecting the five points (distance wise) (4 checks, hip pulls knees in, then knees pull feet
-	var _leftThighDist = point_distance(hipLX, hipLY, jointLX, jointLY) - 34; // over extension distance
-	if(_leftThighDist > 0) {
-		var _dir = point_direction(jointLX, jointLY, hipLX, hipLY);
-		jointLX += dcos(_dir) * _leftThighDist * .8;
-		jointLY -= dsin(_dir) * _leftThighDist * .8;
-		x -= dcos(_dir) * _leftThighDist * .2;
-		y += dsin(_dir) * _leftThighDist * .2;
+	if(hasLJ) {
+		var _leftThighDist = point_distance(hipLX, hipLY, jointLX, jointLY) - legSegLen; // over extension distance
+		if(_leftThighDist > 0) {
+			var _dir = point_direction(jointLX, jointLY, hipLX, hipLY);
+			jointLX += dcos(_dir) * _leftThighDist * .8;
+			jointLY -= dsin(_dir) * _leftThighDist * .8;
+			x -= dcos(_dir) * _leftThighDist * .2;
+			y += dsin(_dir) * _leftThighDist * .2;
+			groundLJYChange = lerp(groundLJYChange, groundYChange, .8);
+			groundYChange = groundLJYChange;
+		}
+		
+		if(hasLF) {
+			var _distLShin = point_distance(jointLX, jointLY, footLX, footLY) - legSegLen; // extension over max 0
+			if(_distLShin > 0) {
+				var _dir = point_direction(footLX, footLY, jointLX, jointLY);
+				footLX += dcos(_dir) * _distLShin * .5;
+				footLY -= dsin(_dir) * _distLShin * .5;
+				jointLX -= dcos(_dir) * _distLShin * .5;
+				jointLY += dsin(_dir) * _distLShin * .5;
+				groundLJYChange = (groundLJYChange + groundLFYChange) / 2;
+				groundLFYChange = groundLJYChange;
+			}
+			
+			footLXChange =  (footLX - prevFootLX);
+			footLYChange =  (footLY - prevFootLY); // if has FOOT then set speed differences
+		}
+		
+		jointLXChange = (jointLX - prevJointLX); // simple as yeah?
+		jointLYChange = (jointLY - prevJointLY); // if has JOINT then set speed differences
+		
+		#region //keep left joints close along height axis (not accurate but whatever)
+		if(abs(groundHeight - groundLJHeight) > legSegLen * .5) { // left thigh dif
+			groundHeight += (groundLJHeight - groundHeight) * .01;
+			groundLJHeight += (groundHeight - groundLJHeight) * .05;
+		}
+		if(abs(groundLFHeight - groundLJHeight) > legSegLen * .5) { // left shin dif
+			groundLJHeight += (groundLFHeight - groundLJHeight) * .03;
+			groundLFHeight += (groundLJHeight - groundLFHeight) * .02;
+		}
+		#endregion
 	}
-	var _rightThighDist = point_distance(hipRX, hipRY, jointRX, jointRY) - 34;
-	if(_rightThighDist > 0) {
-		var _dir = point_direction(jointRX, jointRY, hipRX, hipRY);
-		jointRX += dcos(_dir) * _rightThighDist * .8;
-		jointRY -= dsin(_dir) * _rightThighDist * .8;
-		x -= dcos(_dir) * _rightThighDist * .2;
-		y += dsin(_dir) * _rightThighDist * .2;
-	}
-	var _distLShin = (point_distance(jointLX, jointLY, footLX, footLY) / legSegLen) - 1; // extension over max 0
-	if(_distLShin > 0) {
-		footLX = lerp(footLX, jointLX, _distLShin / 2);
-		jointLX = lerp(jointLX, footLX, _distLShin / 2);
-		footLY = lerp(footLY, jointLY, _distLShin / 2);
-		jointLY = lerp(jointLY, footLY, _distLShin / 2);
-	}
-	var _distRShin = (point_distance(jointRX, jointRY, footRX, footRY) / legSegLen) - 1; // extension over max 0
-	if(_distRShin > 0) {
-		footRX = lerp(footRX, jointRX, _distRShin / 2);
-		jointRX = lerp(jointRX, footRX, _distRShin / 2);
-		footRY = lerp(footRY, jointRY, _distRShin / 2);
-		jointRY = lerp(jointRY, footRY, _distRShin / 2);
+	if(hasRJ) {
+		var _rightThighDist = point_distance(hipRX, hipRY, jointRX, jointRY) - legSegLen;
+		if(_rightThighDist > 0) {
+			var _dir = point_direction(jointRX, jointRY, hipRX, hipRY);
+			jointRX += dcos(_dir) * _rightThighDist * .8;
+			jointRY -= dsin(_dir) * _rightThighDist * .8;
+			x -= dcos(_dir) * _rightThighDist * .2;
+			y += dsin(_dir) * _rightThighDist * .2;
+			groundRJYChange = lerp(groundRJYChange, groundYChange, .8);
+			groundYChange = groundRJYChange;
+		}
+		
+		if(hasRF) {
+			var _distRShin = point_distance(jointRX, jointRY, footRX, footRY) - legSegLen; // extension over max 0
+			if(_distRShin > 0) {
+				var _dir = point_direction(footRX, footRY, jointRX, jointRY);
+				footRX += dcos(_dir) * _distRShin * .5;
+				footRY -= dsin(_dir) * _distRShin * .5;
+				jointRX -= dcos(_dir) * _distRShin * .5;
+				jointRY += dsin(_dir) * _distRShin * .5;
+				groundRJYChange = (groundRJYChange + groundRFYChange) / 2;
+				groundRFYChange = groundRJYChange;
+			}
+			
+			footRXChange =  (footRX - prevFootRX); // if has FOOT then set speed differences
+			footRYChange =  (footRY - prevFootRY);
+		}
+		
+		jointRXChange = (jointRX - prevJointRX); // if has JOINT then set speed differences
+		jointRYChange = (jointRY - prevJointRY);
+		
+		#region //keep right joints close along height axis (not accurate but whatever)
+		if(abs(groundHeight - groundRJHeight) > legSegLen * .5) { // right thigh dif
+			groundHeight += (groundRJHeight - groundHeight) * .01;
+			groundRJHeight += (groundHeight - groundRJHeight) * .05;
+		}
+		if(abs(groundRFHeight - groundRJHeight) > legSegLen * .5) { // right shin dif
+			groundRJHeight += (groundRFHeight - groundRJHeight) * .03;
+			groundRFHeight += (groundRJHeight - groundRFHeight) * .02;
+		}
+		#endregion
 	}
 	#endregion
 	
-	#region set momentums for joints
-	footLXChange =  (footLX - prevFootLX);
-	footLYChange =  (footLY - prevFootLY);
-	footRXChange =  (footRX - prevFootRX);
-	footRYChange =  (footRY - prevFootRY);
-	jointLXChange = (jointLX - prevJointLX); // simple as yeah?
-	jointLYChange = (jointLY - prevJointLY);
-	jointRXChange = (jointRX - prevJointRX);
-	jointRYChange = (jointRY - prevJointRY);
-	xChange =       (hipsX - prevHipsX);
-	yChange =       (hipsY - prevHipsY);
-	#endregion
+	xChange = hipsX - prevHipsX; // last of the speed momentum sets (the others are above in the foot and joint positioner)
+	yChange = hipsY - prevHipsY;
 } 
 else if(recoveringStandingTimer > 0) { // standing up
 	var _progress = (1 - (recoveringStandingTimer / 288)) / 60;
 	
 	y -= .33;
 	
-	footLX = lerp(footLX, x - 5, _progress);
-	footLY = lerp(footLY, y + 70, _progress);
-	footRX = lerp(footRX, x + 5, _progress);
-	footRY = lerp(footRY, y + 70, _progress);
-	
-	jointLX = lerp(jointLX, x - 5, _progress);
-	jointLY = lerp(jointLY, y + 32, _progress);
-	jointRX = lerp(jointRX, x + 5, _progress); // semi arbitrary alligning goal skeleton with example skeleton of standing lad, not a precise science
-	jointRY = lerp(jointRY, y + 32, _progress);
-	
+	if(hasLJ) {
+		jointLX = lerp(jointLX, x - 5, _progress);
+		jointLY = lerp(jointLY, y + 32, _progress);
+		if(hasLF) {
+			footLX = lerp(footLX, x - 5, _progress);
+			footLY = lerp(footLY, y + 70, _progress);
+		}
+	}
+	if(hasRJ) {
+		jointRX = lerp(jointRX, x + 5, _progress); // ^^ VV (above and below) semi arbitrary alligning goal skeleton with example skeleton of standing lad, not a precise science
+		jointRY = lerp(jointRY, y + 32, _progress);
+		if(hasRF) {
+			footRX = lerp(footRX, x + 5, _progress);
+			footRY = lerp(footRY, y + 70, _progress);
+		}
+	}
 	hipsX = lerp(hipsX, x, _progress);
 	hipsY = lerp(hipsY, y, _progress);
+	
 	
 	hipStumbleX = lerp(hipStumbleX, 0, _progress);
 	hipStumbleY = lerp(hipStumbleY, 0, _progress);
@@ -288,7 +358,7 @@ else if(recoveringStandingTimer > 0) { // standing up
 	hipRY = hipsY;
 	
 	recoveringStandingTimer--;
-	if(recoveringStandingTimer <= 0) {
+	if(recoveringStandingTimer <= 0) { // don't think limb checks are that relevant here
 		prevFootLX = footLX;
 		prevFootLY = footLY;
 		prevFootRX = footRX;
@@ -307,12 +377,15 @@ else if(recoveringStandingTimer > 0) { // standing up
 }
 #endregion
 
-/*if(mouse_check_button_pressed(mb_left)) {
-	clickLogicDebug();
-} else if(mouse_check_button(mb_left)) {
-	clickHoldLogicDebug();
-}*/
+//if(mouse_check_button_pressed(mb_left)) {
+//	clickLogicDebug();
+//} else if(mouse_check_button(mb_left)) {
+//	clickHoldLogicDebug();
+//}
 
 if(keyboard_check_pressed(vk_home)) {
-	game_set_speed(8, gamespeed_fps);
+	game_set_speed(2, gamespeed_fps);
 }
+
+prevMouseX = mouse_x;
+prevMouseY = mouse_y;

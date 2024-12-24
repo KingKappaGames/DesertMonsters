@@ -60,7 +60,7 @@ if(input_check_released("reload", playerIndex)) { // reload logic
 }
 
 if(input_check_released("gunSwitch", playerIndex)) { // swap weapons
-	setTurret(3 - gunType);
+	setTurret(clamp((gunType + 1) % 4, 1, 99));
 }
 
 if(reloadingTimer > 0) { // reload timers and ammo logic

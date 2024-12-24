@@ -67,6 +67,7 @@ gunAutomatic = 1;
 
 #region gun functions
 setTurret = function(type) {
+	live_auto_call
 	gunType = type;
 	if(type == 1) {
 		bulletType = obj_basicScanBullet;
@@ -104,6 +105,24 @@ setTurret = function(type) {
 		gunSprite = spr_pistol; //visual bits
 		gunHoldDistance = 22;
 		gunRecoil = 8;
+	} else if(type == 3) {
+		bulletType = obj_rocket;
+		shotSpeed = 15;
+		gunDamageMult = 1;
+		gunAccuracy = .05;
+
+		shotSound = snd_rpgLaunch;
+		reloadSound = snd_largePistolReload;
+		emptyShotSound = snd_emptyRifle;
+
+		shotTimeLimit = 35; // frames per fire
+		reloadingDelay = 320;
+		ammoMax = 1;
+		gunAutomatic = 0;
+		
+		gunSprite = spr_rpg; //visual bits
+		gunHoldDistance = 5;
+		gunRecoil = 6.5;
 	}
 	
 	reloadingTimer = 0; // don't bother reloading
@@ -126,32 +145,37 @@ cancelReload = function(dropCurrentAmmo = false) {
 	}
 }
 
-weaponControls = function(aimDir) {
+weaponControls = function() {
+	var _aimDir = point_direction(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex));
 	if(!gunHeldDown) { // gun aimed down for safety aka not in position to shoot because not aiming at target
 		if(reloadingTimer == 0) {
 			if(ammoCurrent > 0) {
 				if(input_check_pressed("leftClick", playerIndex) || (gunAutomatic == 1 && input_check("leftClick", playerIndex))) {
 					if(asset_has_any_tag(bulletType, "scan", asset_object)) {
-						script_shootBulletScan(x, y, aimDir, input_cursor_x(playerIndex), input_cursor_y(playerIndex), bulletType,, gunAccuracy + burstSpread, shotSound, gunDamageMult);
+						script_shootBulletScan(x, y, _aimDir, input_cursor_x(playerIndex), input_cursor_y(playerIndex), bulletType,, gunAccuracy + burstSpread, shotSound, gunDamageMult);
 						burstSpread += .02;
-						gunShakeX += dcos(aimDir) * gunRecoil;
-						gunShakeY += dsin(aimDir) * gunRecoil;
+						gunShakeX += dcos(_aimDir) * gunRecoil;
+						gunShakeY += dsin(_aimDir) * gunRecoil;
 						ammoCurrent--;
 						//if(ammoCurrent < 1) {
 						//	startReload(); // i don't like having the last shot auto reload, cooler if it just makes the bullet click and all
 						//}
 						shotTimer = 0;
 					} else {
-						script_shootBullet(x, y, shotSpeed, aimDir, bulletType,, shotSpeed * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),, gunAccuracy, , gunDamageMult);
+						script_shootBullet(x, y, shotSpeed, _aimDir, bulletType,, shotSpeed * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),, gunAccuracy, , gunDamageMult);
+						burstSpread += .02;
+						gunShakeX += dcos(_aimDir) * gunRecoil;
+						gunShakeY += dsin(_aimDir) * gunRecoil;
+						ammoCurrent--;
 						shotTimer = 0;
 					}
 				}
 				if(input_check_released("rightClick", playerIndex)) {
-					script_shootBullet(x, y, shotSpeed / 2, aimDir, obj_basicBullet,, shotSpeed / 2 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.12);
+					script_shootBullet(x, y, shotSpeed / 2, _aimDir, obj_basicBullet,, shotSpeed / 2 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.12);
 					shotTimer = 0;
 				}
 				if(input_check_released("middleClick", playerIndex)) {
-					script_shootBullet(x, y, shotSpeed / 4, aimDir, obj_missile,, shotSpeed / 4 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.30);
+					script_shootBullet(x, y, shotSpeed / 4, _aimDir, obj_missile,, shotSpeed / 4 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.30);
 					shotTimer = 0;
 				}
 			} else {

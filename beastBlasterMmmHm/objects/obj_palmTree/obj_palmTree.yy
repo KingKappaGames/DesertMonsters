@@ -13,7 +13,10 @@
     "name":"obj_group_props",
     "path":"folders/Objects/obj_group_props.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_mapVisual",
+    "path":"objects/obj_mapVisual/obj_mapVisual.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -31,7 +34,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"spr_treeCollision",
+    "path":"sprites/spr_treeCollision/spr_treeCollision.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

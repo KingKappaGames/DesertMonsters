@@ -66,19 +66,20 @@ setTurret = function(turretType) {
 }
 #endregion
 
-weaponControls = function(aimDir) {
+weaponControls = function() {
+	var _aimDir = point_direction(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex));
 	live_auto_call
 	if(input_check("leftClick", playerIndex)) {
 		if(asset_has_any_tag(bulletType, "scan", asset_object)) {
-			script_shootBulletScan(x, y, aimDir, input_cursor_x(playerIndex), input_cursor_y(playerIndex), bulletType,, .1);
+			script_shootBulletScan(x, y, _aimDir, input_cursor_x(playerIndex), input_cursor_y(playerIndex), bulletType,, .1);
 			shotTimer = 0;
 		} else {
-			script_shootBullet(x, y, shotSpeed, aimDir, bulletType,, shotSpeed * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.15);
+			script_shootBullet(x, y, shotSpeed, _aimDir, bulletType,, shotSpeed * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.15);
 			shotTimer = 0;
 		}
 	}
 	if(input_check_released("rightClick", playerIndex)) {
-		script_shootBullet(x, y, shotSpeed / 2, aimDir, obj_missile,, shotSpeed / 2 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.22);
+		script_shootBullet(x, y, shotSpeed / 2, _aimDir, obj_missile,, shotSpeed / 2 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.22);
 		shotTimer = 0;
 	}
 	if(input_check_pressed("middleClick", playerIndex)) {

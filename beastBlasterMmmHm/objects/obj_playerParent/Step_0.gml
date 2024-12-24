@@ -1,5 +1,7 @@
 if (live_call()) return live_result;
 
+depth = -(y - global.depthOffset);
+
 //#region camera setting
 
 //camera_set_view_pos(view_camera[0], x - camera_get_view_width(view_camera[0]) / 2, y - camera_get_view_height(view_camera[0]) / 2 - 210);
@@ -12,9 +14,13 @@ var _camUsed = 0;
 if(global.cameraSplitOption) { // don't use index if cameras being shared
 	_camUsed = playerIndex;
 }
-var _camLeft = camera_get_view_x(view_camera[_camUsed]);
-var _camTop = camera_get_view_y(view_camera[_camUsed]);
-input_cursor_limit_aabb(_camLeft, _camTop, _camLeft + view_wport[_camUsed], _camTop + view_hport[_camUsed], playerIndex);
+
+if(!asset_has_tags(object_index, "camManaged", asset_object) && (!instance_exists(obj_playerHeli) || global.cameraSplitOption == true)) {
+	var _camLeft = camera_get_view_x(view_camera[_camUsed]);
+	var _camTop = camera_get_view_y(view_camera[_camUsed]);
+	input_cursor_limit_aabb(_camLeft, _camTop, _camLeft + view_wport[_camUsed], _camTop + view_hport[_camUsed], playerIndex);
+}
+
 if(input_player_using_gamepad(playerIndex)) {
 	input_cursor_set((input_value("aimRight", playerIndex) - input_value("aimLeft", playerIndex)) * controllerAimSensitivity + (x - xprevious), (input_value("aimDown", playerIndex) - input_value("aimUp", playerIndex)) * controllerAimSensitivity + (y - yprevious), playerIndex, 1);
 }
@@ -23,7 +29,7 @@ if(input_player_using_gamepad(playerIndex)) {
 #region combat controls
 
 if(shotTimer > shotTimeLimit) {
-	weaponControls(point_direction(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex)));
+	weaponControls();
 } else {
 	shotTimer++;
 }

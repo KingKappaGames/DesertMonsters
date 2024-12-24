@@ -23,6 +23,7 @@ function __input_config_verbs()
             characterSwitch:  input_binding_key(vk_space),
             reload:  input_binding_key("R"),
 			gunSwitch: input_binding_key("Q"), // player controls
+			drop: input_binding_key("X"),
             sprint: input_binding_key(vk_shift),
             
             //No aiming verbs since we use the mouse for that (see below for aiming verb examples)
@@ -44,9 +45,10 @@ function __input_config_verbs()
             left:  [input_binding_gamepad_axis(gp_axislh, true),  input_binding_gamepad_button(gp_padl)],
             right: [input_binding_gamepad_axis(gp_axislh, false), input_binding_gamepad_button(gp_padr)],
             
-            characterSwitch:  input_binding_gamepad_button(gp_stickl),
+            characterSwitch:  input_binding_gamepad_button(gp_stickr),
             reload:  input_binding_gamepad_button(gp_face3),
             gunSwitch:  input_binding_gamepad_button(gp_face4), // player misc control buttons
+			drop: input_binding_gamepad_button(gp_stickl),
             //crouch: input_binding_gamepad_button(gp_face2), // we still have b and a xbox faces
 			sprint: input_binding_gamepad_button(gp_shoulderl),
             

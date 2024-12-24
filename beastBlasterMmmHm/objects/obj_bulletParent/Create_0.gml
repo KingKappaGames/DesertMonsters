@@ -24,6 +24,8 @@ bulletLevel = 1;
 
 hitIds = ds_list_create();
 
+drawOnNextFrame = false; //TODO not working... how do I draw the debris to the ground on the same frame it's deleting if it doesn't draw it's draw? Maybe it does? It seems like it's not doing shit tbh, destroyed or not.
+
 hit = function() {
 	
 }

@@ -997,7 +997,7 @@ function __input_class_virtual() constructor
     
     static __history_push = function(_x, _y)
     {
-        //Cycle the history array and add a new entry using the previous touch x/y coordinate
+        //sys the history array and add a new entry using the previous touch x/y coordinate
         var _last_coord = __history_array[@ INPUT_TOUCH_HISTORY_FRAMES];
         _last_coord.x = _x;
         _last_coord.y = _y;

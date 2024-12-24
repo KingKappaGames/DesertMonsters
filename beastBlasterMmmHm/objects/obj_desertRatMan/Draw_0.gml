@@ -8,16 +8,34 @@
 
 if (live_call()) return live_result;
 
+//draw thigh and calf segments and circle to round the knee and close visual gap
+
+if(hasRJ) {
+	draw_line_width_color(hipRX, hipRY, jointRX, jointRY, thighWidth, thighColor, thighColor); // right leg
+	if(hasRF) {
+		draw_line_width_color(jointRX, jointRY, footRX, footRY, shinWidth, shinColor, shinColor);
+	}
+	draw_circle_color(jointRX, jointRY, shinWidth, shinColor, shinColor, false); // right knee
+}
+
+if(hasLJ) {
+	draw_line_width_color(hipLX, hipLY, jointLX, jointLY, thighWidth, thighColor, thighColor); // left leg
+	if(hasLF) {
+		draw_line_width_color(jointLX, jointLY, footLX, footLY, shinWidth, shinColor, shinColor);
+	}
+	draw_circle_color(jointLX, jointLY, shinWidth, shinColor, shinColor, false); // left knee
+}
+
 draw_circle(hipsX, hipsY, 12, false);
 
-//draw thigh and calf segments and circle to round the knee and close visual gap
-draw_line_width(hipRX, hipRY, jointRX, jointRY, 5); // right leg
-draw_line_width(jointRX, jointRY, footRX, footRY, 3);
+//draw_text(x, y - 100, yChange);
 
-draw_line_width(hipLX, hipLY, jointLX, jointLY, 5); // left leg
-draw_line_width(jointLX, jointLY, footLX, footLY, 3);
+draw_set_alpha(.3);
+draw_circle_color(x, groundHeight, 15, c_dkgray, c_gray, false);
+draw_set_alpha(1);
 
-draw_circle(jointRX, jointRY, 2, false); // both knees
-draw_circle(jointLX, jointLY, 2, false);
-
-draw_text(x, y - 100, yChange);
+//draw_line(x - 20, groundHeight, x + 20, groundHeight);
+//draw_line(x - 20, groundLFHeight, x + 20, groundLFHeight);
+//draw_line(x - 20, groundRFHeight, x + 20, groundRFHeight);
+//draw_line(x - 20, groundLJHeight, x + 20, groundLJHeight);
+//draw_line(x - 20, groundRJHeight, x + 20, groundRJHeight);

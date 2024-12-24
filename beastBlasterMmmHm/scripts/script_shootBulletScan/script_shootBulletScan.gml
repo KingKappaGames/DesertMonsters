@@ -1,4 +1,4 @@
-function script_shootBulletScan(shotX, shotY, shotDir, shotGoalX, shotGoalY, bulletType, funcPassing = [], shotVariance = 0, shotSound = -1, damageMult = 1) {
+function script_shootBulletScan(shotX, shotY, shotDir, shotGoalX, shotGoalY, bulletType, funcPassing = [], shotVariance = 0, shotSound = -1, damageMult = 1, tracerSet = false) {
 	live_auto_call
 	
 	if(shotSound == -1) {
@@ -15,6 +15,7 @@ function script_shootBulletScan(shotX, shotY, shotDir, shotGoalX, shotGoalY, bul
 	_bullet.goalY = shotGoalY + irandom_range(-250 * shotVariance * _bullet.bulletLevel, 250 * shotVariance * _bullet.bulletLevel);
 	_bullet.shotDir = shotDir;
 	_bullet.bulletDamage *= damageMult;
+	_bullet.tracer = tracerSet;
 	
 	#region function passing
 	//uh huh

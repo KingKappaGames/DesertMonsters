@@ -13,7 +13,10 @@
     "name":"obj_group_props",
     "path":"folders/Objects/obj_group_props.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_mapVisual",
+    "path":"objects/obj_mapVisual/obj_mapVisual.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

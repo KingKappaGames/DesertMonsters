@@ -1,10 +1,13 @@
 global.camera = id;
 
 playerCount = instance_number(obj_playerParent);
+
 cameras = [];
 
 camWidth = 960; // get view width...
 camHeight = 540;
+global.camWidthSingle = 960;
+global.camHeightSingle = 540;
 camSoloWidth = camWidth;
 
 global.cameraSplitOption = true;
@@ -22,11 +25,11 @@ window_set_size(1920, 1080);
 surface_resize(application_surface, 1920, 1080);
 
 refreshCameras = function(split = -1) {
+	playerCount = instance_number(obj_playerParent);
+	
 	if(split != -1) {
 		global.cameraSplitOption = split; // don't change things
 	}
-	
-	playerCount = instance_number(obj_playerParent);
 	
 	#region clear and default cameras
 	var _cameraCount = array_length(cameras);
@@ -51,6 +54,8 @@ refreshCameras = function(split = -1) {
 			view_wport[_i] = camSoloWidth;
 			view_hport[_i] = camHeight;
 		}
+		global.camWidthSingle = camSoloWidth;
+		global.camHeightSingle = camHeight;
 	} else {		
 		cameras[0] = camera_create_view(0, 0, camWidth, camHeight);
 		view_set_camera(0, cameras[0]);
@@ -60,8 +65,23 @@ refreshCameras = function(split = -1) {
 		view_yport[0] = 0;
 		view_wport[0] = camWidth;
 		view_hport[0] = camHeight;
+		
+		global.camWidthSingle = camWidth;
+		global.camHeightSingle = camHeight;
 	}
 	
 	window_set_size(camWidth, camHeight);
 	surface_resize(application_surface, camWidth, camHeight);
+	
+	global.generator.updatePerlinGrid();
+}
+
+resetCamera = function(index) {
+	if(global.cameraSplitOption == true) { // only split cameras if you want splitting, obviously.. 
+		view_wport[index] = camSoloWidth;
+		view_hport[index] = camHeight;
+	} else {
+		view_wport[0] = camWidth;
+		view_hport[0] = camHeight;
+	}
 }

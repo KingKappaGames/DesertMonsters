@@ -1,3 +1,25 @@
+event_inherited();
+
+image_alpha = 0;
+
+Health = 1.5;
+angleShake = 0;
+
+hit = function(damageAmount) {
+	if(damageAmount > 1) {
+		Health -= sqrt(damageAmount);
+	} else {
+		Health -= sqr(damageAmount);
+	}
+	
+	angleShake += damageAmount;
+	
+	if(Health <= 0) {
+		script_createMeatDebris(x, y, 1, 0, 0, 0, irandom_range(3, 5), 50);
+		instance_destroy();
+	}
+}
+
 /* I think the first kind of building I should make is actually trees, dead trees or palm trees that wave around
 like they are in wind or bobbing ect and they can get wiggled by bombs and nukes and ect. They would have multiple
 segments that bent together and could break apart into pieces with particles and such to show leaves being knocked

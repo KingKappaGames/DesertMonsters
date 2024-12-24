@@ -12,7 +12,7 @@ if(keyboard_check_released(ord("M"))) {
 
 #region surface saving
 surfaceTimer++;
-if(surfaceTimer > 1200) { // save current debris surface to buffer
+if(surfaceTimer > 120) { // save current debris surface to buffer
 	surfaceTimer = 0;
 	var _surface = getDebrisSurface();
 	buffer_get_surface(debrisSurfaceBuffer, _surface, 0);
@@ -104,4 +104,12 @@ if(keyboard_check_released(ord("9"))) {
 }
 if(keyboard_check_released(ord("0"))) {
 	switchRoomFake("oceanRoom")
+}
+
+if(abs(global.depthOffset - camera_get_view_y(view_camera[0])) > 3000) {
+	global.depthOffset = camera_get_view_y(view_camera[0]) div 3000 * 3000; // set depth offset to multiples of 3000
+	
+	with(obj_palmTree) {
+		depth = depth % 3000;
+	}
 }

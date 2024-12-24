@@ -10,6 +10,8 @@ goalX = 0;
 goalY = 0;
 shotDir = 0;
 
+tracer = false;
+
 hit = function(hitX, hitY, hitId = noone, finalHit = false, hardness = 0) {
 	if(instance_exists(hitId)) {
 		if(object_is_ancestor(hitId.object_index, obj_enemy)) {
@@ -23,7 +25,7 @@ hit = function(hitX, hitY, hitId = noone, finalHit = false, hardness = 0) {
 				script_burstParticlesConcentrated(_xHit, _yHit, global.bloodSpray, 20, shotDir, 45, 3, 3, 1)
 			}
 			
-			hitId.hurt(bulletDamage, shotDir, 0);
+			hitId.hurt(bulletDamage, shotDir, 1);
 		}	
 	} else {
 		script_burstPartSpawners(hitX, hitY, 5, 180, shotDir, 6 * bulletLevel, .9, 15, 1, sbDustFloat, .5, 1, 1, .5);

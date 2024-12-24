@@ -23,7 +23,7 @@ questEnd = function() { // fail, succeed, simply end and what happened is your f
 }
 
 //TODO when the quest becomes active in the game for either the first time this object (which means room restarts and game reloads) or first time ever, which would be stored in the save data, this intro to the quest code gets run. 
-//Should it be per mission or per load / room enter? And if it is per game cycle would there be a timer on resetting that "familiarity"? 
+//Should it be per mission or per load / room enter? And if it is per game sys would there be a timer on resetting that "familiarity"? 
 //And when the quest was recently seen would there be an alternative start like audio that was more re-explaining than first time intro or a little event that highlighted what happened the first time but not completely redoing the intro? 
 //Could be cool and add some reactivity to the game which you know i love.
 // VVV notes (^^^) for begin quest VVV

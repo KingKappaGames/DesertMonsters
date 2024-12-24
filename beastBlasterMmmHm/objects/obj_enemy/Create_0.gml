@@ -41,6 +41,10 @@ hurt = function(damageDone, kbDir = -1, bleed = 1) {
 	}
 }
 
+hurt3D = function(damage, knockback, radius, dropOffPower = 1, hitSourceId = noone) {
+	hurt(damage, point_direction(hitSourceId.x, hitSourceId.y, x, y), true);
+}
+
 startTravelToPoint = function(goalX, goalY, speedTravel = moveSpeed) {
 	travelToGoalX = goalX;
 	travelToGoalY = goalY;

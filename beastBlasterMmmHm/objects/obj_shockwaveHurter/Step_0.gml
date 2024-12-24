@@ -6,7 +6,7 @@ if(ticksCurrent >= tickCount) {
 	collision_circle_list(x, y, radius, obj_enemy, false, true, hitIds, false);
 	
 	for(var _i = ds_list_size(hitIds) - 1; _i > -1; _i--) {
-		hitIds[| _i].hurt(100);
+		hitIds[| _i].hurt3D(5, 2.2, radius + 600, 1, id);
 	}
 	
 	ticksCurrent = 0;

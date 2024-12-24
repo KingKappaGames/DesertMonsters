@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"generate",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"generate",
+  "parent":{
+    "name":"perlinGeneratorStuff",
+    "path":"folders/perlinGeneratorStuff.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

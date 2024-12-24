@@ -59,10 +59,21 @@ if(_speed > 1) {
 	if(collision_rectangle(x - 18, y - 26, x + 18, y + 10, obj_enemy, false, true)) {
 		var _hit = instance_nearest(x, y, obj_enemy); // probably the closest....
 		var _hitDir = point_direction(x, y, _hit.x, _hit.y);
-		xChange -= dcos(_hitDir) * _speed / 8;
-		yChange += dsin(_hitDir) * _speed / 8;
+		xChange -= dcos(_hitDir) * _speed / 11;
+		yChange += dsin(_hitDir) * _speed / 11;
 		_hit.hurt(clamp(sqr(_speed / 2), 0, 5), _travelDir, true);
-		show_debug_message(sqr(_speed / 4));
+	}
+}
+if(collision_rectangle(x - 15, y - 22, x + 15, y + 8, obj_mapVisual, false, true)) {
+	var _hit = instance_nearest(x, y, obj_mapVisual); // probably the closest....
+	var _hitDir = point_direction(x, y, _hit.x, _hit.y);
+	xChange -= dcos(_hitDir) * _speed / 11;
+	yChange += dsin(_hitDir) * _speed / 11;
+	xChange *= .97;
+	yChange *= .97;
+	
+	if(_hit.object_index == obj_palmTree) {
+		_hit.hit(abs(_speed - point_distance(0, 0, xChange, yChange)));
 	}
 }
 #endregion
@@ -70,9 +81,6 @@ if(_speed > 1) {
 #region camera setting
 if(global.cameraSplitOption == true) {
 	camera_set_view_pos(view_camera[playerIndex], x - camera_get_view_width(view_camera[playerIndex]) / 2 + xChange * 10, y - camera_get_view_height(view_camera[playerIndex]) / 2 + yChange * 10);
-
-	var _camMidX = camera_get_view_x(view_camera[playerIndex]) + camera_get_view_width(view_camera[playerIndex]) / 2; // what do these do???
-	var _camMidY = camera_get_view_y(view_camera[playerIndex]) + camera_get_view_height(view_camera[playerIndex]) / 2;
 }
 #endregion
 

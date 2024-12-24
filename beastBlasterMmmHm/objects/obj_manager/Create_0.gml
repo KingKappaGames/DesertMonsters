@@ -6,11 +6,16 @@ window_set_cursor(cr_none);
 input_source_mode_set(INPUT_SOURCE_MODE.JOIN);
 input_join_params_set(1, 4, "escape", undefined, true)
 
+surface_depth_disable(true);
+
 global.manager = id;
 global.players = []; // set below
 
+global.depthOffset = 0;
+
 depth = 50;
 
+audio_falloff_set_model(audio_falloff_exponent_distance);
 audio_listener_orientation(0, -1, 0, 0, 0, -1); 
 global.muted = 0;
 
@@ -21,15 +26,15 @@ camHeight = camera_get_view_height(view_camera[0]);
 
 #region debris surface set up
 surfaceTimer = 0;
-debrisSurfaceBuffer = buffer_create(64000000, buffer_fixed, 1);
-debrisSurface = surface_create(4000, 4000);
+debrisSurfaceBuffer = buffer_create(67108864, buffer_fixed, 1);
+debrisSurface = surface_create(2048, 2048);
 buffer_set_surface(debrisSurfaceBuffer, debrisSurface, 0);
 
-getDebrisSurface = function() {
+getDebrisSurface = function() { // IF SURFACE NOT WORKING CHECK ROOM DEPTH OF BACKGROUND
 	if(surface_exists(debrisSurface)) {
 		return debrisSurface;
 	} else {
-		debrisSurface = surface_create(4000, 4000);
+		debrisSurface = surface_create(2048, 2048);
 		buffer_set_surface(debrisSurfaceBuffer, debrisSurface, 0);
 		return debrisSurface;
 	}
@@ -39,7 +44,7 @@ getDebrisSurface = function() {
 #region particles (long as hell)
 global.particleSystem = part_system_create();
 sys = global.particleSystem;
-part_system_depth(global.particleSystem, -1100);
+part_system_depth(global.particleSystem, -1001);
 part_system_draw_order(sys, false);
 
 #region basic sand burst
@@ -243,6 +248,8 @@ deactivateThings = function() {
 	instance_activate_object(obj_weatherManager)
 	instance_activate_object(input_controller_object); // inputs controller
 	instance_activate_object(obj_camera);
+	instance_activate_object(obj_particleLayerManager);
+	instance_activate_object(obj_generator);
 }
 
 switchRoomFake = function(roomDestination) {

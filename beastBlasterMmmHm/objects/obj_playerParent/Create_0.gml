@@ -48,6 +48,6 @@ setTurret = function() {
 }
 #endregion
 
-weaponControls = function(aimDir) {
+weaponControls = function() {
 	//what kinds of weapons to use on what buttons, set in children
 }

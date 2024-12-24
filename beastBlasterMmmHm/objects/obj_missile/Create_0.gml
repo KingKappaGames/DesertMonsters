@@ -34,11 +34,12 @@ hit = function() {
 	
 	hitIds = ds_list_create();
 	#region collisions
-	
-	collision_circle_list(x, y, 12 * bulletSize, obj_enemy, false, true, hitIds, false);
+	msg($"size initial check {20 * bulletSize + 50}");
+	collision_circle_list(x, y, 25 * bulletSize, obj_enemy, false, true, hitIds, false);
 	
 	for(var _i = ds_list_size(hitIds) - 1; _i > -1; _i--) {
-		hitIds[| _i].hurt(irandom(bulletDamage), point_direction(x, y, hitIds[| _i].x, hitIds[| _i].y));
+		//hitIds[| _i].hurt(irandom(bulletDamage), point_direction(x, y, hitIds[| _i].x, hitIds[| _i].y)); 
+		hitIds[| _i].hurt3D(irandom(bulletDamage), 4.5, 25 * bulletSize, 1, id);
 	}
 	
 	#endregion

@@ -2,7 +2,7 @@ if (live_call()) return live_result;
 
 event_inherited();
 
-bulletDamage = 10;
+bulletDamage = 20;
 bulletSize = 10 + irandom(5);
 
 hit = function() {

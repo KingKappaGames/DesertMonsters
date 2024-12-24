@@ -8,7 +8,7 @@ windY = 0; // wind x/y gets added to things like particles and debris
 precipitationStrength = 0; // 0 - 100
 
 depth = 0;
-
+/*
 setWeatherTemperature = function(temp) {
 	temp = clamp(temp, 0, 100);
 	temperature = temp;

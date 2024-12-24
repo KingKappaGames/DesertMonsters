@@ -13,7 +13,7 @@ if(global.cameraSplitOption == true) {
 #endregion
 
 if(input_check_released("characterSwitch", playerIndex)) {
-	var _player = instance_create_layer(x, y, "Instances", obj_playerSoldier);
+	var _player = instance_create_layer(x, y, "Instances", obj_playerHeli);
 	_player.playerIndex = playerIndex;
 	instance_destroy();
 	_player.setCursorActive(_player.playerIndex); // in the destroy it sets mouse back to false so this needs to be after
