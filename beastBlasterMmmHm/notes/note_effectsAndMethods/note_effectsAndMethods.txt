@@ -9,3 +9,12 @@ I think the first kind of building I should make is actually trees, dead trees o
 like they are in wind or bobbing ect and they can get wiggled by bombs and nukes and ect. They would have multiple
 segments that bent together and could break apart into pieces with particles and such to show leaves being knocked
 off or pieces being broken away. These pieces could then fall to the ground and maybe become debris?
+
+
+
+
+For the randomly generated villages: Instead of trying to generate one piece at a time like a bozo just find a good spot
+and generate the whole village there regardless of terrain changes (or make a function to pick the point from the numbers)
+and use that to check areas but still, generate the villages in clusters instead of randomly bozo
+Then you can use all kinds of generation tricks like those I described in the space game to do simple note to make the 
+things themselves. Lot's of options here.

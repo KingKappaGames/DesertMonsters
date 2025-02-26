@@ -7,29 +7,26 @@ if(updatePerlin) {
 	    for(var j = 0; j < height; j++) {
 			_height = grid[# i, j];
 			if(_height > valueRange * 1.0) {
-				draw_set_color(#f0bf90);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #f0bf90, 1);
 			} else if(_height > valueRange * .80) {
-				draw_set_color(#f0bf7a);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #f0bf7a, 1);
 			} else if(_height > valueRange * .60) { 
-				draw_set_color(#c99751);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #c99751, 1);
 			} else if(_height > valueRange * .55) {
-				draw_set_color(#9e763e);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #9e763e, 1);
 			} else if(_height > valueRange * .40) {
-				draw_set_color(#5e4c33);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #5e4c33, 1);
 			} else if(_height > valueRange * .37) {
-				draw_set_color(#aa2400); // thin band
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #aa2400, 1); // thin band
 			} else if(_height > valueRange * .25) {
-				draw_set_color(#5e4c33);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #5e4c33, 1);
 			} else if(_height > valueRange * .21) {
-				draw_set_color(#483a23);
-			} else if(_height > valueRange * .16) {
-				draw_set_color(#3e4c23);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #483a23, 1);
+			} else if(_height > valueRange * .13) {
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #3e4c23, 1);
 			} else {
-				draw_set_color(#362d21);
+				draw_sprite_ext(spr_perlinBlock, 0, i*blockSize,j*blockSize, 1, 1, 0, #4d3f5c, 1);
 			}
-		
-	        draw_rectangle(i*blockSize, j*blockSize, 
-	            (i+1)*blockSize, (j+1)*blockSize,false);
 	    }
 	}
 	

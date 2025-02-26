@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"script_generateVillage",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"script_generateVillage",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -4,6 +4,7 @@ event_inherited();
 
 sbHaze = global.sandBurstHaze;
 debris = global.darkDebris;
+heliDust = global.heliDust
 sys = global.particleSystem;
 
 #region player values

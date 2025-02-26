@@ -2,9 +2,9 @@ if (live_call()) return live_result;
 
 #region sound control kiinda ...
 if(keyboard_check_released(ord("M"))) {
-	global.muted -= .25;
+	global.muted -= .2;
 	if(global.muted < 0) {
-		global.muted = 1;
+		global.muted = .5;
 	}
 	audio_group_set_gain(audiogroup_default, global.muted, 1000);
 }
@@ -106,10 +106,32 @@ if(keyboard_check_released(ord("0"))) {
 	switchRoomFake("oceanRoom")
 }
 
+if(keyboard_check_released(vk_f1)) {
+	var _enemy = instance_create_layer(mouse_x, mouse_y, "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
+	_enemy.friendly = false;
+}
+if(keyboard_check_released(vk_f2)) {
+	var _enemy = instance_create_layer(mouse_x, mouse_y, "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
+	_enemy.friendly = true;
+}
+
 if(abs(global.depthOffset - camera_get_view_y(view_camera[0])) > 3000) {
 	global.depthOffset = camera_get_view_y(view_camera[0]) div 3000 * 3000; // set depth offset to multiples of 3000
 	
 	with(obj_palmTree) {
 		depth = depth % 3000;
 	}
+}
+
+if(keyboard_check(vk_left)) {
+	global.windStrength -= .001;
+}
+if(keyboard_check(vk_right)) {
+	global.windStrength += .001;
+}
+if(keyboard_check(vk_up)) {
+	global.gravityStrength -= .001;
+}
+if(keyboard_check(vk_down)) {
+	global.gravityStrength += .001;
 }

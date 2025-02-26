@@ -3,13 +3,6 @@
 function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin = 0) {
 	live_auto_call
 	
-	//msg("_______________________");
-	//msg($"Left margin: {leftMargin}");
-	//msg($"Right margin: {rightMargin}");
-	//msg($"Top margin: {topMargin}");
-	//msg($"Bottom margin: {bottomMargin}");
-	//msg("########################");
-	
 	leftMargin = floor(leftMargin / blockSize);
 	topMargin = floor(topMargin / blockSize);
 	
@@ -32,51 +25,109 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 	debugHeight = (_endY - _beginY) * blockSize;
 	
 	if(leftMargin != 0 || rightMargin != width) { // any horizontal (draw whole vertical slice then partial horizontals (if aplicable))
-		//msg("$$$$$");
-		//msg("horizonta lMovement dectectado");
 		for(var i = _beginX; i < _endX; i++) { // start at flipped margin position since you only need everything else to move to
 		    for(var j = 0; j < height; j++) {
 		        var _zz = getPerlinNoise_2D(i + updateLastX / blockSize, j + updateLastY / blockSize, valueRange);
 			
 		        ds_grid_set(grid, i, j, _zz); // vertical slice
+				
+				random_set_seed((i * blockSize + updateLastX) * 65536 + j * blockSize + updateLastY);
+				
+				var _heightVal = 1 - (_zz / valueRange) * 2.5; // range of .25 - 1 (_zz is cut below .3 here so...)
+				if(_zz < valueRange * .3) {
+					var _rand = random(1);
+					
+					if(_rand > .999) {
+						instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
+					} else if(_rand < _heightVal) {
+						//repeat(2) {
+							var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
+		
+							_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
+							if(_heightVal > .8) {
+								_grass.image_blend = #158a6e;
+							} else if(_heightVal > .6) {
+								_grass.image_blend = #19bf4e;
+							} else if(_heightVal > .4) {
+								_grass.image_blend = #badc60;
+							} else {
+								_grass.image_blend = #a12c1d;
+							}
+						//}
+					}
+				}
 		    }
 		}
 		
 		if(topMargin != 0 || bottomMargin != height) {
-			//msg("$$$$$");
-			//msg("vertical Movement dectectado TOO TOO TOO TOO");
 			for(var i = leftMargin; i < rightMargin; i++) { // start at flipped margin position since you only need everything else to move to
 			    for(var j = _beginY; j < _endY; j++) {
 			        var _zz = getPerlinNoise_2D(i + updateLastX / blockSize, j + updateLastY / blockSize, valueRange);
 			
 			        ds_grid_set(grid, i, j, _zz); // horizontal strip UP TO vertical strip
+					
+					random_set_seed((i * blockSize + updateLastX) * 65536 + j * blockSize + updateLastY);
+					
+					var _heightVal = 1 - (_zz / valueRange) * 2; // range of .4 - 1 (_zz is cut below .3 here so...)
+					if(_zz < valueRange * .3) {
+						var _rand = random(1);
+					
+						if(_rand > .999) {
+							instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
+						} else if(_rand < _heightVal) {
+							//repeat(2) {
+								var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
+		
+								_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
+								if(_heightVal > .8) {
+									_grass.image_blend = #158a6e;
+								} else if(_heightVal > .6) {
+									_grass.image_blend = #19bf4e;
+								} else if(_heightVal > .4) {
+									_grass.image_blend = #badc60;
+								} else {
+									_grass.image_blend = #a12c1d;
+								}
+							//}
+						}
+					}
 			    }
 			}
 		}
-		
-		//msg($"Width: {width}");
-		//msg($"Height: {height}");
-		//msg($"Begin X: {_beginX}");
-		//msg($"Begin Y: {_beginY}");
-		//msg($"End X: {_endX}");
-		//msg($"End Y: {_endY}");
 	} else { // no horizontal, only draw horizontal stips if applicable
-		//msg("$$$$$");
-		//msg("vertical Movement dectectado");
 		for(var i = 0; i < width; i++) { // start at flipped margin position since you only need everything else to move to
 		    for(var j = _beginY; j < _endY; j++) {
 		        var _zz = getPerlinNoise_2D(i + updateLastX / blockSize, j + updateLastY / blockSize, valueRange);
 			
 		        ds_grid_set(grid, i, j, _zz); // only horizontal stip at bottom or top
+				
+				random_set_seed((i * blockSize + updateLastX) * 65536 + j * blockSize + updateLastY);
+				
+				var _heightVal = 1 - (_zz / valueRange) * 2; // range of .4 - 1 (_zz is cut below .3 here so...)
+				if(_zz < valueRange * .3) {
+					var _rand = random(1);
+					
+					if(_rand > .999) {
+						instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
+					} else if(_rand < sqr(_heightVal)) {
+						//repeat(2) {
+							var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
+		
+							_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
+							if(_heightVal > .8) {
+								_grass.image_blend = #158a6e;
+							} else if(_heightVal > .6) {
+								_grass.image_blend = #19bf4e;
+							} else if(_heightVal > .4) {
+								_grass.image_blend = #badc60;
+							} else {
+								_grass.image_blend = #a12c1d;
+							}
+						//}
+					}
+				}
 		    }
 		}
-		
-		//msg($"Width: {width}");
-		//msg($"Height: {height}");
-		//msg($"Begin X: {_beginX}");
-		//msg($"Begin Y: {_beginY}");
-		//msg($"End X: {_endX}");
-		//msg($"End Y: {_endY}");
 	}
 }
 

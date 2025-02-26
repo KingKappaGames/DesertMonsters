@@ -14,3 +14,5 @@ die = function() {
 	alive = 0;
 	instance_destroy();
 }
+
+friendly = false;

@@ -72,9 +72,20 @@ if(height > 1) {
 bladeSpin += bladeSpinSpeed;
 
 if(height < 100) { // near ground specials
-	if(bladeSpinSpeed * (1 - height / 100) > random(8)) { // dust effects when near ground
-		part_particles_create(sys, x + irandom_range(-bladeLength, bladeLength), y + irandom_range(-bladeLength, bladeLength), sbHaze, bladeSpinSpeed / 5 + 1);
-	}
+	if(bladeSpinSpeed * (1 - height / 100) > random(4) + 1.9) { // dust effects when near ground
+		var _heightFactor = 1.2 - (height / 100);
+		repeat(2) {
+			var _x = irandom_range(-bladeLength * (1.5 - _heightFactor) - 30, bladeLength * (1.5 - _heightFactor) + 30);
+			var _y = irandom_range(-bladeLength * (1.5 - _heightFactor) - 30, bladeLength * (1.5 - _heightFactor) + 30) * .8;
+			var _dustDir = point_direction(0, 0, _x, _y);
+			var _dustDist = point_distance(0, 0, _x, _y);
+			var _power = (1 - (_dustDist / 300)) * (bladeSpinSpeed / bladeSpinSpeedMax);
+			part_type_life(heliDust, _heightFactor * 160 * _power, _heightFactor * 250 * _power);
+			part_type_speed(heliDust, _heightFactor * 2.6 * _power, _heightFactor * _power * 4.1, -.04, 0);
+			part_type_direction(heliDust, _dustDir - 4, _dustDir + 4, .25, 0); 
+			part_particles_create(sys, x + _x, y + _y, heliDust, 1);
+		}
+	} 
 	
 	#region collisions accidents when near ground
 	if(height < 50) {

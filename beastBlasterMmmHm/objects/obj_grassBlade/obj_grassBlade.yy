@@ -1,19 +1,21 @@
 {
   "$GMObject":"",
-  "%Name":"obj_camera",
+  "%Name":"obj_grassBlade",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_camera",
+  "name":"obj_grassBlade",
   "overriddenProperties":[],
   "parent":{
-    "name":"obj_group_execs",
-    "path":"folders/Objects/obj_group_execs.yy",
+    "name":"obj_group_props",
+    "path":"folders/Objects/obj_group_props.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_mapVisual",
+    "path":"objects/obj_mapVisual/obj_mapVisual.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -31,7 +33,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"spr_reeds",
+    "path":"sprites/spr_reeds/spr_reeds.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

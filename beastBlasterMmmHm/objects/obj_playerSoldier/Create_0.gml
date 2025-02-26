@@ -226,7 +226,7 @@ setTrack = function(dir, spd) {
 	rTrackY = y + trackHeight + hipYOff + _sin * hipWidth;
 	
 	trackDir = dir;
-	trackLen = (spd * 14) / clamp(sqrt(spd / 2), .4, 2);
+	trackLen = (spd * 14) / clamp(sqrt(spd / 2), .3, 2.4);
 }
 
 setFeetAtTrackBase = function(speedMoving) { // god i hate built in speed variable
@@ -235,7 +235,7 @@ setFeetAtTrackBase = function(speedMoving) { // god i hate built in speed variab
 	var _trackXToEnd = dcos(trackDir) * trackLen;
 	var _trackYToEnd = -dsin(trackDir) * trackLen;
 	
-	var _trackAhead = speedMoving * .1;
+	var _trackAhead = speedMoving * .17;
 	
 	footLX = lTrackX + _trackXToEnd * (_trackProg + _trackAhead);
 	footLY = lTrackY + _trackYToEnd * (_trackProg + _trackAhead);

@@ -5,12 +5,18 @@ event_inherited();
 image_xscale = 14;
 image_yscale = 20;
 
+friendly = choose(false, false, false, true, true);
+strafeDir = 1;
+agroId = noone;
+followId = noone;
+
 Health = 12;
 alive = 1;
 recoveringStandingTimer = 0;
 recoveringLimpTimer = 0;
 ragdolling = 0;
 airHeight = 0;
+moveSpeed = 1;
 
 hasLJ = true;
 hasRJ = true;
@@ -23,7 +29,7 @@ limbStrengthGeneral = 4;
 
 die = function() {
 	alive = 0;
-	recoveringLimpTimer = 288000; // 20 seconds, long enough to not be relevant, tbf they don't really need to deactivate anyway... it's not laggy or anything and they get deactivated just like normal. Idk
+	recoveringLimpTimer = 4320; // 20 seconds, long enough to not be relevant, tbf they don't really need to deactivate anyway... it's not laggy or anything and they get deactivated just like normal. Idk
 	ragdollEnemy(); // take position data and use it to move legs and arms and body around? Fancy 3d stuff I haven't done yet
 }
 

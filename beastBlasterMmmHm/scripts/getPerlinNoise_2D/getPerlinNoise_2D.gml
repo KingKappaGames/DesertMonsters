@@ -1,7 +1,6 @@
 function getPerlinNoise_2D(xx, yy, range) {
 	var chunkSize = 128; // the size of the sections of different terrain roughly (times valueRange too)
 	var noise = 0;
-	range = range;
 	
 	var index_x = 0;
 	var index_y = 0;
@@ -14,6 +13,8 @@ function getPerlinNoise_2D(xx, yy, range) {
 	var r_0 = 0;
 	var r_1 = 0;
 	
+	var _seed = seed; // this is pure variable reference cost nonsense, this does nothing but make the data slightly more accesible to the computer
+	
 	while(chunkSize > 1){
 	    index_x = xx div chunkSize;
 	    index_y = yy div chunkSize;
@@ -21,16 +22,16 @@ function getPerlinNoise_2D(xx, yy, range) {
 	    t_x = (xx % chunkSize) / chunkSize;
 	    t_y = (yy % chunkSize) / chunkSize;
     
-		random_set_seed(seed + index_x + index_y * 65536);
+		random_set_seed(_seed + index_x + index_y * 65536);
 		r_00 = irandom_range(0,range);
 		
-		random_set_seed(seed + index_x + (index_y+1) * 65536);
+		random_set_seed(_seed + index_x + (index_y+1) * 65536);
 	    r_01 = irandom_range(0,range);
 		
-		random_set_seed(seed + (index_x+1) + index_y * 65536);
+		random_set_seed(_seed + (index_x+1) + index_y * 65536);
 	    r_10 = irandom_range(0,range);
 		
-		random_set_seed(seed + (index_x+1) + (index_y+1) * 65536);
+		random_set_seed(_seed + (index_x+1) + (index_y+1) * 65536);
 	    r_11 = irandom_range(0,range);
 		
 		

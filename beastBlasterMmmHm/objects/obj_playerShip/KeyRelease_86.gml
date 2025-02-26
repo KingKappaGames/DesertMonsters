@@ -1,0 +1,1 @@
+script_generateVillage(mouse_x, mouse_y, "desert", irandom_range(4, 25), 140, 1, -2);

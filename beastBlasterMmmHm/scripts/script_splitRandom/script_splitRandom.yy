@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"randomSeed",
+  "%Name":"script_splitRandom",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"randomSeed",
+  "name":"script_splitRandom",
   "parent":{
-    "name":"perlinGeneratorStuff",
-    "path":"folders/perlinGeneratorStuff.yy",
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

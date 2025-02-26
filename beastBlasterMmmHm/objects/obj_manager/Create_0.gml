@@ -18,6 +18,10 @@ depth = 50;
 audio_falloff_set_model(audio_falloff_exponent_distance);
 audio_listener_orientation(0, -1, 0, 0, 0, -1); 
 global.muted = 0;
+audio_group_set_gain(audiogroup_default, .4, 0);
+
+global.windStrength = 0;
+global.gravityStrength = 0;
 
 fakeRoom = "mainRoom"; // this is for the quest set up for checking rooms
 
@@ -198,11 +202,12 @@ smokeTrail = global.smokeTrail;
 part_type_life(smokeTrail, 120, 400);
 part_type_shape(smokeTrail, pt_shape_square);
 part_type_size(smokeTrail, .0, .05, .003, 0);
-part_type_alpha3(smokeTrail, .5, .2, 0);
+part_type_alpha3(smokeTrail, 1, .25, 0);
 part_type_color2(smokeTrail, #777777, #aaaaaa);
 part_type_gravity(smokeTrail, .0015, 135);
 part_type_direction(smokeTrail, 0, 360, 0, 0);
 part_type_speed(smokeTrail, 0, .08, 0, .03);
+part_type_orientation(smokeTrail, 0, 360, .5, 3, 0);
 #endregion
 
 #region floaty smoke for haze, hangs around for longer and doesn't blow?
@@ -227,6 +232,17 @@ part_type_speed(eruptClods, 1.1, 4.3, 0, 0);
 part_type_life(eruptClods, 70, 280);
 part_type_gravity(eruptClods, .010, 270);
 part_type_step(eruptClods, -6, smokeTrail);
+#endregion
+
+#region helicopter wake
+global.heliDust = part_type_create();
+heliDust = global.heliDust;
+part_type_life(heliDust, 196, 300);
+part_type_shape(heliDust, pt_shape_square);
+part_type_size(heliDust, .1, .1, .008, 0);
+part_type_alpha2(heliDust, .9, 0);
+part_type_color1(heliDust, #d5cA89);
+part_type_orientation(heliDust, 0, 360, 0, 0, 0);
 #endregion
 
 #endregion

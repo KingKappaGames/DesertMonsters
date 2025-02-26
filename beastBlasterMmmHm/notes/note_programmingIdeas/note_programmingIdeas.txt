@@ -1,5 +1,6 @@
 Created 5/31/24  around 300 hours as of reset 
 
+When generating flora in the level you can use blocks or grids 
 
 a script that takes a particle and creates a series of them with adjusted directions and speeds, perhaps others too
 maybe I should make a re-set of scripts that sets the size and other things on the fly?

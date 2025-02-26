@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"script_samplePerlinColor",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"script_samplePerlinColor",
+  "parent":{
+    "name":"perlinGeneratorStuff",
+    "path":"folders/perlinGeneratorStuff.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

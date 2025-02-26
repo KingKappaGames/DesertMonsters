@@ -49,7 +49,8 @@ if(abs(x) + abs(y) > 0) {
 }
 
 if(keyboard_check_released(vk_alt)) {
-	var _enemy = instance_create_layer(x + irandom_range(-100, 100), y + irandom_range(-100, 100), "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
+	//var _enemy = instance_create_layer(x + irandom_range(-100, 100), y + irandom_range(-100, 100), "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
+	var _enemy = instance_create_layer(x + irandom_range(-100, 100), y + irandom_range(-100, 100), "Instances", obj_palmTree);
 }
 
 //if(keyboard_check_released(vk_f1)) { // hey so uh, fun fact, angle difference between two set values is SLOWER than dcos of a value... Honestly, not that surprising but I'm retarded is the point here. Yet another entry in the "just use the right tool for the job and stop trying to be clever" catalogue. ARRHRHRRHHRHG! Side note, the display sorting works :D
