@@ -16,6 +16,8 @@ if(surfaceTimer > 120) { // save current debris surface to buffer
 	surfaceTimer = 0;
 	var _surface = getDebrisSurface();
 	buffer_get_surface(debrisSurfaceBuffer, _surface, 0);
+} else if(surfaceTimer == 60) {
+	clearMapVisuals();
 }
 #endregion
 
@@ -112,6 +114,14 @@ if(keyboard_check_released(vk_f1)) {
 }
 if(keyboard_check_released(vk_f2)) {
 	var _enemy = instance_create_layer(mouse_x, mouse_y, "Instances", choose(obj_desertRatMan, obj_desertRatMan, obj_desertRatMan, obj_grub));
+	_enemy.friendly = true;
+}
+if(keyboard_check_released(vk_f3)) {
+	var _enemy = instance_create_layer(mouse_x, mouse_y, "Instances", obj_walker);
+	_enemy.friendly = true;
+}
+if(keyboard_check_released(vk_f4)) {
+	var _enemy = instance_create_layer(mouse_x, mouse_y, "Instances", obj_jeep);
 	_enemy.friendly = true;
 }
 

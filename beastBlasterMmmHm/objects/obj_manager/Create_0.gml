@@ -247,7 +247,32 @@ part_type_orientation(heliDust, 0, 360, 0, 0, 0);
 
 #endregion
 
-deactivateThings = function() {
+///@desc This uses deactivation and object type deleting to clear all map visuals that don't fall within the generation area (generate in, delete out, this keeps a balanced border to the generator)
+clearMapVisuals = function() {
+	var _generator = global.generator;
+	var _camX = _generator.updateLastX;
+	var _camY = _generator.updateLastY;
+	
+	instance_activate_object(obj_mapVisual);
+	instance_deactivate_region(_camX - blockSize * bufferBlockCount / 2, _camY - blockSize * bufferBlockCount / 2, global.generator.width * blockSize + blockSize * bufferBlockCount / 2, global.generator.height * blockSize + blockSize * bufferBlockCount / 2, true, true);
+	instance_destroy(obj_mapVisual);
+	instance_activate_object(obj_mapVisual);
+	
+	instance_activate_object(obj_gmlive); // gmlive's controller object
+	instance_activate_object(obj_playerParent);
+	instance_activate_object(obj_questManager)
+	instance_activate_object(obj_questWatcher) 
+	instance_activate_object(obj_questBookManager)
+	instance_activate_object(obj_weatherManager)
+	instance_activate_object(input_controller_object); // inputs controller
+	instance_activate_object(obj_camera);
+	instance_activate_object(obj_particleLayerManager);
+	instance_activate_object(obj_generator);
+	
+	instance_activate_region(_camX - blockSize * bufferBlockCount / 2, _camY - blockSize * bufferBlockCount / 2, global.generator.width * blockSize + blockSize * bufferBlockCount / 2, global.generator.height * blockSize + blockSize * bufferBlockCount / 2, true);
+}
+
+deactivateThings = function() {	
 	instance_deactivate_all(true);
 	var _checkI = 0;
 	repeat(4) {

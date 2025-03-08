@@ -1,72 +1,90 @@
+if (live_call()) return live_result;
+
+enum legSides {
+	right, // 0
+	left // 1
+}
+
 event_inherited();
 
-sys = global.particleSystem;
-dust = global.sandBurstDustFloat;
+image_xscale = 60;
+image_yscale = 25;
 
-image_alpha = 0;
+Health = 30;
 
-Health = 91.5;
-angleShake = 0;
+moveSpeed = .2;
 
-fallingTimer = 0;
-fallingDir = 0;
-fallingSpeed = 0;
+currentSpeed = .3;
+currentDir = 0;
+dirGoal = 0;
 
-///@desc Sorta works..?
-hurt3D = function(damage, knockback, radius, dropOffPower = 1, hitSourceId = noone) {
-	if(instance_exists(hitSourceId)) {
-		var _hitX = hitSourceId.x;
-		var _hitY = hitSourceId.y;
-		
-		//var _nodeCount = array_length(structureNodes);
-		//for(var _hitI = 0; _hitI < _nodeCount; _hitI++) {
-		//	var _node = 
-		//	var _dist = point_distance(
-		//}
+xChange = random_range(-.3, .3);
+yChange = random_range(-.3, .3);
+
+friendly = false;
+
+
+//animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+hipWidth = 15;
+hipDir = 0; // reset down below based on size of animal
+
+legSegLen = 72;
+stepUpdateDist = 42;
+
+hipPositions = [[x, y, 0], [x, y, 0]]; // right 0 left 1
+kneePositions = [[x, y, 0], [x, y, 0]]; // right = 0, left = 1, following hand numbering in main game
+stepPositions = [[[x, y, 0], [x, y, 0], [x, y, 0]], [[x, y, 0], [x, y, 0], [x, y, 0]]]; // origin x/y PLUS current x/y PLUS end x/y (groups of groups of 3 x/y's for each case, initial, current, goal
+
+stepTimings = [[0, current_time], [0, current_time]]; // each foot gets a timing for how quickly it should move from start to end (duration in ms and the start time of the step)
+
+thighWidth = 20;
+shinWidth = 10; // reset down below for size of animal
+
+placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed = -1) { // goal here is the desired place to step to below the creature, not the ultimate target (with this goal added to prediction dist)
+	live_auto_call
+	var _goalPos = stepPositions[legIndex][2]; // this goal IS the actual step goal used to place the foot
+	var _previousStepPos = stepPositions[legIndex][0]; // this goal IS the actual step goal used to place the foot
+	if(moveSpeed == -1) {
+		moveSpeed = point_distance(0, 0, xChange, yChange);
 	}
+	
+	_previousStepPos[0] = _goalPos[0];
+	_previousStepPos[1] = _goalPos[1];
+	
+	_goalPos[0] = x + clamp((goalX - currentX) * .26, -legSegLen * .65, legSegLen * .65) + xChange * legSegLen; // this takes into acount the dist from previous step, the leg length, the duration of the step, add more for accuracy perhaps
+	_goalPos[1] = y + clamp((goalY - currentY) * .26, -legSegLen * .65, legSegLen * .65) + yChange * legSegLen;
+	
+	var _stepAhead = point_distance(x, y, _goalPos[0], _goalPos[1]);
+	
+	var _stepTime = (_stepAhead / (moveSpeed * 2)) * (game_get_speed(gamespeed_microseconds) / 1000) * 1.65; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
+	
+	setStepTimings(legIndex, _stepTime); //TODO constant step timings? What factors determine how fast a step is taken in real life? Smaller steps are slower? Faster? Moving faster overall means faster steps, for sure.
 }
-//hurt3D = function(damage, knockback, radius, dropOffPower = 1, hitSourceId = noone) {
-//	if(damage > 1) {
-//		Health -= sqrt(damage);
-//	} else {
-//		Health -= sqr(damage);
-//	}
-	
-//	angleShake += damage;
-	
-//	if(Health <= 0) {
-//		var _hitDir = instance_exists(hitSourceId) ? point_direction(hitSourceId.x, hitSourceId.y, x, y) : irandom(360); // im getting freaky with these terniarys
-		
-//		fallingTimer = 432;
-//		fallingDir = (_hitDir > 90 && _hitDir < 270) ? 1 : -1;
-//		fallingSpeed = damage / 12;
-//	}
-//}
 
-hit = function(damageAmount, hitDir) {
-	if(damageAmount > 1) {
-		Health -= sqrt(damageAmount);
-	} else {
-		Health -= sqr(damageAmount);
-	}
-	
-	angleShake += damageAmount;
-	
-	if(Health <= 0) {
-		fallingTimer = 432;
-		fallingDir = hitDir > 90 && hitDir < 270 ? -1 : 1;
-		fallingSpeed = damageAmount / 100;
-	}
+setStepTimings = function(legIndex, duration) {
+	stepTimings[legIndex][1] = current_time;
+	stepTimings[legIndex][0] = duration;
 }
+
+die = function() {
+	alive = 0;
+	instance_destroy();
+}
+
 
 										// the connected nodes V
 //x/y/height, xChange/yChange/heightChange, weight, rigidity, [[dir, dist, rigidity, distRigidity]] ]
 structureNodes = [];
 extraNodes = [];
 
-treeThicknessMax = 28;
+rootThickness = irandom_range(23, 80);
 
-gravityForce = .01;
+thighWidth = rootThickness * .75 + 3;
+shinWidth = rootThickness * .45 + 2;
+hipWidth = rootThickness * .5;
+legSegLen = rootThickness * 1.65 + 10;
+stepUpdateDist = legSegLen * .8;
 
 ///@desc With this you can add a node that has its own values and the values that describe how it attaches to the node it's connected to. You must either give the dir/dist connection or an x/y/z. The alternative will be auto filled by the one you do give.
 ///@param weightSet The heaviness of this node, both in resistance to moving and returning and force applied via gravity?
@@ -91,15 +109,17 @@ addNode = function(weightSet, thicknessSet, connectedToId, angleToConnection = u
 		yy ??= connectedToId.y - _sin * distToConnection;
 		zz ??= connectedToId.height - _sin * (distToConnection / 3);
 
-		currentAngle = connectedToId.currentAngle + (angleToConnection - 180); // this value is the angle of the connection TO the current node after all the extra stuff and other nodes have done their compound slumping and leaning... This is calculated!
+		currentAngle = angleToConnection - 180; // this value is the angle of the connection TO the current node after all the extra stuff and other nodes have done their compound slumping and leaning... This is calculated!
 		connectedTo = connectedToId;
+		
+		var _angleDif = angle_difference(angleToConnection - 180, connectedTo.currentAngle);
 		
 		connectionRigiditySet ??= (power(thicknessSet, 3) * .00025) / (sqrt(clamp(distToConnection / 8, 1, 99))); // lerp value (  pos = lerp(pos, goalPos, rigidity)  )
 		connectionBreakDistSet ??= (30 + (distToConnection * 3)) / power(clamp(thicknessSet - .3, 0, 999), .25);
 		
 		connectionRigidity = connectionRigiditySet;
 		connectionBreakDist = connectionBreakDistSet;
-		connectionDir = angleToConnection + 90;
+		connectionDir = _angleDif;
 		connectionDist = distToConnection;
 	} else { // no connection
 		connectedTo = -1;
@@ -110,8 +130,8 @@ addNode = function(weightSet, thicknessSet, connectedToId, angleToConnection = u
 			connectionDir = angleToConnection;
 			currentAngle = angleToConnection;
 		} else {
-			connectionDir = 90;
-			currentAngle = 90;
+			connectionDir = 0;
+			currentAngle = 0;
 		}
 		connectionDist = 0;
 	}
@@ -138,7 +158,7 @@ addNode = function(weightSet, thicknessSet, connectedToId, angleToConnection = u
 	return self;
 }
 
-breakNode = function(firstNode) { // why are random nodes breaking through out when this happens?
+breakNode = function(firstNode) {
 	var _breakFromNodes = [structureNodes[firstNode]];
 	var _breakFromNodesHold= [];
 	//var _removedNodes = [structureNodes[firstNode]];
@@ -177,54 +197,22 @@ breakNode = function(firstNode) { // why are random nodes breaking through out w
 	}
 }
 
-var _height = 0;
-var _y = y;
-var _x = x;
+rootNode = new addNode(0, 40, -1, 0,,,, x, y, legSegLen * 2);
 
-var _totalThickness = treeThicknessMax;
-var _outness = 1; // step counter for splits, 1 as base to like, 6 for 6 splits away and the end
-
-var _weight = 1;
-
-var _first = new addNode(1, _totalThickness, -1, 90,,,, _x, _y, _height);
-
-var _newlyAdded = [_first];
-var _addedHold = [];
-
-while(array_length(_newlyAdded) > 0) { // for as long as there are new growths check their splitting
-	for(var _i = array_length(_newlyAdded) - 1; _i >= 0; _i--) {
-		var _sourceNode = _newlyAdded[_i];
-		var _branchThickness = _sourceNode.thickness; // total usable thickness for this branch to split
-		if(_branchThickness >= 2) {
-			var _splits = irandom_range(1, ceil(power(_branchThickness, .5)) * ((_height + 15) / (_height + 50)));
-			var _splitThicknesses = script_splitRandom(_branchThickness, _splits, _branchThickness / 5);
-			for(var _branchI = 0; _branchI < _splits; _branchI++) {
-				var _thickLengthMult = power(_splitThicknesses[_branchI] / 10, .2) + .5;
-				var _splitNode = new addNode(clamp(sqr(_splitThicknesses[_branchI] / 2), .5, 99999), _splitThicknesses[_branchI] * .85, _sourceNode, ,,,, _sourceNode.x + irandom_range(-20, 20) * _thickLengthMult, _sourceNode.y + irandom_range(-48, -10) * _thickLengthMult, _height);
-
-				array_push(_addedHold, _splitNode);
-			}
-		}
-		
-		_height += 20;
-	}
+var _prevNode = rootNode;
+var _width = rootThickness;
+var _step = 1;
+repeat(10) {
+	_prevNode = new addNode(_width / 2, 5 + _width, _prevNode,,, _width / 200, 999, x - _step * rootThickness, y, rootNode.height);
+	_width -= rootThickness / 10;
+	_step++;
 	
-	_newlyAdded = _addedHold;
-	_addedHold = [];
+	if(_step == 2) {
+		msg(_prevNode);
+	}
 }
 
-/* I think the first kind of building I should make is actually trees, dead trees or palm trees that wave around
-like they are in wind or bobbing ect and they can get wiggled by bombs and nukes and ect. They would have multiple
-segments that bent together and could break apart into pieces with particles and such to show leaves being knocked
-off or pieces being broken away. These pieces could then fall to the ground and maybe become debris?
-
-segments could try and lower towards a y value of "ground" but their direction could be restricted by the segment they
-connect to so if segment one is leaning 10 degrees right then segment two would be drawn super tightly to only hang say 
-15 degrees different so 25 degrees and then segement three would be 25+15=40 degrees. I think this both makes the tree 
-look like it's under weight and also balances the "physics" to make it seem like it's flexible and has realistic connections
-perhaps the breaking conditions could be segment to segment angle differences above 20 degrees including ground. This would 
-directly make the warping of the tree related to it's breaking. It would also use IK to link sections and create the pull
-that let's the gravity work against something. Sounds sick. The leaves could be IK or just drawn shapes with random wag
-for the degree of shake that their segment is under. Trying to avoid lag of course.. Should be easy to cull these though.
-
-*/
+var _chest = new addNode(rootThickness * .5, rootThickness * 1.4, rootNode,,, .24, 999, x + rootThickness * 2.4, y, rootNode.height + rootThickness * .6); // chest (hip to chest)
+var _neck = new addNode(rootThickness * .3, rootThickness * .8, _chest,,, .16, 999, _chest.x + rootThickness * .5, _chest.y, _chest.height + rootThickness * .2); // neck (chest to neck base)
+var _skullTop = new addNode(rootThickness * .3, rootThickness * .7, _neck,,, .16, 999, _neck.x + rootThickness * .8, _neck.y, _neck.height + rootThickness * .1); // skull (neck base to skull tip top)
+var _skullBottom = new addNode(rootThickness * .15, rootThickness * .7, _neck,,, .13, 999, _neck.x + rootThickness * .7, _neck.y, _neck.height + rootThickness * -.1); // skull (neck base to skull tip bottom)

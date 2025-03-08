@@ -64,8 +64,9 @@ if(_speed > 1) {
 		_hit.hurt(clamp(sqr(_speed / 2), 0, 5), _travelDir, true);
 	}
 }
-if(collision_rectangle(x - 15, y - 22, x + 15, y + 8, obj_mapVisual, false, true)) {
-	var _hit = instance_nearest(x, y, obj_mapVisual); // probably the closest....
+
+var _hit = collision_rectangle(x - 15, y - 22, x + 15, y + 8, obj_palmTree, false, true);
+if(instance_exists(_hit)) {
 	var _hitDir = point_direction(x, y, _hit.x, _hit.y);
 	xChange -= dcos(_hitDir) * _speed / 11;
 	yChange += dsin(_hitDir) * _speed / 11;

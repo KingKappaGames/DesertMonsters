@@ -3,10 +3,11 @@ event_inherited();
 sys = global.particleSystem;
 dust = global.sandBurstDustFloat;
 
+sprite_index = choose(spr_reeds, spr_bush, spr_tuft);
 image_alpha = 1;
 image_index = irandom(image_number);
-image_xscale = 2;
-image_yscale = 2;
+image_xscale = 1;
+image_yscale = 1;
 
 Health = 91.5;
 height = 0;

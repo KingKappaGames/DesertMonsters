@@ -9,7 +9,7 @@ directionFacing = _dirMoving
 
 var _viewCompress = .5 + abs(dsin(directionFacing) / 2);
 var _speed = point_distance(0, 0, xChange, yChange);
-var _jostle = (dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * _speed * 3;
+var _jostle = (dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * sqrt(_speed) * 3;
 
 var _leanAheadX = xChange * 9; // keep consistent i suppose
 var _leanAheadY = clamp(yChange, 0, 99) * 9; // keep consistent i suppose

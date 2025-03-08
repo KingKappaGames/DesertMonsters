@@ -43,6 +43,8 @@ for(var _sNodeI = _structureNodeCount - 1; _sNodeI >= 0; _sNodeI--) {
 				//draw_circle_color((_node.x + _connection.x) / 2, (_node.y + _connection.y) / 2, 3 + _node.connectionDist * 1.25, _endColor, #ffbbbb, false);
 			}
 		}
+	} else {
+		draw_line_width_color(x, y, _node.x, _node.y, _nodeThickness, c_white, c_white);
 	}
 	
 	//draw_set_color(c_green);

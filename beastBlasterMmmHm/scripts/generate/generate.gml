@@ -1,7 +1,7 @@
 //WIP DO NOT DELETE - REGEN ONLY PART OF GRID NECESSARY - PERFORMANCE UP ONE MILLION BILLION PERCENT 
 ///@desc The limits represent the edge of the existing grid (in PIXELS!) to draw in so if you moved to the left 50 and down 50 the grid would have a rightLimit of 50 and bottomLimit of 50 to represent those sections needing drawing!
 function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin = 0) {
-	live_auto_call
+	updatePerlin = true;
 	
 	leftMargin = floor(leftMargin / blockSize);
 	topMargin = floor(topMargin / blockSize);
@@ -40,20 +40,20 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 					if(_rand > .999) {
 						instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
 					} else if(_rand < _heightVal) {
-						//repeat(2) {
+						repeat(2) {
 							var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
 		
 							_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
 							if(_heightVal > .8) {
-								_grass.image_blend = #158a6e;
+								_grass.image_blend = #DBE7FF;
 							} else if(_heightVal > .6) {
-								_grass.image_blend = #19bf4e;
+								_grass.image_blend = #dfffdf;
 							} else if(_heightVal > .4) {
-								_grass.image_blend = #badc60;
+								_grass.image_blend = #D0FFC1;
 							} else {
-								_grass.image_blend = #a12c1d;
+								_grass.image_blend = #FFC6C3;
 							}
-						//}
+						}
 					}
 				}
 		    }

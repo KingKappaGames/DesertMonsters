@@ -1,8 +1,9 @@
 if(updatePerlin) {
+	updatePerlin = false;
 	var _height = 0;
 
-	surface_set_target(getSurf());
-
+	surface_set_target(getSurf()); //TODO draw the old perlin surface offset to the grid position then redraw the gaps like the generator but for drawing!!
+//old redrawing method 2.2 ms of lag for drawing the draw event (this event) in vm
 	for(var i = 0; i < width; i++) {
 	    for(var j = 0; j < height; j++) {
 			_height = grid[# i, j];
@@ -39,30 +40,47 @@ if(updatePerlin) {
 var _distortionWidth = sprite_get_width(spr_distort_smoothnoise);
 var _distortionHeight = sprite_get_height(spr_distort_smoothnoise);
 
+var _sandWidth = sprite_get_width(spr_sandTexture);
+var _sandHeight = sprite_get_height(spr_sandTexture);
+
 var _gridX = y div blockSize * blockSize;
 var _gridY = x div blockSize * blockSize;
 
-shader_set(Shader1);
+#region shader 1 (blur!) ###############################################################################################
+shader_set(shd_desertDistortAndTexture);
 
-shader_set_uniform_f(shader_get_uniform(Shader1, "roomPosition"), (x - (x - updateLastX)) / _distortionWidth, (y - (y - updateLastY)) / _distortionWidth);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "roomPositionDistort"), (x - (x - updateLastX)) / _distortionWidth, (y - (y - updateLastY)) / _distortionHeight);
 
-shader_set_uniform_f(shader_get_uniform(Shader1, "gm_pSurfaceDimensions"), surface_get_width(perlinSurf), surface_get_height(perlinSurf));
-
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "gm_pSurfaceDimensions"), surface_get_width(perlinSurf), surface_get_height(perlinSurf));
 
 var texture = sprite_get_texture(spr_distort_smoothnoise, 0);
-var register = shader_get_sampler_index(Shader1, "g_DistortTexture");
+var register = shader_get_sampler_index(shd_desertDistortAndTexture, "g_DistortTexture");
 texture_set_stage(register, texture);
 gpu_set_texrepeat_ext(register, true);
 
 
-shader_set_uniform_f(shader_get_uniform(Shader1, "g_DistortTextureDimensions"), _distortionWidth, _distortionHeight);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortTextureDimensions"), _distortionWidth, _distortionHeight);
 
-shader_set_uniform_f(shader_get_uniform(Shader1, "g_DistortScale"), 10.0);
-shader_set_uniform_f(shader_get_uniform(Shader1, "g_DistortAmount"), 60.0);
-shader_set_uniform_f(shader_get_uniform(Shader1, "g_DistortOffset"), 0.0, 0.0);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortScale"), 10.0);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortAmount"), 60.0);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortOffset"), 0.0, 0.0);
+
+//Sand texture stuff
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "roomPositionSand"), (x - (x - updateLastX)) / _sandWidth, (y - (y - updateLastY)) / _sandHeight);
+var _sandTexture = sprite_get_texture(spr_sandTexture, 0);
+var _sandRegister = shader_get_sampler_index(shd_desertDistortAndTexture, "g_sandTexture");
+texture_set_stage(_sandRegister, _sandTexture);
+gpu_set_texrepeat_ext(_sandRegister, true);
+
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_sandTextureDimensions"), _sandWidth, _sandHeight);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_sandTextureOpacity"), .32);
+#endregion ###############################################################################################################################
+
+
 
 draw_surface(getSurf(), updateLastX, updateLastY); // round draw positions to grid spaces
 
 gpu_set_texrepeat_ext(register, false);
+gpu_set_texrepeat_ext(_sandRegister, false); 
 
 shader_reset();

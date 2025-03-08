@@ -15,15 +15,15 @@ if(hasRJ) {
 	if(hasRF) {
 		draw_line_width_color(jointRX, jointRY, footRX, footRY, shinWidth, shinColor, shinColor);
 	}
-	draw_circle_color(jointRX, jointRY, shinWidth, shinColor, shinColor, false); // right knee
+	draw_circle_color(jointRX, jointRY, thighWidth / 2, thighColor, thighColor, false); // right knee
 }
-
+//TODO I should be using 3d drawing to draw the legs, the cross overs and specifics of the legs are really finicky and won't look good if they're done wrong so at LEAST the leg positions should be drawn accurately with a 3d render script (which I already have of course.) perhaps everything should be 3d especially if some things are going to be 3d. It would make it simpler to just remake the project using 3d logic if everythings going to be using 3d roughly anyway...
 if(hasLJ) {
 	draw_line_width_color(hipLX, hipLY, jointLX, jointLY, thighWidth, thighColor, thighColor); // left leg
 	if(hasLF) {
 		draw_line_width_color(jointLX, jointLY, footLX, footLY, shinWidth, shinColor, shinColor);
 	}
-	draw_circle_color(jointLX, jointLY, shinWidth, shinColor, shinColor, false); // left knee
+	draw_circle_color(jointLX, jointLY, thighWidth / 2, thighColor, thighColor, false); // left knee
 }
 
 draw_circle(hipsX, hipsY, 12, false);

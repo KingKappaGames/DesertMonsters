@@ -1,7 +1,7 @@
 {
   "$GMShader":"",
-  "%Name":"Shader1",
-  "name":"Shader1",
+  "%Name":"shd_desertDistortAndTexture",
+  "name":"shd_desertDistortAndTexture",
   "parent":{
     "name":"Shaders",
     "path":"folders/stuffIDontUseOften/Shaders.yy",

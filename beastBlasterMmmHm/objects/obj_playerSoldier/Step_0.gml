@@ -20,7 +20,7 @@ yChange *= speedDecay;
 #region leg stuff!!
 var _speed = point_distance(0, 0, xChange, yChange);
 
-legRotationSpeed = 4.8 * clamp(sqrt(_speed / 2), .17, .85); //proportional to speed
+legRotationSpeed = 4.1 * clamp(sqrt(_speed / 2), .17, .85); //proportional to speed
 legRotation = (legRotation + legRotationSpeed) % 360;
 
 hipYBob = lerp(hipYBob, clamp((-1 + _speed) * 7.5, -7.5, 0) + clamp((dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * _speed, -3, 15), .03);

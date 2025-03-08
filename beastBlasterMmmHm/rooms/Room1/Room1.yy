@@ -43,8 +43,8 @@
         {"name":"g_Distort1Scale","type":0,"value":"1.3",},
         {"name":"g_Distort2Scale","type":0,"value":"38.3",},
         {"name":"g_Distort2Scale","type":0,"value":"3.3",},
-        {"name":"g_Distort1Amount","type":0,"value":"2",},
-        {"name":"g_Distort2Amount","type":0,"value":"4",},
+        {"name":"g_Distort1Amount","type":0,"value":"1",},
+        {"name":"g_Distort2Amount","type":0,"value":"2",},
         {"name":"g_ChromaSpreadAmount","type":0,"value":"1.25",},
         {"name":"g_CamOffsetScale","type":0,"value":"1",},
         {"name":"g_DistortTexture","type":2,"value":"_filter_heathaze_noise_sprite",},
@@ -52,12 +52,11 @@
     {"$GMREffectLayer":"","%Name":"Effect_1_1","depth":2998,"effectEnabled":true,"effectType":"_filter_pixelate","gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Effect_1_1","properties":[
         {"name":"g_CellSize","type":0,"value":"4",},
       ],"resourceType":"GMREffectLayer","resourceVersion":"2.0","userdefinedDepth":true,"visible":false,},
-    {"$GMREffectLayer":"","%Name":"Effect_1","depth":2999,"effectEnabled":true,"effectType":"_filter_distort","gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Effect_1","properties":[
-        {"name":"g_DistortScale","type":0,"value":"2",},
-        {"name":"g_DistortAmount","type":0,"value":"50",},
-        {"name":"g_DistortOffset","type":0,"value":"0",},
-        {"name":"g_DistortOffset","type":0,"value":"0",},
-        {"name":"g_DistortTexture","type":2,"value":null,},
+    {"$GMREffectLayer":"","%Name":"Effect_1","depth":2999,"effectEnabled":true,"effectType":"_filter_rgbnoise","gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Effect_1","properties":[
+        {"name":"g_RGBNoiseIntensity","type":0,"value":"0.15",},
+        {"name":"g_RGBNoiseAnimation","type":0,"value":"0",},
+        {"name":"g_RGBNoiseColour","type":1,"value":"#FFFFFFFF",},
+        {"name":"g_RGBNoiseTexture","type":2,"value":"_filter_rgbnoise_noise",},
       ],"resourceType":"GMREffectLayer","resourceVersion":"2.0","userdefinedDepth":true,"visible":false,},
     {"$GMRBackgroundLayer":"","%Name":"Background","animationFPS":0.0,"animationSpeedType":0,"colour":4294967295,"depth":10000,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"hspeed":0.0,"htiled":true,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Background","properties":[],"resourceType":"GMRBackgroundLayer","resourceVersion":"2.0","spriteId":{"name":"spr_sandBG","path":"sprites/spr_sandBG/spr_sandBG.yy",},"stretch":false,"userdefinedAnimFPS":false,"userdefinedDepth":true,"visible":true,"vspeed":0.0,"vtiled":true,"x":0,"y":0,},
   ],

@@ -192,7 +192,7 @@ weaponControls = function() {
 #region leg stuff!!! LEG STUFF
 
 #region leg variables
-legSegLen = 34;
+legSegLen = 33;
 
 footLX = 0;
 footLY = 0;
@@ -226,7 +226,7 @@ setTrack = function(dir, spd) {
 	rTrackY = y + trackHeight + hipYOff + _sin * hipWidth;
 	
 	trackDir = dir;
-	trackLen = (spd * 14) / clamp(sqrt(spd / 2), .3, 2.4);
+	trackLen = (spd * 14) / clamp(sqrt(spd * .29), .25, 2.4);
 }
 
 setFeetAtTrackBase = function(speedMoving) { // god i hate built in speed variable
@@ -245,8 +245,8 @@ setFeetAtTrackBase = function(speedMoving) { // god i hate built in speed variab
 }
 
 raiseFeetOffTrack = function(spd) {
-	footLY += clamp(dsin(legRotation + 270), -99, 0) * sqrt(spd) * 10;
-	footRY += clamp(dsin(legRotation + 90), -99, 0) * sqrt(spd) * 10;
+	footLY += clamp(dsin(legRotation + 270), -99, 0) * (power(1 + spd, 1.25) - 1) * 9;
+	footRY += clamp(dsin(legRotation + 90), -99, 0) * (power(1 + spd, 1.25) - 1) * 9;
 }
 
 placeFeetFull = function(dir, spd) {
