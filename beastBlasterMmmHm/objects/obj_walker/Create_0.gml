@@ -23,14 +23,16 @@ yChange = random_range(-.3, .3);
 
 friendly = false;
 
-
 //animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 hipWidth = 15;
 hipDir = 0; // reset down below based on size of animal
 
 legSegLen = 72;
-stepUpdateDist = 42;
+standingHeight = 1.7; // multiple of leg seg len
+
+stepUpdateDistBase = 42;
+stepUpdateDist = stepUpdateDistBase;
 
 hipPositions = [[x, y, 0], [x, y, 0]]; // right 0 left 1
 kneePositions = [[x, y, 0], [x, y, 0]]; // right = 0, left = 1, following hand numbering in main game
@@ -56,6 +58,7 @@ placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed =
 	_goalPos[1] = y + clamp((goalY - currentY) * .26, -legSegLen * .65, legSegLen * .65) + yChange * legSegLen;
 	
 	var _stepAhead = point_distance(x, y, _goalPos[0], _goalPos[1]);
+	msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
 	var _stepTime = (_stepAhead / (moveSpeed * 2)) * (game_get_speed(gamespeed_microseconds) / 1000) * 1.65; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
 	
@@ -63,8 +66,9 @@ placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed =
 }
 
 setStepTimings = function(legIndex, duration) {
-	stepTimings[legIndex][1] = current_time;
-	stepTimings[legIndex][0] = duration;
+	stepTimings[2] = current_time + duration; // step end time
+	stepTimings[legIndex][1] = current_time; // current time duh
+	stepTimings[legIndex][0] = duration; // step (expected!) duration
 }
 
 die = function() {
@@ -216,3 +220,5 @@ var _chest = new addNode(rootThickness * .5, rootThickness * 1.4, rootNode,,, .2
 var _neck = new addNode(rootThickness * .3, rootThickness * .8, _chest,,, .16, 999, _chest.x + rootThickness * .5, _chest.y, _chest.height + rootThickness * .2); // neck (chest to neck base)
 var _skullTop = new addNode(rootThickness * .3, rootThickness * .7, _neck,,, .16, 999, _neck.x + rootThickness * .8, _neck.y, _neck.height + rootThickness * .1); // skull (neck base to skull tip top)
 var _skullBottom = new addNode(rootThickness * .15, rootThickness * .7, _neck,,, .13, 999, _neck.x + rootThickness * .7, _neck.y, _neck.height + rootThickness * -.1); // skull (neck base to skull tip bottom)
+
+debugArr = [["updateDist", stepUpdateDist], ["updateDistBase", stepUpdateDistBase], ["currentSpeed", currentSpeed]];

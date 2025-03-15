@@ -34,7 +34,7 @@ function __input_config_verbs()
             escape: input_binding_key(vk_escape),
 			control: input_binding_key(vk_control),
 			cameraChange: input_binding_key("C"), // managment controls
-			restart: input_binding_key("Y"),
+			restart: input_binding_key(vk_f8),
 			fullscreen: input_binding_key("F"),
         },
         

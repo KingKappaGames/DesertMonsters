@@ -1,6 +1,11 @@
 draw_sprite_ext(spr_desertStructure, round(dsin(current_time)), x, y, 1, 2, image_angle, c_white, image_alpha);
 
-//draw_line_width_color(x, y, x + dcos(image_angle + 90) * 100, y - dsin(image_angle + 90) * 100, 10, image_blend, #dddd88)
-//draw_circle_color(x, y - 100, 25, c_green, c_olive, false);
+//x += 10000;
+//var _nearest = instance_nearest(x - 10000, y, obj_desertStructure);
+//x -= 10000;
 
-//draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
+//if(_nearest != id) {
+//	var _dist = point_distance(x, y, _nearest.x, _nearest.y);
+//	var _dir = point_direction(x, y, _nearest.x, _nearest.y);
+//	draw_arc((x + _nearest.x) / 2, (y + _nearest.y) / 2, _dist, _dir + sign(angle_difference(270, _dir)) * 20, _dir + 180 + sign(angle_difference(270, _dir + 180)) * 20);
+//}

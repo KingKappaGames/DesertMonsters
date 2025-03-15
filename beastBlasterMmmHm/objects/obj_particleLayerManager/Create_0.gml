@@ -1,4 +1,6 @@
-/*depthOrigin = 0;
+if (live_call()) return live_result;
+
+depthOrigin = 0;
 
 sysCount = 400; // count X spacing is the total screen range in room pixels that the sys manages, set this range to be your screen plus margins if particles ever move up or down within their system and would leave the locality of their layer (depth = -y) as a guess. Because their depths are popped up or down at the edges put those off screen by 10% or something
 sysSpacing = 4;

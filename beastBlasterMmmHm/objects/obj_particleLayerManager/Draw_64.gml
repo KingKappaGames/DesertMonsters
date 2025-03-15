@@ -1,4 +1,4 @@
-/*if(live_call()) { return live_result }
+if(live_call()) { return live_result }
 
 draw_text(500, 400, currentSysEdge);
 draw_text(500, 420, previousCamY);

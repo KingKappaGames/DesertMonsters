@@ -1,21 +1,19 @@
 event_inherited();
 
 if(alive == 1) {
-	if(irandom(200) == 0) {
-		dirGoal = currentDir + irandom_range(-110, 110);
-		if(irandom(30) == 0) {
-			xChange = 0;
-			yChange = 0;
-		}
-	}
+	var _xSpd = keyboard_check(ord("J")) - keyboard_check(ord("G"))
+	var _ySpd = keyboard_check(ord("H")) - keyboard_check(ord("Y"))
 	
-	xChange += dcos(dirGoal) / 100;
-	yChange -= dsin(dirGoal) / 100;
+	xChange += _xSpd * .1;
+	yChange += _ySpd * .1;
+	
+	
 	xChange *= .994;
 	yChange *= .994;
 	
 	currentDir = point_direction(0, 0, xChange, yChange);
 	currentSpeed = point_distance(0, 0, xChange, yChange);
+	stepUpdateDist = stepUpdateDistBase * sqrt(currentSpeed) * .8;
 	
 	x += xChange;
 	y += yChange;
@@ -34,6 +32,19 @@ if(alive == 1) {
 		var _stepTiming = stepTimings[_legI];
 		_stepProgresses[_legI] = clamp((current_time - _stepTiming[1]) / _stepTiming[0], 0, 1);
 		if(_allFeetOnGround && _stepProgresses[_legI] != 1) {
+			
+			#region containing step goals within reasonable range AND bringing in step goals when slowing down
+			var _stepGoal = stepPositions[_legI][2];
+			var _hip = hipPositions[_legI];
+			var _stepDist = point_distance(_hip[0], _hip[1], _stepGoal[0], _stepGoal[1]);
+			if(_stepDist > stepUpdateDist) {
+				var _distOverMultiply = stepUpdateDist / _stepDist;
+			
+				_stepGoal[0] = lerp(_hip[0], _stepGoal[0], _distOverMultiply);
+				_stepGoal[1] = lerp(_hip[1], _stepGoal[1], _distOverMultiply);
+			}
+			#endregion
+			
 			_allFeetOnGround = false;
 		}
 	}
@@ -52,7 +63,7 @@ if(alive == 1) {
 		//temp hip calcs (no control for where the hip is?)
 		_hip[0] = x + dcos(hipDir + 90 - (180 * _legI)) * hipWidth;
 		_hip[1] = y - dsin(hipDir + 90 - (180 * _legI)) * hipWidth;
-		_hip[2] = legSegLen * 2;
+		_hip[2] = legSegLen * standingHeight;
 		
 		var _stepPlacement = array_create(2, 0);
 		_stepPlacement[0] = _hip[0];

@@ -110,3 +110,5 @@ for(var _sNodeI = 0; _sNodeI < _structureNodeCount; _sNodeI++) {
 	}
 }
 draw_set_color(c_white);
+
+draw_circle(x, y, stepUpdateDist, true);
