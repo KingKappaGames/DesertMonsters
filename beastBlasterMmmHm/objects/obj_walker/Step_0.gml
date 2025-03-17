@@ -26,11 +26,10 @@ if(alive == 1) {
 	
 	var _legCount = array_length(stepPositions); // proxy for leg count, should always line up
 	
-	var _stepProgresses = array_create(_legCount); // collect progresses
-	var _allFeetOnGround = true;
+	var _allFeetOnGround = true; // DO PROGRESS SETTING
 	for(var _legI = 0; _legI < _legCount; _legI++) { // check leg progresses to allow or disallow new steps in legs
 		var _stepTiming = stepTimings[_legI];
-		_stepProgresses[_legI] = clamp((current_time - _stepTiming[1]) / _stepTiming[0], 0, 1);
+		_stepTiming[3] = clamp((current_time - _stepTiming[1]) / _stepTiming[0], 0, 1);
 		if(_allFeetOnGround && _stepProgresses[_legI] != 1) {
 			
 			#region containing step goals within reasonable range AND bringing in step goals when slowing down

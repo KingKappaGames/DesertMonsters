@@ -38,7 +38,7 @@ hipPositions = [[x, y, 0], [x, y, 0]]; // right 0 left 1
 kneePositions = [[x, y, 0], [x, y, 0]]; // right = 0, left = 1, following hand numbering in main game
 stepPositions = [[[x, y, 0], [x, y, 0], [x, y, 0]], [[x, y, 0], [x, y, 0], [x, y, 0]]]; // origin x/y PLUS current x/y PLUS end x/y (groups of groups of 3 x/y's for each case, initial, current, goal
 
-stepTimings = [[0, current_time], [0, current_time]]; // each foot gets a timing for how quickly it should move from start to end (duration in ms and the start time of the step)
+stepTimings = [[0, current_time, current_time, 0], [0, current_time, current_time, 0]]; //[progress(updated by step), startTime, endTime, speedRef] (where speed reference is the speed that the thing was moving for that step to compare against for clipping a step on speed up or extending a step in slow down.
 
 thighWidth = 20;
 shinWidth = 10; // reset down below for size of animal
@@ -62,13 +62,15 @@ placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed =
 	
 	var _stepTime = (_stepAhead / (moveSpeed * 2)) * (game_get_speed(gamespeed_microseconds) / 1000) * 1.65; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
 	
-	setStepTimings(legIndex, _stepTime); //TODO constant step timings? What factors determine how fast a step is taken in real life? Smaller steps are slower? Faster? Moving faster overall means faster steps, for sure.
+	setStepTimings(legIndex, _stepTime, moveSpeed); //TODO constant step timings? What factors determine how fast a step is taken in real life? Smaller steps are slower? Faster? Moving faster overall means faster steps, for sure.
 }
 
-setStepTimings = function(legIndex, duration) {
-	stepTimings[2] = current_time + duration; // step end time
-	stepTimings[legIndex][1] = current_time; // current time duh
-	stepTimings[legIndex][0] = duration; // step (expected!) duration
+setStepTimings = function(legIndex, duration, speedRef) {
+	var _timeInfo = stepTimings[legIndex];
+	_timeInfo[3] = speedRef;
+	_timeInfo[2] = current_time + duration; // step end time
+	_timeInfo[1] = current_time; // current time duh
+	_timeInfo[0] = 0; // step (expected!) progress set (starts at 0)
 }
 
 die = function() {

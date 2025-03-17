@@ -17,14 +17,15 @@ if(_depthChange > sysUpdateRange) {
 	if(_depthChange < sysSpacing * sysCount) {
 		
 		var _updateCamEdgeY = (_camY - sysUpdateRange);
-		//if(_stepSign == -1) {  
-			_updateCamEdgeY += camera_get_view_height(view_camera[0]);
-		//}
+		if(_stepSign == 1) {   
+			_updateCamEdgeY -= camera_get_view_height(view_camera[0]); 
+		}
 		
 		var _updateDepth = -(((_updateCamEdgeY) div sysSpacing) * sysSpacing) + depthOrigin;
 		var _updatePos = _previousEdge; // if undoing move back on step before starting to hit current entry
 		repeat(_depthChange / sysSpacing) { // amount of layers traversed (because of check this is sure to be less than total count)
 			part_system_depth(_sysCollection[_updatePos], _updateDepth);
+			particleLayerDepthArray[_updatePos] = _updateDepth;
 			if(irandom(0) == 0) {
 				msg($"The {_updatePos}th system was set to a depth of {_updateDepth}");
 			}
@@ -66,12 +67,11 @@ if(_depthChange > sysUpdateRange) {
 }
 
 var _sysAll = global.sysCollection;
-var _layerAdd = round(((mouse_y - sysUpdateRange) - layerCreateOrigin) / sysSpacing) - 1; // the mouse layer is accurate
+var _layerAdd = round(((mouse_y - (previousCamY - sysUpdateRange)) - layerCreateOrigin) / sysSpacing) - 1; // the mouse layer is accurate
 //var _sysIndex = ((currentSysEdge + sysCollectionMoveSign * _layerAdd) + sysCount) % sysCount;
-var _sysIndex = (_layerAdd + sysCount) % sysCount;
-if(irandom(90) == 0) {
-	msg(_sysIndex);
-}
+var _sysIndex = (currentSysEdge + _layerAdd * sysCollectionMoveSign + sysCount) % sysCount;
+mouseLayer = _sysIndex;
+
 var _sys = _sysAll[_sysIndex]; // the goal layer is accurate, confirmed to at least 1 layer
 part_particles_create_color(_sys, mouse_x, mouse_y, part, make_color_rgb(mouse_y % 256, 0, 0), 1);
 if(mouse_check_button_released(mb_left)) {

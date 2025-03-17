@@ -300,11 +300,9 @@ switchRoomFake = function(roomDestination) {
 
 //global.player = instance_create_layer(x, y, "Instances", obj_playerShip);
 
-var _yuh0 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
-_yuh0.yOffset = -30;
-var _yuh1 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
-_yuh1.yOffset = -12;
-var _yuh2 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
-_yuh2.yOffset = 12;
-var _yuh3 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
-_yuh3.yOffset = 30;
+var _off = -300;
+repeat(30) {
+	var _yuh0 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
+	_yuh0.yOffset = _off;
+	_off += 20;
+}

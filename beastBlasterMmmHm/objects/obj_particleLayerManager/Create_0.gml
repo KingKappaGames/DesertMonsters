@@ -2,8 +2,8 @@ if (live_call()) return live_result;
 
 depthOrigin = 0;
 
-sysCount = 400; // count X spacing is the total screen range in room pixels that the sys manages, set this range to be your screen plus margins if particles ever move up or down within their system and would leave the locality of their layer (depth = -y) as a guess. Because their depths are popped up or down at the edges put those off screen by 10% or something
-sysSpacing = 4;
+sysCount = 160; // count X spacing is the total screen range in room pixels that the sys manages, set this range to be your screen plus margins if particles ever move up or down within their system and would leave the locality of their layer (depth = -y) as a guess. Because their depths are popped up or down at the edges put those off screen by 10% or something
+sysSpacing = 5;
 
 sysUpdateRange = 100; // if the screen varies from the last update by this many pixels the systems will be updated (hence why the buffer space is important, among other things)
 
@@ -43,3 +43,7 @@ updateLayers = function(count = -1, spacing = -1) {
 }
 
 part = global.sandBurstDust;
+
+mouseLayer = 0;
+
+particleLayerDepthArray = array_create(sysCount, 0);
