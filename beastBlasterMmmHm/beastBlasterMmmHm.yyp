@@ -507,6 +507,7 @@
     {"id":{"name":"script_burstParticlesConcentrated","path":"scripts/script_burstParticlesConcentrated/script_burstParticlesConcentrated.yy",},},
     {"id":{"name":"script_burstPartSpawners","path":"scripts/script_burstPartSpawners/script_burstPartSpawners.yy",},},
     {"id":{"name":"script_createMeatDebris","path":"scripts/script_createMeatDebris/script_createMeatDebris.yy",},},
+    {"id":{"name":"script_createPartDepth","path":"scripts/script_createPartDepth/script_createPartDepth.yy",},},
     {"id":{"name":"script_createShockHurter","path":"scripts/script_createShockHurter/script_createShockHurter.yy",},},
     {"id":{"name":"script_generateVillage","path":"scripts/script_generateVillage/script_generateVillage.yy",},},
     {"id":{"name":"script_samplePerlinColor","path":"scripts/script_samplePerlinColor/script_samplePerlinColor.yy",},},

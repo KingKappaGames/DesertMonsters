@@ -2,7 +2,7 @@ if (live_call()) return live_result;
 
 #region sound control kiinda ...
 if(keyboard_check_released(ord("M"))) {
-	global.muted -= .2;
+	global.muted -= .25;
 	if(global.muted < 0) {
 		global.muted = .5;
 	}

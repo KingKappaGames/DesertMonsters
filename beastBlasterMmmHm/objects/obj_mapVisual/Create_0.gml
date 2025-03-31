@@ -1,4 +1,4 @@
-depth = -(y - global.depthOffset) + 40;
+depth = -(y - global.depthOffset);
 
 hit = function(catchy) {
 	
