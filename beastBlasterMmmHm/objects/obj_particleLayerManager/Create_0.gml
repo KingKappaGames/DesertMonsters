@@ -1,23 +1,26 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
+
+global.particleSystemManager = id;
 
 depthOrigin = 0;
 
-sysCount = 160; // count X spacing is the total screen range in room pixels that the sys manages, set this range to be your screen plus margins if particles ever move up or down within their system and would leave the locality of their layer (depth = -y) as a guess. Because their depths are popped up or down at the edges put those off screen by 10% or something
-sysSpacing = 5;
+sysCount = 1200; // count X spacing is the total screen range in room pixels that the sys manages, set this range to be your screen plus margins if particles ever move up or down within their system and would leave the locality of their layer (depth = -y) as a guess. Because their depths are popped up or down at the edges put those off screen by 10% or something
+sysSpacing = 1;
 
-sysUpdateRange = 100; // if the screen varies from the last update by this many pixels the systems will be updated (hence why the buffer space is important, among other things)
+sysUpdateRange = 50; // if the screen varies from the last update by this many pixels the systems will be updated (hence why the buffer space is important, among other things)
 
 previousCamY = camera_get_view_y(view_camera[0]);
 currentSysEdge = 0;
 sysCollectionMoveSign = 0;
 
 global.sysBottom = part_system_create();
-part_system_depth(global.sysBottom, 1000); // bottom, where ever that is V 
+part_system_depth(global.sysBottom, 1000); // bottom, where ever that is V  (not part of the moving system! But often times you will want a particle layer that goes over everything)
 
 global.sysTop = part_system_create();
-part_system_depth(global.sysTop, -1000); // top, what ever depth that is ^
+part_system_depth(global.sysTop, -1000); // top, what ever depth that is ^ (not part of the moving system! But often times you will want a particle layer that goes under everything)
 
 global.sysCollection = array_create(sysCount, 0);
+sysCollection = global.sysCollection; // local reference of the same thing above (for lag/typing convenience)
 
 var _sysSet = global.sysCollection;
 var _depthOfInitial = -(camera_get_view_y(view_camera[0]) - sysUpdateRange) + depthOrigin;
@@ -32,13 +35,81 @@ repeat(sysCount) {
 layerCreateOrigin = previousCamY - sysUpdateRange;
 
 
-updateLayers = function(count = -1, spacing = -1) {
-	if(count != -1) {
-		
+///@param {REAL} borderWidth The height in pixels of the margins above and below the screen
+///@param {REAL} systemSpacing The height of each layer in pixels, this being 1 means the layering DEPTH is pixel perfect, being 100 means your particles will snap to depths of 100 (the position is always correct regardless, this is a GM thing, the only thing this system does is depth, you don't need to mess with position at all)
+///@param {BOOL} useCameraAsArea The normal use case for this system is wrapping depth around the camera space plus margins, if you need something else then turn this off (but then what? You'll have to custom make the else case I guess))
+///@param {REAL} originY Not super useful usually, changes the relative 0 point of the depth looping but doesn't affect final depth (final depth aligns with depth = -y)
+///@param {REAL} forceSystemCount The quantity of systems to use (will update the collection to have this many systems)
+///@param {REAL} camIndex The index number for the camera to calculate positions with
+setSpacing = function(borderWidth = 20, systemSpacing = 1, useCameraAsArea = true, originY = undefined, forceSystemCount = -1, camIndex = 0) {
+	sysUpdateRange = borderWidth; // the margins above and below the screen (only really useful for preventing movement from showing off the screen (which isn't even a problem BUT the particles created when doing so will be dropped to the nearest depth.. And you'll notice that when you go far enough to see them in a position they shouldn't be (clumped on the edge vs placed along the range they were intended to have))
+	if(originY != undefined) {
+		layerCreateOrigin = originY; // origin is just the depth of the first system, not really useful for much but hey
 	}
 	
-	if(spacing != -1) {
+	var _systemCount = 0;
+	if(useCameraAsArea) {
+		if(forceSystemCount == -1) {
+			_systemCount = ceil((camera_get_view_height(view_camera[camIndex]) + borderWidth * 2) / layerSpacing); // default to placing enough layers to cover camera and margins with spaced layers, though I guess there's some use for doing a different set up?
+		}
+	}
+	
+	if(forceSystemCount != -1) {
+		_systemCount = forceSystemCount; // if forced, set forced count
+	}
+	
+	var _oldSysCount = sysCount;
+	sysCount = _systemCount; // finalize the layer count
+	
+	#region // resize the layer collection to match new count
+	
+	if(sysCount > _oldSysCount) { // adding systems to collection
+		array_resize(sysCollection, sysCount);
+		for(var _i = _oldSysCount; _i < sysCount; _i++) {
+			sysCollection[_i] = part_system_create(); // create blank system
+		}
+	} else if(sysCount < _oldSysCount) { // removing systems from collection
+		for(var _i = sysCount; _i < _oldSysCount; _i++) {
+			part_system_destroy(sysCollection[_i]); //clear out the excess now
+		}
+		array_resize(sysCollection, sysCount);
+	} // else if the same do nothing
+	#endregion
+	
+	
+}
+
+///@desc This replaces all the systems to the desired position and updates their depths to be current with this new position, this can be useful for immediate jumps or changes (like spawning in, since there's no reference point on the first frame). Note though that the system already does this when moving more than a full system at once so teleports and such changes should be handled automatically, but this is here if you need it.
+setCollectionPosition = function(useCamera = true, forcePosition = undefined) {
+	if(useCamera) { // place the systems around the camera with the established margins
 		
+	} else if(forcePosition != undefined) { // if you instead want to place the systems relative to some other point for some reason then this can do that.. not sure why it would be necessary but I wish you luck with what you're doing
+		
+	}
+}
+
+///@param drawSystems This toggles whether the paused systems should keep drawing
+pauseAll = function(/*drawSystems = false*/) {
+	var _sysSet = sysCollection; // get a ref for all systems
+	var _sys = -1; // pre set a hold variable for your system
+	for(var _i = sysCount - 1; _i >= 0; _i--) { // for all systems
+		_sys = _sysSet[_i]; // set the system for reference convinience
+		//if(!drawSystems) {
+		part_system_automatic_draw(_sys, false); // pause drawing in the system, making it invisible (and not lag unnecesarily) (if you for some reason want to be able to keep drawing them then uncomment the drawSystems values here, but usually to maintain particles you store the screen to a surface for pause backgrounds, not draw everything while paused)
+		//}
+		part_system_automatic_update(_sys, false); // pause updating in the system, making it frozen
+	}
+}
+
+
+///@param {BOOL} forceDrawState This forces the systems to draw or not draw after being unpaused, since sometimes you want to do drawing yourself and changing it here would be problematic for that. Set this to whatever your otherwise desired draw state is when updating (defaults to true though)
+unpauseAll = function(forceDrawState = true) {
+	var _sysSet = sysCollection; // get a ref for all systems
+	var _sys = -1; // pre set a hold variable for your system
+	for(var _i = sysCount - 1; _i >= 0; _i--) { // for all systems
+		_sys = _sysSet[_i]; // set the system for reference convinience
+		part_system_automatic_draw(_sys, forceDrawState); // unpause drawing in the system so that it's visible again (if allowed)
+		part_system_automatic_update(_sys, true); // unpause updating in the system so that it moves again
 	}
 }
 
