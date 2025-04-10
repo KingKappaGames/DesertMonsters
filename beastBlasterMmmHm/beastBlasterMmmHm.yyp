@@ -569,6 +569,7 @@
     {"id":{"name":"spr_perlinBlock","path":"sprites/spr_perlinBlock/spr_perlinBlock.yy",},},
     {"id":{"name":"spr_pistol","path":"sprites/spr_pistol/spr_pistol.yy",},},
     {"id":{"name":"spr_reeds","path":"sprites/spr_reeds/spr_reeds.yy",},},
+    {"id":{"name":"spr_robeParts","path":"sprites/spr_robeParts/spr_robeParts.yy",},},
     {"id":{"name":"spr_rpg","path":"sprites/spr_rpg/spr_rpg.yy",},},
     {"id":{"name":"spr_sandBG","path":"sprites/spr_sandBG/spr_sandBG.yy",},},
     {"id":{"name":"spr_sandSprayDecalCrater","path":"sprites/spr_sandSprayDecalCrater/spr_sandSprayDecalCrater.yy",},},

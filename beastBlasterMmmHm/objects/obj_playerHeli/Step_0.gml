@@ -35,6 +35,7 @@ if(input_check_pressed("drop", playerIndex)) {
 	}
 } else if(input_check("drop", playerIndex)) {
 	heightChange -= heightChangeSign * .01;
+	global.generator.updatePerlinGrid(playerIndex);
 	if(height > 100) {
 		depth = -1002;
 	} else {

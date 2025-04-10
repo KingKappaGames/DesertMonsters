@@ -7,7 +7,7 @@ if(_depthChange >= (sysUpdateRange div sysSpacing) * sysSpacing / 2) { // margin
 	
 	var _stepSign = sign(_camY - previousCamY); // which way to iterate the list updating depths
 	var _previousEdge = currentSysEdge; // last updated index (working)
-	var _goalEdge = round((_camY - sysUpdateRange / 2 - depthOrigin) / sysSpacing) % sysCount; // goal update index (move to this from _previousEdge) (unecessary?)
+	var _goalEdge = round((_camY - sysUpdateRange / 2) / sysSpacing) % sysCount; // goal update index (move to this from _previousEdge) (unecessary?)
 	if(_goalEdge < 0) {
 		_goalEdge += sysCount; // goal edge working (goes up to number - 1 which makes sense i think)
 	}
@@ -19,7 +19,7 @@ if(_depthChange >= (sysUpdateRange div sysSpacing) * sysSpacing / 2) { // margin
 			_updateEdgeY += sysSpacing * sysCount - sysUpdateRange; // sys range * 2?
 		}
 		
-		var _updateDepth = -(((_updateEdgeY) div sysSpacing + 1) * sysSpacing) + depthOrigin; // round the depth and offset by origin (also the first layer is 0 so -1 to the count when multiplying)
+		var _updateDepth = -(((_updateEdgeY) div sysSpacing + 1) * sysSpacing); // round the depth and offset by origin (also the first layer is 0 so -1 to the count when multiplying)
 		var _updatePos = _previousEdge; // if undoing move back on step before starting to hit current entry
 		repeat(_depthChange / sysSpacing) { // amount of layers traversed (because of check this is sure to be less than total count)
 			part_system_depth(sysCollection[_updatePos], _updateDepth);
@@ -46,14 +46,14 @@ if(_depthChange >= (sysUpdateRange div sysSpacing) * sysSpacing / 2) { // margin
 	previousEdgeY = previousCamY - sysUpdateRange;
 	currentSysEdge = _goalEdge;
 	
-	if(depthOrigin < previousEdgeY) { // if layers being looped higher than origin (in depth)
+	if(0 < previousEdgeY) { // if layers being looped higher than origin (in depth)
 		sysCollectionMoveSign = 1;
 	} else {
 		sysCollectionMoveSign = -1;
 	}
 }
 
-var _layerAdd = round(((mouse_y - (previousEdgeY)) - depthOrigin) / sysSpacing) - 1; // the mouse layer is accurate
+var _layerAdd = round(((mouse_y - (previousEdgeY))) / sysSpacing) - 1; // the mouse layer is accurate
 //var _sysIndex = ((currentSysEdge + sysCollectionMoveSign * _layerAdd) + sysCount) % sysCount;
 var _sysIndex = (currentSysEdge + _layerAdd) % sysCount;
 if(_sysIndex < 0) {
@@ -61,10 +61,10 @@ if(_sysIndex < 0) {
 }
 mouseLayer = _sysIndex;
 
-if(mouse_check_button(mb_left)) {
+//if(mouse_check_button(mb_left)) {
 	script_createPartDepth(part, mouse_x, mouse_y, 10, make_color_rgb(mouse_y % 256, 0, 0));
-}
+//}
 
 if(mouse_check_button_released(mb_right)) {
-	global.players[0].y += 5000;
+	global.players[0].y += 2000;
 }

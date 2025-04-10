@@ -1,5 +1,7 @@
 if (live_call()) return live_result;
 
+sprite_set_live(spr_robeParts, true);
+
 randomize();
 window_set_cursor(cr_none);
 
@@ -247,6 +249,17 @@ part_type_orientation(heliDust, 0, 360, 0, 0, 0);
 
 #endregion
 
+#region enum crap
+
+enum stepTimeEnum {
+	progress = 0,
+	startTime = 1,
+	endTime = 2,
+	speedRef = 3
+}
+
+#endregion
+
 ///@desc This uses deactivation and object type deleting to clear all map visuals that don't fall within the generation area (generate in, delete out, this keeps a balanced border to the generator)
 clearMapVisuals = function() {
 	var _generator = global.generator;
@@ -300,9 +313,9 @@ switchRoomFake = function(roomDestination) {
 
 //global.player = instance_create_layer(x, y, "Instances", obj_playerShip);
 
-var _off = -200;
-repeat(20) {
-	var _yuh0 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
-	_yuh0.yOffset = _off;
-	_off += 20;
-}
+//var _off = -200;
+//repeat(20) {
+//	var _yuh0 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
+//	_yuh0.yOffset = _off;
+//	_off += 20;
+//}

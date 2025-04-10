@@ -3,10 +3,8 @@ if(keyboard_check(vk_space)) {
 	generate(); 
 }
 
-if(array_length(global.players) > 0) {
-	x = camera_get_view_x(view_camera[0]) - blockSize * bufferBlockCount;
-	y = camera_get_view_y(view_camera[0]) - blockSize * bufferBlockCount;
-}
+x = camera_get_view_x(view_camera[0]) - blockSize * bufferBlockCount;
+y = camera_get_view_y(view_camera[0]) - blockSize * bufferBlockCount;
 
 if((abs(x - updateLastX) > blockSize * bufferBlockCount * .8) || (abs(y - updateLastY) > blockSize * bufferBlockCount * .8)) { // moving since last frame
 	var _prevUpdateX = updateLastX;

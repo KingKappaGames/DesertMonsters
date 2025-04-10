@@ -12,6 +12,7 @@ for(var _legI = 0; _legI < _legCount; _legI++) {
 	//var _stepGoal = stepPositions[_legI][2];
 	
 	draw_line_width(_hip[0], _hip[1] - _hip[2] * .7, _knee[0], _knee[1] - _knee[2] * .7, thighWidth);
+	draw_circle(_knee[0], _knee[1] - _knee[2] * .7, thighWidth / 2, false);
 	draw_line_width(_knee[0], _knee[1] - _knee[2] * .7, _stepCurrent[0], _stepCurrent[1] - _stepCurrent[2] * .7, shinWidth);
 	
 	draw_set_color(c_red);
@@ -82,33 +83,33 @@ for(var _sNodeI = _structureNodeCount - 1; _sNodeI >= 0; _sNodeI--) {
 	
 	//draw_set_color(c_green);
 	//draw_set_alpha(.75);
-	draw_text_transformed(_node.x, _node.y, _node.connectionDir, .5, .5, 0);
-	draw_text_transformed(_node.x + 50, _node.y, _node.currentAngle, .5, .5, 0);
+	//draw_text_transformed(_node.x, _node.y, _node.connectionDir, .5, .5, 0);
+	//draw_text_transformed(_node.x + 50, _node.y, _node.currentAngle, .5, .5, 0);
 	//draw_set_color(c_white);
 	//draw_set_alpha(1);
 }
 
-draw_set_color(c_purple);
-var _theoryNodes = [];
-for(var _sNodeI = 0; _sNodeI < _structureNodeCount; _sNodeI++) {
-	var _node = structureNodes[_sNodeI];
+//draw_set_color(c_purple);
+//var _theoryNodes = [];
+//for(var _sNodeI = 0; _sNodeI < _structureNodeCount; _sNodeI++) {
+//	var _node = structureNodes[_sNodeI];
 	
-	var _theoryConnectionI = 0;
+//	var _theoryConnectionI = 0;
 	
-	if(_node.connectedTo == -1) {
-		array_push(_theoryNodes, [_node.x, _node.y, _node.currentAngle]);
-	} else {
-		_theoryConnectionI = array_get_index(structureNodes, _node.connectedTo);
-		var _netRot = _theoryNodes[_theoryConnectionI][2] + _node.connectionDir;
-		var _theoryNode = [_theoryNodes[_theoryConnectionI][0] + dcos(_netRot) * _node.connectionDist, _theoryNodes[_theoryConnectionI][1] - dsin(_netRot) * _node.connectionDist, _netRot];
+//	if(_node.connectedTo == -1) {
+//		array_push(_theoryNodes, [_node.x, _node.y, _node.currentAngle]);
+//	} else {
+//		_theoryConnectionI = array_get_index(structureNodes, _node.connectedTo);
+//		var _netRot = _theoryNodes[_theoryConnectionI][2] + _node.connectionDir;
+//		var _theoryNode = [_theoryNodes[_theoryConnectionI][0] + dcos(_netRot) * _node.connectionDist, _theoryNodes[_theoryConnectionI][1] - dsin(_netRot) * _node.connectionDist, _netRot];
 		
-		array_push(_theoryNodes, _theoryNode);
-	}
+//		array_push(_theoryNodes, _theoryNode);
+//	}
 	
-	if(_node.connectedTo != -1) {
-		draw_line(_theoryNodes[_sNodeI][0], _theoryNodes[_sNodeI][1], _theoryNodes[_theoryConnectionI][0], _theoryNodes[_theoryConnectionI][1]);
-	}
-}
+//	if(_node.connectedTo != -1) {
+//		draw_line(_theoryNodes[_sNodeI][0], _theoryNodes[_sNodeI][1], _theoryNodes[_theoryConnectionI][0], _theoryNodes[_theoryConnectionI][1]);
+//	}
+//}
 draw_set_color(c_white);
 
 draw_circle(x, y, stepUpdateDist, true);

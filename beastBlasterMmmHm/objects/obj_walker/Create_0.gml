@@ -60,9 +60,9 @@ placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed =
 	var _stepAhead = point_distance(x, y, _goalPos[0], _goalPos[1]);
 	msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
-	var _stepTime = (_stepAhead / (moveSpeed * 2)) * (game_get_speed(gamespeed_microseconds) / 1000) * 1.65; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
+	var _stepTime = (_stepAhead / (moveSpeed * 2)) * (game_get_speed(gamespeed_microseconds) / 1000) * 3 * (legSegLen / 100); // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
 	
-	setStepTimings(legIndex, _stepTime, moveSpeed); //TODO constant step timings? What factors determine how fast a step is taken in real life? Smaller steps are slower? Faster? Moving faster overall means faster steps, for sure.
+	setStepTimings(legIndex, _stepTime, moveSpeed);
 }
 
 setStepTimings = function(legIndex, duration, speedRef) {

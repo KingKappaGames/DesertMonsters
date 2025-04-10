@@ -19,13 +19,17 @@ debugHeight = 0;
 width = round(camera_get_view_width(view_camera[0]) / blockSize) + bufferBlockCount * 2;
 height = round(camera_get_view_height(view_camera[0]) / blockSize) + bufferBlockCount * 2;
 
-updatePerlinGrid = function() {
+updatePerlinGrid = function(playerIndex = 0) {
 	ds_grid_destroy(grid); 
 	
-	width = round(camera_get_view_width(view_camera[0]) / blockSize) + bufferBlockCount * 2;
-	height = round(camera_get_view_height(view_camera[0]) / blockSize) + bufferBlockCount * 2;
+	width = round(camera_get_view_width(view_camera[playerIndex]) / blockSize) + bufferBlockCount * 2;
+	height = round(camera_get_view_height(view_camera[playerIndex]) / blockSize) + bufferBlockCount * 2;
 	
 	grid = ds_grid_create(width, height);
+	
+	surface_free(perlinSurf);
+	
+	perlinSurf = surface_create(width * blockSize, height * blockSize);
 }
 
 grid = ds_grid_create(width, height);

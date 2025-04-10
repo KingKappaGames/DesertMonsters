@@ -1,4 +1,3 @@
-//WIP DO NOT DELETE - REGEN ONLY PART OF GRID NECESSARY - PERFORMANCE UP ONE MILLION BILLION PERCENT 
 ///@desc The limits represent the edge of the existing grid (in PIXELS!) to draw in so if you moved to the left 50 and down 50 the grid would have a rightLimit of 50 and bottomLimit of 50 to represent those sections needing drawing!
 function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin = 0) {
 	updatePerlin = true;

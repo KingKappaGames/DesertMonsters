@@ -1,19 +1,23 @@
 event_inherited();
 
 if(alive == 1) {
-	var _xSpd = keyboard_check(ord("J")) - keyboard_check(ord("G"))
-	var _ySpd = keyboard_check(ord("H")) - keyboard_check(ord("Y"))
+	if(irandom(200) == 0) {
+		dirGoal = currentDir + irandom_range(-110, 110);
+		if(irandom(30) == 0) {
+			xChange = 0;
+			yChange = 0;
+		}
+	}
 	
-	xChange += _xSpd * .1;
-	yChange += _ySpd * .1;
-	
-	
-	xChange *= .994;
-	yChange *= .994;
+	xChange += dcos(dirGoal) / 46;
+	yChange -= dsin(dirGoal) / 46;
+	xChange *= .993;
+	yChange *= .993;
+
 	
 	currentDir = point_direction(0, 0, xChange, yChange);
 	currentSpeed = point_distance(0, 0, xChange, yChange);
-	stepUpdateDist = stepUpdateDistBase * sqrt(currentSpeed) * .8;
+	stepUpdateDist = stepUpdateDistBase * sqrt(currentSpeed) * 1.25;
 	
 	x += xChange;
 	y += yChange;
@@ -29,15 +33,22 @@ if(alive == 1) {
 	var _allFeetOnGround = true; // DO PROGRESS SETTING
 	for(var _legI = 0; _legI < _legCount; _legI++) { // check leg progresses to allow or disallow new steps in legs
 		var _stepTiming = stepTimings[_legI];
-		_stepTiming[3] = clamp((current_time - _stepTiming[1]) / _stepTiming[0], 0, 1);
-		if(_allFeetOnGround && _stepProgresses[_legI] != 1) {
+		var _stepGoal = stepPositions[_legI][2];
+		var _stepDuration = _stepTiming[stepTimeEnum.endTime] - _stepTiming[stepTimeEnum.startTime];
+		_stepTiming[stepTimeEnum.progress] = clamp((current_time - _stepTiming[stepTimeEnum.startTime]) / (_stepDuration), 0, 1);
+		if(_stepTiming[stepTimeEnum.progress] < 1) { // still in the air, then add momentum to goal as well as body, this keeps feet aligned with object movement without having to predict some crazy future point
+			_stepGoal[0] += xChange;
+			_stepGoal[1] += yChange; // add height?
+		}
+		if(_allFeetOnGround && _stepTiming[stepTimeEnum.progress] != 1) {
 			
 			#region containing step goals within reasonable range AND bringing in step goals when slowing down
-			var _stepGoal = stepPositions[_legI][2];
 			var _hip = hipPositions[_legI];
 			var _stepDist = point_distance(_hip[0], _hip[1], _stepGoal[0], _stepGoal[1]);
 			if(_stepDist > stepUpdateDist) {
 				var _distOverMultiply = stepUpdateDist / _stepDist;
+				
+				_stepTiming[stepTimeEnum.endTime] = lerp(_stepTiming[stepTimeEnum.endTime], _stepTiming[stepTimeEnum.startTime], 1 - _distOverMultiply); // reduce time for step along with distance, basically, drop your foot sooner than planned if changing course
 			
 				_stepGoal[0] = lerp(_hip[0], _stepGoal[0], _distOverMultiply);
 				_stepGoal[1] = lerp(_hip[1], _stepGoal[1], _distOverMultiply);
@@ -56,7 +67,7 @@ if(alive == 1) {
 		var _stepCurrent = stepPositions[_legI][1];
 		var _stepGoal = stepPositions[_legI][2];
 		var _stepTiming = stepTimings[_legI]; // not necessary ?
-		#endregion convinience value setting ^^^
+		#endregion convenience value setting ^^^
 		
 		#region doing the step positions and updates
 		//temp hip calcs (no control for where the hip is?)
@@ -68,13 +79,15 @@ if(alive == 1) {
 		_stepPlacement[0] = _hip[0];
 		_stepPlacement[1] = _hip[1];
 		
-		var _stepHeight = dsin(180 * _stepProgresses[_legI]) * legSegLen * .7;
+		var _progress = stepTimings[_legI][stepTimeEnum.progress];
+		
+		var _stepHeight = dsin(180 * _progress) * legSegLen * .7;
 		
 		_stepCurrent[2] = _stepHeight;
-		_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _stepProgresses[_legI]);
-		_stepCurrent[1] = lerp(_stepInitial[1], _stepGoal[1], _stepProgresses[_legI]);
+		_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _progress);
+		_stepCurrent[1] = lerp(_stepInitial[1], _stepGoal[1], _progress);
 		
-		if(_allFeetOnGround && _stepProgresses[_legI] == 1) { // there needs to be some way to deal with changing step lengths and repositions i think, for now just not stepping when already stepping works but has a bunch of issues
+		if(_allFeetOnGround && _progress == 1) { // there needs to be some way to deal with changing step lengths and repositions i think, for now just not stepping when already stepping works but has a bunch of issues
 			var _stepPlacementDist = point_distance(_stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1]); // add the height to the value but remove it when checking distance to step
 			if(_stepPlacementDist > stepUpdateDist) {
 				placeStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed);

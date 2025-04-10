@@ -4,12 +4,11 @@ global.particleSystemManager = id;
 
 global.debugFollow = true;
 
-depthOrigin = 0;
 
 sysCount = 1200; // count X spacing is the total screen range in room pixels that the sys manages, set this range to be your screen plus margins if particles ever move up or down within their system and would leave the locality of their layer (depth = -y) as a guess. Because their depths are popped up or down at the edges put those off screen by 10% or something
 sysSpacing = 1;
 
-sysUpdateRange = 50; // if the screen varies from the last update by this many pixels the systems will be updated (hence why the buffer space is important, among other things)
+sysUpdateRange = 200; // if the screen varies from the last update by this many pixels the systems will be updated (hence why the buffer space is important, among other things)
 
 previousCamY = camera_get_view_y(view_camera[0]);
 previousEdgeY = previousCamY - sysUpdateRange;
@@ -26,7 +25,7 @@ part_system_depth(global.sysTop, -1000); // top, what ever depth that is ^ (not 
 sysCollection = array_create(sysCount, 0);
 
 var _sysSet = sysCollection;
-var _depthOfInitial = -(camera_get_view_y(view_camera[0]) - sysUpdateRange) + depthOrigin;
+var _depthOfInitial = -(camera_get_view_y(view_camera[0]) - sysUpdateRange);
 var _sysAddI = 0;
 repeat(sysCount) {
 	_sysSet[_sysAddI] = part_system_create();
@@ -34,22 +33,14 @@ repeat(sysCount) {
 	_sysAddI++;
 }
 
-
-depthOrigin = previousCamY;
-
-
 ///@param {REAL} borderWidth The height in pixels of the margins above and below the screen
 ///@param {REAL} systemSpacing The height of each layer in pixels, this being 1 means the layering DEPTH is pixel perfect, being 100 means your particles will snap to depths of 100 (the position is always correct regardless, this is a GM thing, the only thing this system does is depth, you don't need to mess with position at all)
 ///@param {BOOL} useCameraAsArea The normal use case for this system is wrapping depth around the camera space plus margins, if you need something else then turn this off (but then what? You'll have to custom make the else case I guess))
-///@param {REAL} originY Not super useful usually, changes the relative 0 point of the depth looping but doesn't affect final depth (final depth aligns with depth = -y)
 ///@param {REAL} forceSystemCount The quantity of systems to use (will update the collection to have this many systems)
 ///@param {REAL} camIndex The index number for the camera to calculate positions with (default 0)
-setSpacing = function(borderWidth = 20, systemSpacing = 1, useCameraAsArea = true, originY = undefined, forceSystemCount = -1, camIndex = 0) {	
+setSpacing = function(borderWidth = 20, systemSpacing = 1, useCameraAsArea = true, forceSystemCount = -1, camIndex = 0) {	
 	sysUpdateRange = borderWidth; // the margins above and below the screen (only really useful for preventing movement from showing off the screen (which isn't even a problem BUT the particles created when doing so will be dropped to the nearest depth.. And you'll notice that when you go far enough to see them in a position they shouldn't be (clumped on the edge vs placed along the range they were intended to have))
 	sysSpacing = systemSpacing;
-	if(originY != undefined) {
-		depthOrigin = originY; // origin is just the depth of the first system, not really useful for much but hey
-	}
 	
 	var _systemCount = 0;
 	if(useCameraAsArea) {
@@ -90,7 +81,7 @@ setCollectionPosition = function(useCamera = true, forcePosition = undefined) {
 	if(useCamera) { // place the systems around the camera with the established margins
 		var _sysSet = sysCollection;
 		var _startY = (((is_undefined(forcePosition) ? camera_get_view_y(view_camera[0]) : forcePosition) - sysUpdateRange) div sysSpacing) * sysSpacing; // rounding to a number is basically div number * number to create a 1 rounded factor of the desired round. It works.
-		var _depthOfInitial = -(_startY - depthOrigin); // depth origin is negative up so adding it outside the negative means adding -200 for up 200 will decrease the depth of this position by 200 which is correct (i think)
+		var _depthOfInitial = -(_startY); // depth origin is negative up so adding it outside the negative means adding -200 for up 200 will decrease the depth of this position by 200 which is correct (i think)
 		currentSysEdge = 0;
 		var _sysAddI = 0;//(currentSysEdge - (_startY - previousCamY) div sysSpacing) % sysCount; // offset current edge (the position in the cycle) by the changed position (this is the starting position that will be looped during the setting loops)
 		//if(_sysAddI < 0) {
@@ -134,9 +125,9 @@ unpauseAll = function(forceDrawState = true) {
 }
 
 part = global.sandBurstDust;
-part_type_life(part, 100000, 100000);
 
 mouseLayer = 0;
 
 particleLayerDepthArray = array_create(sysCount, 0);
 
+setSpacing(300, 5, true);

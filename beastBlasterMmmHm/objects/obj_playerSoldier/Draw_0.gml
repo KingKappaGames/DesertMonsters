@@ -35,41 +35,6 @@ if(gunDrawBehind) {
 }
 #endregion
 
-#region body component drawing
-
-array_sort(bodyComponents, function(elementCurrent, elementNext, originalOrder)
-{                
-	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]);
-});
-
-//msg(bodyComponents);
-
-var _x = 0, _y = 0;
-var _bodyOut = 14; // standard body distance? OR should this be a value in the array?
-var _componentCount = array_length(bodyComponents);
-var _counter = 0, _ang = 0;
-for(var _i = 0; _i < _componentCount; _i++) {
-	_ang = (directionFacing + bodyComponents[_i][2]) % 360;
-	_bodyOut = bodyComponents[_i][4];
-	if(_ang > 3 && _ang < 177) { // so maybe I shouldn't but this puts them further back than flat, a slightly behind thing by 3 degrees will go in front, this is maybe to give them a bit of covering thickness? But I do kind of hate the canabalistic effect of forcing up here.
-		var _netAngle = _dirMoving + bodyComponents[_i][2];
-		_x = x + _leanAheadX + dcos(_netAngle) * _bodyOut;
-		_y = y + _leanAheadY - dsin(_netAngle) * _bodyOut * .6 + bodyComponents[_i][3] + _jostle;
-		var _compress = 1;
-		if(bodyComponents[_i][8] != 1) {
-			_compress = dsin(_netAngle + bodyComponents[_i][7]) * (1 - bodyComponents[_i][8]);
-			_compress += bodyComponents[_i][8] * sign(_compress);
-		}
-		draw_sprite_ext(bodyComponents[_i][0], bodyComponents[_i][1], _x, _y, bodyComponents[_i][5] * _compress, bodyComponents[_i][6], 0, bodyComponents[_i][9], 1);
-		//draw behind components?
-		_counter++;
-	} else {
-		break;
-	}
-}
-
-#endregion
-
 #region draw legs and feet and body
 
 var _cosFacing = dcos(_dirMoving);
@@ -131,24 +96,65 @@ draw_set_color(c_white);
 #endregion
 
 //BODY
-draw_rectangle(x - 8 + _leanAheadX, y + _jostle + _leanAheadY - 14, x + 8 + _leanAheadX, y + 9 + _jostle + _leanAheadY, false); // BODY
-draw_sprite_ext(bodySprite, 0, x + _leanAheadX, y + _jostle + _leanAheadY, 1, 1, 0, c_white, 1); // lean body towards movement, scale based on image like everything else?
+//draw_rectangle(x - 8 + _leanAheadX, y + _jostle + _leanAheadY - 14, x + 8 + _leanAheadX, y + 9 + _jostle + _leanAheadY, false); // BODY
+//draw_sprite_ext(bodySprite, 0, x + _leanAheadX, y + _jostle + _leanAheadY, 1, 1, 0, c_white, 1); // lean body towards movement, scale based on image like everything else?
 
+
+#endregion
+
+#region body component drawing
+
+array_sort(bodyComponents, function(elementCurrent, elementNext, originalOrder) // sort drawing based on visual height
+{                
+	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]);
+});
+
+//msg(bodyComponents);
+
+var _x = 0, _y = 0;
+var _bodyOut = 14; // standard body distance? OR should this be a value in the array?
+var _componentCount = array_length(bodyComponents);
+var _counter = 0, _ang = 0;
+for(var _i = 0; _i < _componentCount; _i++) {
+	var _bodyPart = bodyComponents[_i];
+	_ang = (directionFacing + _bodyPart[2]) % 360;
+	_bodyOut = _bodyPart[4];
+	if(_ang > 3 && _ang < 177) { // so maybe I shouldn't but this puts them further back than flat, a slightly behind thing by 3 degrees will go in front, this is maybe to give them a bit of covering thickness? But I do kind of hate the canabalistic effect of forcing up here.
+		var _netAngle = _dirMoving + _bodyPart[2];
+		var _imageInfo = _bodyPart[1];
+		_x = x + _leanAheadX + dcos(_netAngle) * _bodyOut;
+		_y = y + _leanAheadY - dsin(_netAngle) * _bodyOut * .6 + _bodyPart[3] + _jostle;
+		var _compress = 1;
+		if(_bodyPart[8] != 1) {
+			_compress = dsin(_netAngle + _bodyPart[7]) * (1 - _bodyPart[8]);
+			_compress += _bodyPart[8] * sign(_compress);
+		}
+		var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
+		draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], 0, _bodyPart[9], 1);
+		//draw behind components?
+		_counter++;
+	} else {
+		break;
+	}
+}
 
 #endregion
 
 #region draw the rest of the body components in front of body
 for(var _i = _counter; _i < _componentCount; _i++) {
-	_bodyOut = bodyComponents[_i][4];
-	var _netAngle = _dirMoving + bodyComponents[_i][2];
+	var _bodyPart = bodyComponents[_i];
+	_bodyOut = _bodyPart[4];
+	var _netAngle = _dirMoving + _bodyPart[2];
+	var _imageInfo = _bodyPart[1];
 	_x = x + _leanAheadX + dcos(_netAngle) * _bodyOut;
-	_y = y + _leanAheadY - dsin(_netAngle) * _bodyOut * .6 + bodyComponents[_i][3] + _jostle;
+	_y = y + _leanAheadY - dsin(_netAngle) * _bodyOut * .6 + _bodyPart[3] + _jostle;
 	var _compress = 1;
-	if(bodyComponents[_i][8] != 1) {
-		_compress = dsin(_netAngle + bodyComponents[_i][7]) * (1 - bodyComponents[_i][8]);
-		_compress += bodyComponents[_i][8] * sign(_compress);
+	if(_bodyPart[8] != 1) {
+		_compress = dsin(_netAngle + _bodyPart[7]) * (1 - _bodyPart[8]);
+		_compress += _bodyPart[8] * sign(_compress);
 	}
-	draw_sprite_ext(bodyComponents[_i][0], bodyComponents[_i][1], _x, _y, bodyComponents[_i][5] * _compress, bodyComponents[_i][6], 0, bodyComponents[_i][9], 1);
+	var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
+	draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], 0, _bodyPart[9], 1);
 }
 #endregion
 
