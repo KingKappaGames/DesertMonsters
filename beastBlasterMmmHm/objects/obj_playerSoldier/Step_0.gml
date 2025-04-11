@@ -49,6 +49,7 @@ if(gunHoldDirection > 0 && gunHoldDirection < 180) {
 
 gunShakeX *= .95;
 gunShakeY *= .95;
+
 #endregion
 
 if(input_check_released("reload", playerIndex)) { // reload logic

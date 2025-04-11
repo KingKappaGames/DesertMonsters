@@ -551,6 +551,7 @@
     {"id":{"name":"snd_SoftMediumShot","path":"sounds/snd_SoftMediumShot/snd_SoftMediumShot.yy",},},
     {"id":{"name":"snd_StubbedExplosion","path":"sounds/snd_StubbedExplosion/snd_StubbedExplosion.yy",},},
     {"id":{"name":"snd_VeryDrawnOutGrainyExplosion","path":"sounds/snd_VeryDrawnOutGrainyExplosion/snd_VeryDrawnOutGrainyExplosion.yy",},},
+    {"id":{"name":"spr_armParts","path":"sprites/spr_armParts/spr_armParts.yy",},},
     {"id":{"name":"spr_backpack","path":"sprites/spr_backpack/spr_backpack.yy",},},
     {"id":{"name":"spr_blood","path":"sprites/spr_blood/spr_blood.yy",},},
     {"id":{"name":"spr_bodyVultureCoat","path":"sprites/spr_bodyVultureCoat/spr_bodyVultureCoat.yy",},},

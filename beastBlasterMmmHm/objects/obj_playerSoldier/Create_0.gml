@@ -258,6 +258,11 @@ placeFeetFull = function(dir, spd) {
 }
 #endregion
 
+#region arm arrays, more of a loose structure to mirror the component settings
+limbLength = 20;
+limbArray = [  [[x, y, trackHeight], [x, y, trackHeight], [x, y, trackHeight]], [[x, y, trackHeight], [x, y, trackHeight], [x, y, trackHeight]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
+#endregion
+
 #region body components
 bodyComponents = [];
 
@@ -275,6 +280,24 @@ bodyComponents = [];
 ///@param imgRotationAdjust The angle to add to the view angle when getting the image for angle based images
 addToBodyComponents = function(sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color = c_white, imgRotationAdjust = 0) {
 	array_push(bodyComponents, [sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color, imgRotationAdjust]);
+}
+
+///@desc Adds an array listing to the components array, note though that with this because you are describing a limb with multiple segments all the drawing values will be arrays representing joint to limb tip (hand, foot, whatever). So the position is the origin of the limb but the sprite, scale, img ect are arrays of each segment
+///@param spriteArr The sprites to use
+///@param imageArr The sprite images to use
+///@param rotationRelative This is the off set from straight forward to draw the component
+///@param height The y offset to draw this component with
+///@param distance The distance from the player this item should rotate at unaffected by angle compression
+///@param xscaleArr The horizontal scale of the images
+///@param yscaleArr The vertical scale of the images
+///@param viewAngle The direction of the view of the image, for backpacks it would straight out aka 0, for something that sticks away and scales that way 90 would be "away" and the range 0 - 180 not -90 to 90, depends on the flatness of your perspective
+///@param viewCompressionMin The minimum horizontal visual scale that can be had based on the view angles, backpacks might be .4 for 40% width at off angle view
+///@param colorArr The color blend to apply, standard stuff
+///@param imgRotationAdjust The angle to add to the view angle when getting the image for angle based images
+///@param limbArrRef The array reference to seek a limb with the index below, so you pass like, armArray from your own code, and below index 3 means armArray[3] should contain a node set that this drawing can use
+///@param limbIndex The index in the limb array that this component relates to (as described in limb array ref param above)
+addLimbToBodyComponents = function(spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr = c_white, imgRotationAdjust = 0, limbArrRef, limbIndex) { // these limbs still need to adhere to rotation and position values because the sorting will use it the same way for all, or I can change it but seems easy enough as is
+	array_push(bodyComponents, [spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr, imgRotationAdjust, limbArrRef, limbIndex]); // limbSegLen array?
 }
 
 #endregion

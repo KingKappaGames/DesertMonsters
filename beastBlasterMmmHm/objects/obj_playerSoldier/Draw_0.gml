@@ -25,12 +25,15 @@ if(gunHeldDown) {
 	}
 }
 
+gunX += _leanAheadX;
+gunY += _leanAheadY + _jostle / 2;
+
 if(gunDrawBehind) {
 	var _gunLayers = sprite_get_number(gunSprite);
 	var _yAdd = -3; // the up push of each layer
 	
 	for(var _i = 0; _i < _gunLayers; _i++) {
-		draw_sprite_ext(gunSprite, _i, gunX + _leanAheadX, gunY + _leanAheadY + _yAdd * _i + _jostle / 2, .65 + abs(dcos(gunHoldDirection)) * .35, 1, gunHoldDirection + _heldDownAngleAdjust, c_white, 1);
+		draw_sprite_ext(gunSprite, _i, gunX, gunY + _yAdd * _i, .65 + abs(dcos(gunHoldDirection)) * .35, 1, gunHoldDirection + _heldDownAngleAdjust, c_white, 1);
 	}
 }
 #endregion
@@ -125,13 +128,65 @@ for(var _i = 0; _i < _componentCount; _i++) {
 		_x = x + _leanAheadX + dcos(_netAngle) * _bodyOut;
 		_y = y + _leanAheadY - dsin(_netAngle) * _bodyOut * .6 + _bodyPart[3] + _jostle;
 		var _compress = 1;
-		if(_bodyPart[8] != 1) {
-			_compress = dsin(_netAngle + _bodyPart[7]) * (1 - _bodyPart[8]);
-			_compress += _bodyPart[8] * sign(_compress);
+		if(!is_array(_bodyPart[0])) { // single sprite
+			if(_bodyPart[8] != 1) {
+				_compress = dsin(_netAngle + _bodyPart[7]) * (1 - _bodyPart[8]);
+				_compress += _bodyPart[8] * sign(_compress);
+			}
+			var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
+			draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], 0, _bodyPart[9], 1);
+			//draw behind components?
+		} else { // drawing limbs!
+			var _limb = _bodyPart[11][_bodyPart[12]]; // store the reference to the array that holds the arrays at this index that holds the nodes of this limb for drawing with, specify the collection and where in that collection, basically
+			
+			#region place arms on gun via IK
+			_limb[0][0] = _x;
+			_limb[0][1] = _y;
+			_limb[0][2] = 0; // set the two knowns, origin and gun position (the end)
+	
+			_limb[2][0] = gunX;
+			_limb[2][1] = gunY;
+			_limb[2][2] = 0; //TODO height of gun is relevant but maybe y can do this ? But then it's faked and will surely break at some point
+			
+			var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
+			var _limbDir = point_direction(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
+			
+			var _limbOutDist = sqrt(clamp(sqr(limbLength) - sqr(_limbDist / 2), 0, 999999)); // outwardness of joint
+
+			var _limbMidX = (_limb[0][0] + _limb[2][0]) / 2;
+			var _limbMidY = (_limb[0][1] + _limb[2][1]) / 2; // visual mid point simply between start and end of limb
+
+			var _armBendAngleSign = sign(angle_difference(_limbDir - 90, 270));
+
+			var _jointX = _limbMidX + dcos(_limbDir + 90 * _armBendAngleSign) * abs(_cosFacing) * _limbOutDist;
+			var _jointY = _limbMidY - dsin(_limbDir + 90 * _armBendAngleSign) * _limbOutDist; // final joint positions
+
+			_limb[1][0] = _jointX;
+			_limb[1][1] = _jointY;
+			_limb[1][2] = 0;
+			#endregion
+			
+			for(var _limbSegI = array_length(_limb) - 2; _limbSegI >= 0; _limbSegI--) { // repeat nodes - 1, so n-n+1, n+1-n+2, n+2-n+3, ect but cut off one early, 3 nodes = 2 segments
+				var _limbSegStart = _limb[_limbSegI];
+				var _limbSegEnd = _limb[_limbSegI + 1];
+				
+				var _segBeginX = _limbSegStart[0];
+				var _segBeginY = _limbSegStart[1] - _limbSegStart[2] * .7;
+				var _segEndX = _limbSegEnd[0];
+				var _segEndY = _limbSegEnd[1] - _limbSegEnd[2] * .7;
+				
+				var _sprite = _bodyPart[0][_limbSegI];
+				
+				var _segmentDir = point_direction(_segBeginX, _segBeginY, _segEndX, _segEndY); // visual dir, not horizontal dir
+				var _lengthMultX = point_distance(_segBeginX, _segBeginY, _segEndX, _segEndY) / sprite_get_width(_sprite);
+				
+				draw_circle(_segEndX, _segEndY, 5, true);
+				
+				//msg(_lengthMultX);
+				
+				draw_sprite_ext(_sprite, _bodyPart[1][_limbSegI], _segBeginX, _segBeginY, _lengthMultX, _bodyPart[6][_limbSegI], _segmentDir, _bodyPart[9][_limbSegI], 1);
+			}
 		}
-		var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
-		draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], 0, _bodyPart[9], 1);
-		//draw behind components?
 		_counter++;
 	} else {
 		break;
@@ -149,19 +204,70 @@ for(var _i = _counter; _i < _componentCount; _i++) {
 	_x = x + _leanAheadX + dcos(_netAngle) * _bodyOut;
 	_y = y + _leanAheadY - dsin(_netAngle) * _bodyOut * .6 + _bodyPart[3] + _jostle;
 	var _compress = 1;
-	if(_bodyPart[8] != 1) {
-		_compress = dsin(_netAngle + _bodyPart[7]) * (1 - _bodyPart[8]);
-		_compress += _bodyPart[8] * sign(_compress);
+	if(!is_array(_bodyPart[0])) { // single sprite
+		if(_bodyPart[8] != 1) {
+			_compress = dsin(_netAngle + _bodyPart[7]) * (1 - _bodyPart[8]);
+			_compress += _bodyPart[8] * sign(_compress);
+		}
+		var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
+		draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], 0, _bodyPart[9], 1);
+		//draw behind components?
+	} else { // drawing limbs!
+		var _limb = _bodyPart[11][_bodyPart[12]]; // store the reference to the array that holds the arrays at this index that holds the nodes of this limb for drawing with, specify the collection and where in that collection, basically
+			
+		#region place arms on gun via IK
+		_limb[0][0] = _x;
+		_limb[0][1] = _y;
+		_limb[0][2] = 0; // set the two knowns, origin and gun position (the end)
+	
+		_limb[2][0] = gunX;
+		_limb[2][1] = gunY;
+		_limb[2][2] = 0; //TODO height of gun is relevant but maybe y can do this ? But then it's faked and will surely break at some point
+			
+		var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
+		var _limbDir = point_direction(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
+			
+		var _limbOutDist = sqrt(clamp(sqr(limbLength) - sqr(_limbDist / 2), 0, 999999)); // outwardness of joint
+
+		var _limbMidX = (_limb[0][0] + _limb[2][0]) / 2;
+		var _limbMidY = (_limb[0][1] + _limb[2][1]) / 2; // visual mid point simply between start and end of limb
+
+		var _armBendAngleSign = sign(angle_difference(_limbDir - 90, 270));
+
+		var _jointX = _limbMidX + dcos(_limbDir + 90 * _armBendAngleSign) * abs(_cosFacing) * _limbOutDist;
+		var _jointY = _limbMidY - dsin(_limbDir + 90 * _armBendAngleSign) * _limbOutDist; // final joint positions
+
+		_limb[1][0] = _jointX;
+		_limb[1][1] = _jointY;
+		_limb[1][2] = 0;
+		#endregion
+			
+		for(var _limbSegI = array_length(_limb) - 2; _limbSegI >= 0; _limbSegI--) { // repeat nodes - 1, so n-n+1, n+1-n+2, n+2-n+3, ect but cut off one early, 3 nodes = 2 segments
+			var _limbSegStart = _limb[_limbSegI];
+			var _limbSegEnd = _limb[_limbSegI + 1];
+				
+			var _segBeginX = _limbSegStart[0];
+			var _segBeginY = _limbSegStart[1] - _limbSegStart[2] * .7;
+			var _segEndX = _limbSegEnd[0];
+			var _segEndY = _limbSegEnd[1] - _limbSegEnd[2] * .7;
+			
+			var _sprite = _bodyPart[0][_limbSegI];
+				
+			var _segmentDir = point_direction(_segBeginX, _segBeginY, _segEndX, _segEndY); // visual dir, not horizontal dir
+			var _lengthMultX = point_distance(_segBeginX, _segBeginY, _segEndX, _segEndY) / sprite_get_width(_sprite);
+			
+			draw_sprite_ext(_sprite, _bodyPart[1][_limbSegI], _segBeginX, _segBeginY, _lengthMultX, _bodyPart[6][_limbSegI], _segmentDir, _bodyPart[9][_limbSegI], 1);
+		}
 	}
-	var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
-	draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], 0, _bodyPart[9], 1);
+	_counter++;
 }
 #endregion
 
 if(!gunDrawBehind) {
 	var _gunLayers = sprite_get_number(gunSprite);
 	var _yAdd = -3; // the up push of each layer
+	
 	for(var _i = 0; _i < _gunLayers; _i++) {
-		draw_sprite_ext(gunSprite, _i, gunX + _leanAheadX, gunY + _leanAheadY + _yAdd * _i + _jostle / 2, .65 + abs(dcos(gunHoldDirection)) * .35, 1, gunHoldDirection + _heldDownAngleAdjust, c_white, 1);
+		draw_sprite_ext(gunSprite, _i, gunX, gunY + _yAdd * _i, .65 + abs(dcos(gunHoldDirection)) * .35, 1, gunHoldDirection + _heldDownAngleAdjust, c_white, 1);
 	}
 }

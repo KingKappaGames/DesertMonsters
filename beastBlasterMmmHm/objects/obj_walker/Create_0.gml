@@ -58,7 +58,7 @@ placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed =
 	_goalPos[1] = y + clamp((goalY - currentY) * .26, -legSegLen * .65, legSegLen * .65) + yChange * legSegLen;
 	
 	var _stepAhead = point_distance(x, y, _goalPos[0], _goalPos[1]);
-	msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
+	//msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
 	var _stepTime = (_stepAhead / (moveSpeed * 2)) * (game_get_speed(gamespeed_microseconds) / 1000) * 3 * (legSegLen / 100); // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
 	
