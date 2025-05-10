@@ -79,16 +79,18 @@ setSpacing = function(borderWidth = 20, systemSpacing = 1, useCameraAsArea = tru
 ///@param {REAL} forcePosition This passes in a position instead of the camera, if for some reason you want to arrange the collection around y = 1000 when the camera is somewhere else
 setCollectionPosition = function(useCamera = true, forcePosition = undefined) {
 	if(useCamera) { // place the systems around the camera with the established margins
+		previousCamY = camera_get_view_y(view_camera[0]);
+		previousEdgeY = previousCamY - sysUpdateRange;
+
 		var _sysSet = sysCollection;
-		var _startY = (((is_undefined(forcePosition) ? camera_get_view_y(view_camera[0]) : forcePosition) - sysUpdateRange) div sysSpacing) * sysSpacing; // rounding to a number is basically div number * number to create a 1 rounded factor of the desired round. It works.
-		var _depthOfInitial = -(_startY); // depth origin is negative up so adding it outside the negative means adding -200 for up 200 will decrease the depth of this position by 200 which is correct (i think)
+		var _startY = (((is_undefined(forcePosition) ? previousCamY : forcePosition) - sysUpdateRange) div sysSpacing) * sysSpacing; // rounding to a number is basically div number * number to create a 1 rounded factor of the desired round. It works.
+		var _depthOfInitial = -_startY; // depth origin is negative up so adding it outside the negative means adding -200 for up 200 will decrease the depth of this position by 200 which is correct (i think)
 		currentSysEdge = 0;
 		var _sysAddI = 0;//(currentSysEdge - (_startY - previousCamY) div sysSpacing) % sysCount; // offset current edge (the position in the cycle) by the changed position (this is the starting position that will be looped during the setting loops)
 		//if(_sysAddI < 0) {
 		//	_sysAddI = sysCount + _sysAddI;
 		//}
 		repeat(sysCount) { // for every system
-			_sysSet[_sysAddI] = part_system_create();
 			part_system_depth(_sysSet[_sysAddI], _depthOfInitial - _sysAddI * sysSpacing); // down screen / positive y / less depth (negative)
 			particleLayerDepthArray[_sysAddI] = _depthOfInitial - _sysAddI * sysSpacing;
 			_sysAddI += 1;

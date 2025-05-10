@@ -24,27 +24,24 @@ if(_depthChange >= (sysUpdateRange div sysSpacing) * sysSpacing / 2) { // margin
 		repeat(_depthChange / sysSpacing) { // amount of layers traversed (because of check this is sure to be less than total count)
 			part_system_depth(sysCollection[_updatePos], _updateDepth);
 			particleLayerDepthArray[_updatePos] = _updateDepth;
-			if(irandom(0) == 0) {
-				//msg($"The {_updatePos}th system was set to a depth of {_updateDepth}");
-			}
-			
+						
 			_updateDepth -= _stepSign * sysSpacing;
 			_updatePos = (_updatePos + _stepSign) % sysCount;
 			if(_updatePos < 0) {
 				_updatePos = sysCount - 1;
-			}
+			} 
 		}
 		
 		if(_stepSign == -1) {
 			part_system_depth(sysCollection[_updatePos], _updateDepth);
 		}
+		
+		previousCamY = _camY; // plain value, no adjustments (equal to camera y)
+		previousEdgeY = previousCamY - sysUpdateRange;
+		currentSysEdge = _goalEdge;
 	} else { // the whole loop has been cycled in one update, update from your current position backwards the entire list as to not skip anything, by mod over steps (the function does this, i mean)
 		setCollectionPosition();
 	}
-	
-	previousCamY = _camY; // plain value, no adjustments (equal to camera y)
-	previousEdgeY = previousCamY - sysUpdateRange;
-	currentSysEdge = _goalEdge;
 	
 	if(0 < previousEdgeY) { // if layers being looped higher than origin (in depth)
 		sysCollectionMoveSign = 1;
