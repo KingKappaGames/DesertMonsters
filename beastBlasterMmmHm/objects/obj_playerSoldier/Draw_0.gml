@@ -156,10 +156,17 @@ for(var _i = 0; _i < _componentCount; _i++) {
 			var _limbMidX = (_limb[0][0] + _limb[2][0]) / 2;
 			var _limbMidY = (_limb[0][1] + _limb[2][1]) / 2; // visual mid point simply between start and end of limb
 
-			var _armBendAngleSign = sign(angle_difference(_limbDir - 90, 270));
+			var _armBendAngleSign = 1 - (abs(angle_difference(_limbDir + 90, 270)) > 90) * 2;
+			//draw_text(x + 70, y - 20, _limbDir);
+			//draw_text(x + 50, y, angle_difference(_limbDir - 90, 270));
+			//draw_text(x + 50, y + 20, _armBendAngleSign);
 
 			var _jointX = _limbMidX + dcos(_limbDir + 90 * _armBendAngleSign) * abs(_cosFacing) * _limbOutDist;
 			var _jointY = _limbMidY - dsin(_limbDir + 90 * _armBendAngleSign) * _limbOutDist; // final joint positions
+			
+			//draw_line(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
+			//var _col = [c_blue, c_red][.5 + _armBendAngleSign / 2];
+			//draw_line_color((_limb[0][0] + _limb[2][0]) / 2, (_limb[0][1] + _limb[2][1]) / 2, _jointX, _jointY, _col, _col);
 
 			_limb[1][0] = _jointX;
 			_limb[1][1] = _jointY;
@@ -232,10 +239,14 @@ for(var _i = _counter; _i < _componentCount; _i++) {
 		var _limbMidX = (_limb[0][0] + _limb[2][0]) / 2;
 		var _limbMidY = (_limb[0][1] + _limb[2][1]) / 2; // visual mid point simply between start and end of limb
 
-		var _armBendAngleSign = sign(angle_difference(_limbDir - 90, 270));
+		var _armBendAngleSign = 1 - (abs(angle_difference(_limbDir + 90, 270)) > 90) * 2;
 
 		var _jointX = _limbMidX + dcos(_limbDir + 90 * _armBendAngleSign) * abs(_cosFacing) * _limbOutDist;
 		var _jointY = _limbMidY - dsin(_limbDir + 90 * _armBendAngleSign) * _limbOutDist; // final joint positions
+		
+		//draw_text(x - 70, y - 20, _limbDir);
+		//draw_text(x - 50, y, angle_difference(_limbDir - 90, 270));
+		//draw_text(x - 50, y + 20, _armBendAngleSign);
 
 		_limb[1][0] = _jointX;
 		_limb[1][1] = _jointY;

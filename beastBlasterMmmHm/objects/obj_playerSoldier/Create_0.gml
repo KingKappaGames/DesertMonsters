@@ -18,6 +18,7 @@ yChange = 0;
 #region camera
 camX = camera_get_view_x(view_camera[0]);
 camY = camera_get_view_y(view_camera[0]);
+camera_set_view_size(view_camera[0], 480, 270);
 #endregion
 
 #region gun and bullet values
@@ -29,7 +30,7 @@ gunX = x;
 gunY = y;
 gunHoldDistance = 30;
 gunHoldDirection = 0;
-gunAimRange = 105;
+gunAimRange = 95;
 gunHeldDown = 0;
 
 gunDrawBehind = 0;

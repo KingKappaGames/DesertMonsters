@@ -33,14 +33,21 @@ placeFeetFull(point_direction(0, 0, xChange, yChange), _speed);
 var _aimToFacingDifference = angle_difference(point_direction(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex)), directionFacing);
 gunHoldDirection = (directionFacing + clamp(_aimToFacingDifference, -gunAimRange, gunAimRange)) % 360; // limits aiming held range to facing direction plus aiming range 
 var _holdDistMult = 1;
+var _mouseDist = point_distance(x, y, mouse_x, mouse_y);
 if(abs(_aimToFacingDifference) >= gunAimRange) { // if aiming outside of range
 	gunHeldDown = 1; // dont aim the gun up if not possible to aim at a given target, meh.
 	_holdDistMult = .5; // heldDown = less dist
 } else {
 	gunHeldDown = 0; // aim normally
+	
+	_holdDistMult = .5 + min(_mouseDist / 220, 1.2);
 }
 gunX = x + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
-gunY = y + 13 - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7 + (gunHeldDown * 6); // lower and bring in gun when not holding up
+gunY = y + 13 - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7 + (gunHeldDown * 6) + ((1 - gunHeldDown) * (3 - _holdDistMult * 12)); // lower and bring in gun when not holding up
+if(point_distance(x, y, gunX, gunY) > limbLength * 2) {
+	gunX = x + dcos(gunHoldDirection) * 20;
+	gunY = y - dsin(gunHoldDirection) * 13;
+}
 if(gunHoldDirection > 0 && gunHoldDirection < 180) {
 	gunDrawBehind = 1;
 } else {
