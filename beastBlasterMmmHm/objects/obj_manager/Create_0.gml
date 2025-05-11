@@ -61,6 +61,14 @@ sys = global.particleSystem;
 part_system_depth(global.particleSystem, -1001);
 part_system_draw_order(sys, false);
 
+//basic debug part
+global.debugPart = part_type_create();
+debugPart = global.debugPart;
+part_type_life(debugPart, 1, 1);
+part_type_shape(debugPart, pt_shape_square);
+part_type_size(debugPart, .05, .05, 0, 0);
+part_type_alpha1(debugPart, 1);
+
 #region basic sand burst
 global.sandBurstDust = part_type_create();
 sbDust = global.sandBurstDust;

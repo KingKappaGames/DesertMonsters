@@ -5,7 +5,7 @@ event_inherited();
 #region bunch of things for general positioning, needs to be established first
 //var _dirMoving = point_direction(x, y, mouse_x, mouse_y);
 var _dirMoving = point_direction(0, 0, xChange, yChange);
-directionFacing = _dirMoving
+directionFacing = _dirMoving;
 
 var _viewCompress = .5 + abs(dsin(directionFacing) / 2);
 var _speed = point_distance(0, 0, xChange, yChange);
@@ -108,11 +108,11 @@ array_sort(bodyComponents, function(elementCurrent, elementNext, originalOrder) 
 
 var _counter = 0; 
 //draw the components in front
-_counter += script_drawComponents(_i, _leanAheadX, _leanAheadY, _jostle, _cosFacing, true);
+_counter += script_drawComponents(0, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, true);
 
 
 //draw the rest of the body components in front of body
-script_drawComponents(_i, _leanAheadX, _leanAheadY, _jostle, _cosFacing, true);
+script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, false);
 
 if(!gunDrawBehind) {
 	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust);

@@ -1,12 +1,12 @@
 ///@desc Written to simply take the component count and use all the local variables but edit to a more modular system is neede, this basically is just a way to centralize the code and not have to duplicate it
-function script_drawComponents(componentI, leanAheadX, leanAheadY, jostle, cosFacing, moveDir, frontDraw){
+function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, cosFacing, moveDir, frontDraw){
 	var _counter = 0;
 	var _componentCount = array_length(bodyComponents);
 	var _x = 0, _y = 0;
 	var _bodyOut = 14; // standard body distance? OR should this be a value in the array?
 	var _ang = 0;
-	for(var _i = 0; _i < _componentCount; _i++) {
-		var _bodyPart = bodyComponents[componentI];
+	for(var _i = startComponentI; _i < _componentCount; _i++) {
+		var _bodyPart = bodyComponents[_i];
 		_ang = (directionFacing + _bodyPart[2]) % 360;
 		_bodyOut = _bodyPart[4];
 		if(!frontDraw || (_ang > 3 && _ang < 177)) { // so maybe I shouldn't but this puts them further back than flat, a slightly behind thing by 3 degrees will go in front, this is maybe to give them a bit of covering thickness? But I do kind of hate the canabalistic effect of forcing up here.

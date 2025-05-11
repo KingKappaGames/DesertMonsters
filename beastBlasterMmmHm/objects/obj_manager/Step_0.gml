@@ -2,11 +2,12 @@ if (live_call()) return live_result;
 
 #region sound control kiinda ...
 if(keyboard_check_released(ord("M"))) {
-	global.muted -= .25;
-	if(global.muted < 0) {
-		global.muted = .5;
+	if(global.muted == 0) {
+		global.muted = 1;
+	} else {
+		global.muted = 0;
 	}
-	audio_group_set_gain(audiogroup_default, global.muted, 1000);
+	audio_group_set_gain(audiogroup_default, global.muted, 250);
 }
 #endregion
 

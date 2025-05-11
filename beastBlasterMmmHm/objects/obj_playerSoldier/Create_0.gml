@@ -15,6 +15,18 @@ yChange = 0;
 
 #endregion
 
+#region surf stuff
+surf = surface_create(120, 120); // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO
+
+getSurf = function() {
+	if(!surface_exists(surf)) {
+		surf = surface_create(120, 120); // recreate if lost (no need to buffer store this since it's updating every frame anyway, (i think? Perhaps certain effects cause problems and need a more direct solution, doubt it though)
+	}
+	
+	return surf;
+}
+#endregion
+
 #region camera
 camX = camera_get_view_x(view_camera[0]);
 camY = camera_get_view_y(view_camera[0]);
@@ -153,7 +165,7 @@ weaponControls = function() {
 			if(ammoCurrent > 0) {
 				if(input_check_pressed("leftClick", playerIndex) || (gunAutomatic == 1 && input_check("leftClick", playerIndex))) {
 					if(asset_has_any_tag(bulletType, "scan", asset_object)) {
-						script_shootBulletScan(x, y, _aimDir, input_cursor_x(playerIndex), input_cursor_y(playerIndex), bulletType,, gunAccuracy + burstSpread, shotSound, gunDamageMult);
+						script_shootBulletScan(weaponPosition[0], weaponPosition[1], _aimDir, input_cursor_x(playerIndex), input_cursor_y(playerIndex), bulletType,, gunAccuracy + burstSpread, shotSound, gunDamageMult, true);
 						burstSpread += .02;
 						gunShakeX += dcos(_aimDir) * gunRecoil;
 						gunShakeY += dsin(_aimDir) * gunRecoil;
@@ -163,7 +175,7 @@ weaponControls = function() {
 						//}
 						shotTimer = 0;
 					} else {
-						script_shootBullet(x, y, shotSpeed, _aimDir, bulletType,, shotSpeed * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),, gunAccuracy, , gunDamageMult);
+						script_shootBullet(weaponPosition[0], weaponPosition[1], shotSpeed, _aimDir, bulletType,, shotSpeed * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),, gunAccuracy, , gunDamageMult);
 						burstSpread += .02;
 						gunShakeX += dcos(_aimDir) * gunRecoil;
 						gunShakeY += dsin(_aimDir) * gunRecoil;
@@ -172,11 +184,11 @@ weaponControls = function() {
 					}
 				}
 				if(input_check_released("rightClick", playerIndex)) {
-					script_shootBullet(x, y, shotSpeed / 2, _aimDir, obj_basicBullet,, shotSpeed / 2 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.12);
+					script_shootBullet(weaponPosition[0], weaponPosition[1], shotSpeed / 2, _aimDir, obj_basicBullet,, shotSpeed / 2 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.12);
 					shotTimer = 0;
 				}
 				if(input_check_released("middleClick", playerIndex)) {
-					script_shootBullet(x, y, shotSpeed / 4, _aimDir, obj_missile,, shotSpeed / 4 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.30);
+					script_shootBullet(weaponPosition[0], weaponPosition[1], shotSpeed / 4, _aimDir, obj_missile,, shotSpeed / 4 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.30);
 					shotTimer = 0;
 				}
 			} else {
@@ -261,7 +273,7 @@ placeFeetFull = function(dir, spd) {
 
 #region arm arrays, more of a loose structure to mirror the component settings
 limbLength = 20;
-limbArray = [  [[x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5]], [[x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
+limbArray = [  [[x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5]], [[x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
 weaponPosition = [x, y, ]; // use arrays (structs??) to store positions both for simplicty (i guess?) but more importantly for reference passing, being able to give the component system the item 
 #endregion
 
