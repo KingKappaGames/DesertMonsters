@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"script_setIKJoints",
+  "%Name":"script_drawComponents",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"script_setIKJoints",
+  "name":"script_drawComponents",
   "parent":{
     "name":"script_group_tormentJustRemake",
     "path":"folders/Scripts/script_group_tormentJustRemake.yy",

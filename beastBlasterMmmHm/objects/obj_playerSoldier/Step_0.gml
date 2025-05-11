@@ -42,11 +42,11 @@ if(abs(_aimToFacingDifference) >= gunAimRange) { // if aiming outside of range
 	
 	_holdDistMult = .5 + min(_mouseDist / 220, 1.2);
 }
-gunX = x + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
-gunY = y + 13 - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7 + (gunHeldDown * 6) + ((1 - gunHeldDown) * (3 - _holdDistMult * 12)); // lower and bring in gun when not holding up
-if(point_distance(x, y, gunX, gunY) > limbLength * 2) {
-	gunX = x + dcos(gunHoldDirection) * 20;
-	gunY = y - dsin(gunHoldDirection) * 13;
+weaponPosition[0] = x + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
+weaponPosition[1] = y + 13 - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7 + (gunHeldDown * 6) + ((1 - gunHeldDown) * (3 - _holdDistMult * 12)); // lower and bring in gun when not holding up
+if(point_distance(x, y, weaponPosition[0], weaponPosition[1]) > limbLength * 2) {
+	weaponPosition[0] = x + dcos(gunHoldDirection) * 20;
+	weaponPosition[1] = y - dsin(gunHoldDirection) * 13;
 }
 if(gunHoldDirection > 0 && gunHoldDirection < 180) {
 	gunDrawBehind = 1;

@@ -261,14 +261,8 @@ placeFeetFull = function(dir, spd) {
 
 #region arm arrays, more of a loose structure to mirror the component settings
 limbLength = 20;
-enum limbNode {
-	xx, 
-	yy, 
-	zz, 
-	len, 
-	thickness 
-}
 limbArray = [  [[x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5]], [[x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
+weaponPosition = [x, y, ]; // use arrays (structs??) to store positions both for simplicty (i guess?) but more importantly for reference passing, being able to give the component system the item 
 #endregion
 
 #region body components
@@ -307,6 +301,8 @@ addToBodyComponents = function(sprite, image, rotationRelative, height, distance
 addLimbToBodyComponents = function(spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr = c_white, imgRotationAdjust = 0, limbArrRef, limbIndex) { // these limbs still need to adhere to rotation and position values because the sorting will use it the same way for all, or I can change it but seems easy enough as is
 	array_push(bodyComponents, [spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr, imgRotationAdjust, limbArrRef, limbIndex]); // limbSegLen array?
 }
+
+
 
 #endregion
 
