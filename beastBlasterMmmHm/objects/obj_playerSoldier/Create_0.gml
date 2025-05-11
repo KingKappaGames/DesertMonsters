@@ -261,7 +261,14 @@ placeFeetFull = function(dir, spd) {
 
 #region arm arrays, more of a loose structure to mirror the component settings
 limbLength = 20;
-limbArray = [  [[x, y, trackHeight], [x, y, trackHeight], [x, y, trackHeight]], [[x, y, trackHeight], [x, y, trackHeight], [x, y, trackHeight]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
+enum limbNode {
+	xx, 
+	yy, 
+	zz, 
+	len, 
+	thickness 
+}
+limbArray = [  [[x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5]], [[x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5], [x, y, trackHeight, limbLength, 5]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
 #endregion
 
 #region body components

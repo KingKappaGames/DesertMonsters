@@ -25,6 +25,14 @@ audio_group_set_gain(audiogroup_default, .4, 0);
 global.windStrength = 0;
 global.gravityStrength = 0;
 
+enum limbNode { // values for limb nodes to ref (in array!)
+	xx, 
+	yy, 
+	zz, 
+	len, 
+	thickness 
+}
+
 fakeRoom = "mainRoom"; // this is for the quest set up for checking rooms
 
 camWidth = camera_get_view_width(view_camera[0]);
