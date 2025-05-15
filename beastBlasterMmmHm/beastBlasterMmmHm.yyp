@@ -518,6 +518,7 @@
     {"id":{"name":"script_generateVillage","path":"scripts/script_generateVillage/script_generateVillage.yy",},},
     {"id":{"name":"script_samplePerlinColor","path":"scripts/script_samplePerlinColor/script_samplePerlinColor.yy",},},
     {"id":{"name":"script_sendQuestMessage","path":"scripts/script_sendQuestMessage/script_sendQuestMessage.yy",},},
+    {"id":{"name":"script_setHoldOffsets","path":"scripts/script_setHoldOffsets/script_setHoldOffsets.yy",},},
     {"id":{"name":"script_setIKJoints","path":"scripts/script_setIKJoints/script_setIKJoints.yy",},},
     {"id":{"name":"script_shootBullet","path":"scripts/script_shootBullet/script_shootBullet.yy",},},
     {"id":{"name":"script_shootBulletScan","path":"scripts/script_shootBulletScan/script_shootBulletScan.yy",},},

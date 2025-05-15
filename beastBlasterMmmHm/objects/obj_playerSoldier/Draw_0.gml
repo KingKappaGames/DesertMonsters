@@ -2,6 +2,14 @@ if (live_call()) return live_result;
 
 event_inherited();
 
+var _surf = getSurf(); // the surface you draw to
+var _surfMidX = surface_get_width(_surf) / 2;
+var _surfMidY = surface_get_height(_surf) / 2;
+
+surface_set_target(_surf);
+
+draw_clear_alpha(c_white, 0);
+
 #region bunch of things for general positioning, needs to be established first
 //var _dirMoving = point_direction(x, y, mouse_x, mouse_y);
 var _dirMoving = point_direction(0, 0, xChange, yChange);
@@ -18,7 +26,7 @@ var _leanAheadY = clamp(yChange, 0, 99) * 9; // keep consistent i suppose
 #region draw gun
 var _heldDownAngleAdjust = 0;
 if(gunHeldDown) {
-	_heldDownAngleAdjust = (angle_difference(270, gunHoldDirection) / 3);
+	_heldDownAngleAdjust = (angle_difference(270, gunHoldDirection) / 3); // set the holding down effect if out of aim range (when aiming away hold gun down to side)
 	var _upAngleDiff = angle_difference(gunHoldDirection, 90);
 	if(abs(_upAngleDiff) < 90) {
 		_heldDownAngleAdjust *= clamp(abs(_upAngleDiff) - 45, 0, 45) / 45; // reduce adjust as it approaches upward hold angle because pushing an up gun towards down doesn't make any sense
@@ -26,10 +34,10 @@ if(gunHeldDown) {
 }
 
 weaponPosition[0] += _leanAheadX;
-weaponPosition[1] += _leanAheadY + _jostle / 2;
+weaponPosition[1] += _leanAheadY + _jostle / 2; // position the gun with body movement variations
 
 if(gunDrawBehind) {
-	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust);
+	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, x - _surfMidX, y - _surfMidY); // draw gun in front if supposed to be in front
 }
 #endregion
 
@@ -81,15 +89,19 @@ var _jointRY = dsin(_dirRFoot + 90) * -sign(_cosFacing) * _footRJointDist;
 #endregion
 
 #region draw thigh and calf segments and circle to round the knee and close visual gap
+
+var _offX = x - _surfMidX;
+var _offY = y - _surfMidY;
+
 draw_set_color(c_red);
-draw_line_width(_hipRX, _hipRY, _legMidRX + _jointRX, _legMidRY + _jointRY, 5); // right leg
-draw_line_width(_legMidRX + _jointRX, _legMidRY + _jointRY, footRX, footRY, 3);
+draw_line_width(_hipRX - _offX, _hipRY - _offY, _legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 5); // right leg
+draw_line_width(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, footRX - _offX, footRY - _offY, 3);
 
-draw_line_width(_hipLX, _hipLY, _legMidLX + _jointLX, _legMidLY + _jointLY, 5); // left leg
-draw_line_width(_legMidLX + _jointLX, _legMidLY + _jointLY, footLX, footLY, 3);
+draw_line_width(_hipLX - _offX, _hipLY - _offY, _legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 5); // left leg
+draw_line_width(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, footLX - _offX, footLY - _offY, 3);
 
-draw_circle(_legMidRX + _jointRX, _legMidRY + _jointRY, 2, false); // both knees
-draw_circle(_legMidLX + _jointLX, _legMidLY + _jointLY, 2, false);
+draw_circle(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 2, false); // both knees
+draw_circle(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 2, false);
 draw_set_color(c_white);
 #endregion
 
@@ -115,5 +127,12 @@ _counter += script_drawComponents(0, _leanAheadX, _leanAheadY, _jostle, _cosFaci
 script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, false);
 
 if(!gunDrawBehind) {
-	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust);
+	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, x - _surfMidX, y - _surfMidY); // draw gun behind if supposed to be behind
 }
+
+surface_reset_target();
+
+//var _ang = current_time / 10; 
+//var _dist = (_surfMidX) * 1.4142; // the radius of the surf is the sqrt((width/2^2) + (height/2^2)) not just width / 2 but also just paste in a real for sqrt(2) which is that number
+//draw_surface_ext(_surf, x + dcos(_ang + 135) * _dist, y - dsin(_ang + 135) * _dist, 1, 1, _ang, c_white, 1);
+draw_surface(_surf, x - _surfMidX, y - _surfMidY);

@@ -25,6 +25,7 @@ audio_group_set_gain(audiogroup_default, .4, 0);
 global.windStrength = 0;
 global.gravityStrength = 0;
 
+#region enums
 enum limbNode { // values for limb nodes to ref (in array!)
 	xx, 
 	yy, 
@@ -32,6 +33,20 @@ enum limbNode { // values for limb nodes to ref (in array!)
 	len, 
 	thickness 
 }
+enum component {
+	sprite,
+	image,
+	rotationRelative,
+	height, 
+	dist,
+	xScale,
+	yScale,
+	viewAngle,
+	compressionMin,
+	color,
+	rotationAdjust
+}
+#endregion
 
 fakeRoom = "mainRoom"; // this is for the quest set up for checking rooms
 

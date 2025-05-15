@@ -1,4 +1,4 @@
-function script_drawIKLimb(limb, bodyPart) {
+function script_drawIKLimb(limb, bodyPart, surfOffX = -1, surfOffY = -1) {
 	live_auto_call
 	for(var _limbSegI = array_length(limb) - 2; _limbSegI >= 0; _limbSegI--) { // repeat nodes - 1, so n-n+1, n+1-n+2, n+2-n+3, ect but cut off one early, 3 nodes = 2 segments
 		var _limbSegStart = limb[_limbSegI];
@@ -14,6 +14,6 @@ function script_drawIKLimb(limb, bodyPart) {
 		var _segmentDir = point_direction(_segBeginX, _segBeginY, _segEndX, _segEndY); // visual dir, not horizontal dir
 		var _lengthMultX = point_distance(_segBeginX, _segBeginY, _segEndX, _segEndY) / sprite_get_width(_sprite);
 			
-		draw_sprite_ext(_sprite, bodyPart[1][_limbSegI], _segBeginX, _segBeginY, _lengthMultX, bodyPart[6][_limbSegI], _segmentDir, bodyPart[9][_limbSegI], 1);
+		draw_sprite_ext(_sprite, bodyPart[1][_limbSegI], _segBeginX - surfOffX, _segBeginY - surfOffY, _lengthMultX, bodyPart[6][_limbSegI], _segmentDir, bodyPart[9][_limbSegI], 1);
 	}
 }

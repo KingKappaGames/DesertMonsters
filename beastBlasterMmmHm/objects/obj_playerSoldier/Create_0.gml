@@ -16,11 +16,11 @@ yChange = 0;
 #endregion
 
 #region surf stuff
-surf = surface_create(120, 120); // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO
+surf = surface_create(256, 256); // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO
 
 getSurf = function() {
 	if(!surface_exists(surf)) {
-		surf = surface_create(120, 120); // recreate if lost (no need to buffer store this since it's updating every frame anyway, (i think? Perhaps certain effects cause problems and need a more direct solution, doubt it though)
+		surf = surface_create(256, 256); // recreate if lost (no need to buffer store this since it's updating every frame anyway, (i think? Perhaps certain effects cause problems and need a more direct solution, doubt it though)
 	}
 	
 	return surf;
@@ -30,7 +30,7 @@ getSurf = function() {
 #region camera
 camX = camera_get_view_x(view_camera[0]);
 camY = camera_get_view_y(view_camera[0]);
-camera_set_view_size(view_camera[0], 480, 270);
+camera_set_view_size(view_camera[0], 640, 360);
 #endregion
 
 #region gun and bullet values
@@ -38,8 +38,7 @@ gunType = 0;
 
 #region gun in hand values
 gunSprite = spr_pistol;
-gunX = x;
-gunY = y;
+gunHoldOffsets = [[0, 0, 0], [0, 0, 0]]; // the sub arrays here are hand locations relative to the x/y of the gun (must be rotated and scaled if applicable)
 gunHoldDistance = 30;
 gunHoldDirection = 0;
 gunAimRange = 95;
@@ -99,6 +98,7 @@ setTurret = function(type) {
 		
 		gunSprite = spr_machineGun; //visual bits
 		gunHoldDistance = 13;
+		script_setHoldOffsets(10, -10, 30, 5, -5, 3);
 		gunRecoil = 2.2;
 	} else if(type == 2) {
 		bulletType = obj_basicScanBullet;
@@ -117,6 +117,7 @@ setTurret = function(type) {
 		
 		gunSprite = spr_pistol; //visual bits
 		gunHoldDistance = 22;
+		script_setHoldOffsets(0, 0, 5, 0, 0, 0);
 		gunRecoil = 8;
 	} else if(type == 3) {
 		bulletType = obj_rocket;
@@ -134,7 +135,8 @@ setTurret = function(type) {
 		gunAutomatic = 0;
 		
 		gunSprite = spr_rpg; //visual bits
-		gunHoldDistance = 5;
+		gunHoldDistance = 6;
+		script_setHoldOffsets(1, 1, 3, 25, -25, 4);
 		gunRecoil = 6.5;
 	}
 	
@@ -274,7 +276,7 @@ placeFeetFull = function(dir, spd) {
 #region arm arrays, more of a loose structure to mirror the component settings
 limbLength = 20;
 limbArray = [  [[x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5]], [[x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
-weaponPosition = [x, y, ]; // use arrays (structs??) to store positions both for simplicty (i guess?) but more importantly for reference passing, being able to give the component system the item 
+weaponPosition = [x, y, 0]; // use arrays (structs??) to store positions both for simplicty (i guess?) but more importantly for reference passing, being able to give the component system the item 
 #endregion
 
 #region body components
@@ -294,7 +296,8 @@ bodyComponents = [];
 ///@param imgRotationAdjust The angle to add to the view angle when getting the image for angle based images
 addToBodyComponents = function(sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color = c_white, imgRotationAdjust = 0) {
 	array_push(bodyComponents, [sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color, imgRotationAdjust]);
-}
+}  
+
 
 ///@desc Adds an array listing to the components array, note though that with this because you are describing a limb with multiple segments all the drawing values will be arrays representing joint to limb tip (hand, foot, whatever). So the position is the origin of the limb but the sprite, scale, img ect are arrays of each segment
 ///@param spriteArr The sprites to use
@@ -308,10 +311,10 @@ addToBodyComponents = function(sprite, image, rotationRelative, height, distance
 ///@param viewCompressionMin The minimum horizontal visual scale that can be had based on the view angles, backpacks might be .4 for 40% width at off angle view
 ///@param colorArr The color blend to apply, standard stuff
 ///@param imgRotationAdjust The angle to add to the view angle when getting the image for angle based images
-///@param limbArrRef The array reference to seek a limb with the index below, so you pass like, armArray from your own code, and below index 3 means armArray[3] should contain a node set that this drawing can use
-///@param limbIndex The index in the limb array that this component relates to (as described in limb array ref param above)
-addLimbToBodyComponents = function(spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr = c_white, imgRotationAdjust = 0, limbArrRef, limbIndex) { // these limbs still need to adhere to rotation and position values because the sorting will use it the same way for all, or I can change it but seems easy enough as is
-	array_push(bodyComponents, [spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr, imgRotationAdjust, limbArrRef, limbIndex]); // limbSegLen array?
+///@param limbArrRef The array reference to get the nodes of drawing from, since arrays are ref passed you simply pass the [node1, node2, node3] limb array from wherever it is stored and this will sample from it
+///@param gunHoldOffset The array reference of the offset values for this gun and hold index (a rifle has two holding locations, right? So pass the sub array of the hold positions at the desired coords)
+addLimbToBodyComponents = function(spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr = c_white, imgRotationAdjust = 0, limbArrRef, gunHoldOffset) { // these limbs still need to adhere to rotation and position values because the sorting will use it the same way for all, or I can change it but seems easy enough as is
+	array_push(bodyComponents, [spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr, imgRotationAdjust, limbArrRef, gunHoldOffset]); // limbSegLen array?
 }
 
 
