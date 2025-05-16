@@ -2,6 +2,8 @@ if (live_call()) return live_result;
 
 event_inherited();
 
+draw_text(x, y - 100, weaponPosition[2]);
+
 var _surf = getSurf(); // the surface you draw to
 var _surfMidX = surface_get_width(_surf) / 2;
 var _surfMidY = surface_get_height(_surf) / 2;

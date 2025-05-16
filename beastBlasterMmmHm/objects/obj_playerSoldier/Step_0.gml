@@ -10,6 +10,7 @@ yChange -= dsin(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick; // push i
 
 x += xChange;
 y += yChange;
+feetY = y + feetOffY;
 //depth = - (y + 60); // this project doesn't use depth... YET??? Maybe, I assume when i start making trees and walls and buildings I'll switch to -y depth but for now it's simpler to do surfaces with out any depth consideration. Especially the dust and debris... That'll be a pain with surfaces unless I go full layer stacking and do what main game does... Though I don't know if I have the height for it here... Too many layers required I think.
 xChange *= speedDecay;
 yChange *= speedDecay;
@@ -43,11 +44,14 @@ if(abs(_aimToFacingDifference) >= gunAimRange) { // if aiming outside of range
 	_holdDistMult = .5 + min(_mouseDist / 220, 1.2);
 }
 weaponPosition[0] = x + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
-weaponPosition[1] = y + 13 - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7 + (gunHeldDown * 6) + ((1 - gunHeldDown) * (3 - _holdDistMult * 12)); // lower and bring in gun when not holding up
-if(point_distance(x, y, weaponPosition[0], weaponPosition[1]) > limbLength * 2) {
+weaponPosition[1] = feetY - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7; // lower and bring in gun when not holding up
+weaponPosition[2] = feetOffY - ((gunHeldDown * 6) + ((1 - gunHeldDown) * (3 - _holdDistMult * 17)));
+if(point_distance(x, feetY, weaponPosition[0], weaponPosition[1]) > limbLength * 2) {
+	msg("hell")
 	weaponPosition[0] = x + dcos(gunHoldDirection) * 20;
-	weaponPosition[1] = y - dsin(gunHoldDirection) * 13;
+	weaponPosition[1] = feetY - dsin(gunHoldDirection) * 13;
 }
+
 if(gunHoldDirection > 0 && gunHoldDirection < 180) {
 	gunDrawBehind = 1;
 } else {

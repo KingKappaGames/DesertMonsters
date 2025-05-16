@@ -505,6 +505,7 @@
     {"id":{"name":"input_x","path":"scripts/input_x/input_x.yy",},},
     {"id":{"name":"input_xy","path":"scripts/input_xy/input_xy.yy",},},
     {"id":{"name":"input_y","path":"scripts/input_y/input_y.yy",},},
+    {"id":{"name":"mark","path":"scripts/mark/mark.yy",},},
     {"id":{"name":"msg","path":"scripts/msg/msg.yy",},},
     {"id":{"name":"random_color","path":"scripts/random_color/random_color.yy",},},
     {"id":{"name":"script_burstParticlesConcentrated","path":"scripts/script_burstParticlesConcentrated/script_burstParticlesConcentrated.yy",},},

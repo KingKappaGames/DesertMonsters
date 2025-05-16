@@ -1,6 +1,7 @@
 ///@desc Written to simply take the component count and use all the local variables but edit to a more modular system is neede, this basically is just a way to centralize the code and not have to duplicate it
 function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, cosFacing, moveDir, frontDraw){
-	var _counter = 0;
+	live_auto_call
+	var _counter = 0; // index counter for main component drawing loop (continues outside this function, hence why it's returned by this)
 	var _componentCount = array_length(bodyComponents);
 	
 	var _x = 0, _y = 0;
@@ -21,7 +22,7 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 			var _netAngle = moveDir + _bodyPart[2];
 			var _imageInfo = _bodyPart[1];
 			_x = _surfMidX + leanAheadX + dcos(_netAngle) * _bodyOut;
-			_y = _surfMidY + leanAheadY - dsin(_netAngle) * _bodyOut * .6 + _bodyPart[3] + jostle;
+			_y = _surfMidY + leanAheadY - dsin(_netAngle) * _bodyOut * .6 - _bodyPart[3] + jostle;
 			var _compress = 1;
 			if(!is_array(_bodyPart[0])) { // single sprite
 				if(_bodyPart[8] != 1) {
@@ -37,13 +38,13 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 			
 				#region place arms on gun via IK
 				_limb[0][0] = _surfOffX + _x;
-				_limb[0][1] = _surfOffY + _y;
-				_limb[0][2] = 0; // set the two knowns, origin and gun position (the end)
-	
+				_limb[0][1] = _surfOffY + _y + feetOffY;
+				_limb[0][2] = feetOffY + _bodyPart[3]; // set the two knowns, origin and gun position (the end)
+				
 				_limb[2][0] = weaponPosition[0] + _weaponOffsets[0] * dcos(gunHoldDirection); // x
 				_limb[2][1] = weaponPosition[1] + _weaponOffsets[1] * dsin(gunHoldDirection); // y (duh)
 				_limb[2][2] = weaponPosition[2] + _weaponOffsets[2]; // height //TODO height of gun is relevant but maybe y can do this ? But then it's faked and will surely break at some point
-			
+				
 				var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
 				var _limbDir = point_direction(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
 			
