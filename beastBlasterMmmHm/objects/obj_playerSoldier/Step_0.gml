@@ -47,7 +47,6 @@ weaponPosition[0] = x + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult
 weaponPosition[1] = feetY - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7; // lower and bring in gun when not holding up
 weaponPosition[2] = feetOffY - ((gunHeldDown * 6) + ((1 - gunHeldDown) * (3 - _holdDistMult * 17)));
 if(point_distance(x, feetY, weaponPosition[0], weaponPosition[1]) > limbLength * 2) {
-	msg("hell")
 	weaponPosition[0] = x + dcos(gunHoldDirection) * 20;
 	weaponPosition[1] = feetY - dsin(gunHoldDirection) * 13;
 }
@@ -105,3 +104,5 @@ if(burstSpread > .01) { // decay gun bloom, (inaccuracy with constant shots)
 //ammoCurrent = ammoMax; // clean
 
 event_inherited();
+
+depth = -((y + feetOffY) - global.depthOffset);

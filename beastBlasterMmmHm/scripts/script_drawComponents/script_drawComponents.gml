@@ -1,6 +1,7 @@
 ///@desc Written to simply take the component count and use all the local variables but edit to a more modular system is neede, this basically is just a way to centralize the code and not have to duplicate it
 function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, cosFacing, moveDir, frontDraw){
 	live_auto_call
+	spineAngle += .1;
 	var _counter = 0; // index counter for main component drawing loop (continues outside this function, hence why it's returned by this)
 	var _componentCount = array_length(bodyComponents);
 	
@@ -21,8 +22,8 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 		if(!frontDraw || (_ang > 3 && _ang < 177)) { // so maybe I shouldn't but this puts them further back than flat, a slightly behind thing by 3 degrees will go in front, this is maybe to give them a bit of covering thickness? But I do kind of hate the canabalistic effect of forcing up here.
 			var _netAngle = moveDir + _bodyPart[2];
 			var _imageInfo = _bodyPart[1];
-			_x = _surfMidX + leanAheadX + dcos(_netAngle) * _bodyOut;
-			_y = _surfMidY + leanAheadY - dsin(_netAngle) * _bodyOut * .6 - _bodyPart[3] + jostle;
+			_x = _surfMidX + leanAheadX + dcos(_netAngle) * _bodyOut + dcos(spineAngle) * _bodyPart[3];
+			_y = _surfMidY + leanAheadY - dsin(_netAngle) * _bodyOut * .6 + jostle - dsin(spineAngle) * _bodyPart[3];   // applying sin/cos to height offset created some strange results because of sprite positions, perhaps drawing the body to a surface then rotating would be better? Correcting for absolute angle by removing body angle.. I dunno.
 			var _compress = 1;
 			if(!is_array(_bodyPart[0])) { // single sprite
 				if(_bodyPart[8] != 1) {
@@ -30,7 +31,7 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 					_compress += _bodyPart[8] * sign(_compress);
 				}
 				var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
-				draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], 0, _bodyPart[9], 1);
+				draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], spineAngle - 90, _bodyPart[9], 1);
 				//draw behind components?
 			} else { // drawing limbs!
 				var _limb = _bodyPart[11]; // store the reference to the array that holds the arrays at this index that holds the nodes of this limb for drawing with, specify the collection and where in that collection, basically

@@ -2,7 +2,7 @@ if (live_call()) return live_result;
 
 event_inherited();
 
-draw_text(x, y - 100, weaponPosition[2]);
+//draw_text(x, y - 100, weaponPosition[2]);
 
 var _surf = getSurf(); // the surface you draw to
 var _surfMidX = surface_get_width(_surf) / 2;
@@ -116,8 +116,13 @@ draw_set_color(c_white);
 
 
 array_sort(bodyComponents, function(elementCurrent, elementNext, originalOrder) // sort drawing based on visual height
-{                
+{            
 	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]);
+	//if(is_array(elementCurrent[0])) {
+	//	return elementCurrent[11][2][1] - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // the 11-2-1 is the y value of the 3rd node of the limb ( [11] )  ( limb component! )
+	//} else {
+	//	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // normal component
+	//}  // (sorting to the end the limb, instead of start (looks bad!)
 });
 
 var _counter = 0; 
