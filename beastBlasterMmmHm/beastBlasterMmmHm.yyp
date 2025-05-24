@@ -508,6 +508,7 @@
     {"id":{"name":"mark","path":"scripts/mark/mark.yy",},},
     {"id":{"name":"msg","path":"scripts/msg/msg.yy",},},
     {"id":{"name":"random_color","path":"scripts/random_color/random_color.yy",},},
+    {"id":{"name":"script_addBodyComponent","path":"scripts/script_addBodyComponent/script_addBodyComponent.yy",},},
     {"id":{"name":"script_burstParticlesConcentrated","path":"scripts/script_burstParticlesConcentrated/script_burstParticlesConcentrated.yy",},},
     {"id":{"name":"script_burstPartSpawners","path":"scripts/script_burstPartSpawners/script_burstPartSpawners.yy",},},
     {"id":{"name":"script_createMeatDebris","path":"scripts/script_createMeatDebris/script_createMeatDebris.yy",},},

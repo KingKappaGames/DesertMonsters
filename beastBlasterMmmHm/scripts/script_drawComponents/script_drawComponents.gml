@@ -30,8 +30,19 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 					_compress = dsin(_netAngle + _bodyPart[7]) * (1 - _bodyPart[8]);
 					_compress += _bodyPart[8] * sign(_compress);
 				}
+				
+				var _sprite = -1;
+				var _image = -1;
+				if(is_array(_imageInfo)) {
+					_sprite = 
+					_image = 
+				} else {
+					_sprite = _bodyPart[0];
+					_image = _bodyPart[1];
+				}
+				
 				var _directionImg = floor(((((_netAngle + _bodyPart[10]) + 360) / 360) % 1) * (array_length(_imageInfo)));
-				draw_sprite_ext(_bodyPart[0], is_array(_imageInfo) ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], spineAngle - 90, _bodyPart[9], 1);
+				draw_sprite_ext(_bodyPart[0],  ? _imageInfo[_directionImg] : _imageInfo, _x, _y, _bodyPart[5] * _compress, _bodyPart[6], spineAngle - 90, _bodyPart[9], 1);
 				//draw behind components?
 			} else { // drawing limbs!
 				var _limb = _bodyPart[11]; // store the reference to the array that holds the arrays at this index that holds the nodes of this limb for drawing with, specify the collection and where in that collection, basically
