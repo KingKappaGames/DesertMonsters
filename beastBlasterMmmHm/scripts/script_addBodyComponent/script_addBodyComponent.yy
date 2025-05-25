@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"script_addBodyComponent",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/Scripts.yy",
+    "name":"script_group_tormentJustRemake",
+    "path":"folders/Scripts/script_group_tormentJustRemake.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

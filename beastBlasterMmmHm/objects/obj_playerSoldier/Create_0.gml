@@ -362,12 +362,12 @@ addLimbToBodyComponents = function(spriteArr, imageArr, rotationRelative, height
 //addToBodyComponents(spr_backpack, 8, 180, 3, 12, 1, 1, 0, 0, c_white); // ruck sack 2 parts
 //addToBodyComponents(spr_backpack, 9, 115, -26, 33, 1, 1, 0, .99, c_white); // not possible with the current scaling of rotation move combined with image scaling, could add a supplement to match them up but... Sigh. Performance is already suffering...
 
-addToBodyComponents(spr_robeParts,  [8, 1],  0,    0,     0, 1.6,   2,      0,     .6,         #3D3D29, 0); // body
-addToBodyComponents(spr_robeParts,  [9, 3],  0,    22,   2, 1.6,   2,      0,     .6,         #ffaaaa, 0); // head
-addToBodyComponents(spr_robeParts,  0,  85,   12,   10, 1.6,   2,      0,     .4,         #4D4D39, 0); // shoulder
-addToBodyComponents(spr_robeParts,  0,  -85,  12,   10, 1.6,   2,      0,     .4,         #4D4D39, 0); // shoulder
-addLimbToBodyComponents([spr_armParts, spr_armParts], [0, 0],  80,   15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[0], gunHoldOffsets[0]); // arm arrays
-addLimbToBodyComponents([spr_armParts, spr_armParts], [0, 0],  -80,  15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[1], gunHoldOffsets[1]); // arm arrays
-addToBodyComponents(spr_robeParts,  4,  0,    -2,    -6, 1.6,   2,      0,     .4,          #363622, 0); // cape
+new script_addBodyComponent(id, 0, spr_robeParts,  [8, 1],  0,    0,     0, 1.6,   2,      0,     .6,         #3D3D29, 0); // body
+new script_addBodyComponent(id, 0, spr_robeParts,  [9, 3],  0,    22,   2, 1.6,   2,      0,     .6,         #ffaaaa, 0); // head
+new script_addBodyComponent(id, 0, spr_robeParts,  0,  85,   12,   10, 1.6,   2,      0,     .4,         #4D4D39, 0); // shoulder
+new script_addBodyComponent(id, 0, spr_robeParts,  0,  -85,  12,   10, 1.6,   2,      0,     .4,         #4D4D39, 0); // shoulder
+new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  80,   15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[0], gunHoldOffsets[0]); // arm arrays
+new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  -80,  15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[1], gunHoldOffsets[1]); // arm arrays
+new script_addBodyComponent(id, 0, spr_robeParts,  4,  0,    -2,    -6, 1.6,   2,      0,     .4,          #363622, 0); // cape
 
 setTurret(1);

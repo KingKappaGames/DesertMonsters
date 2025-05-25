@@ -1,10 +1,10 @@
 ///@desc Simply sets the joint position (as given by mid points in nodeArray for an individual limb), doesn't draw, doesn't set orgins or clamp distance
-///@param nodeArray
-///@param segmentLength
-///@param endDist
-///@param endDir
-///@param facingCos
-///@param joints
+///@param nodeArray The geometry nodes of the limb to use for this, eg, [shoulder/hip x,y,  joint x2,y2,  foot/hand x3,y3]
+///@param segmentLength How long the individual segments of the limb are
+///@param endDist Dist from start point to end point of limb
+///@param endDir Dir from start point to end point of limb
+///@param facingCos The visual compression (as a -1-1 cos output) of the limb, if facing you for example any out will be irelavant ect
+///@param joints Integer count! Not a list or positions, simply the amount of bends to use
 ///@param bendDirGoal This is the direction to bend towards, in any 90 degree bending system it must choose to bend +90 or -90 from the original angle, this is the angle that it will prefer when bending
 function script_setIKJoints(nodeArray, segmentLength, endDist, endDir, facingCos, bendDirGoal = 270) { // which direction they bend for up or down angles
 	live_auto_call
