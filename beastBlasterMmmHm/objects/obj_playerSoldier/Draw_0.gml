@@ -116,7 +116,7 @@ draw_set_color(c_white);
 
 
 array_sort(bodyComponents, function(elementCurrent, elementNext, originalOrder) // sort drawing based on visual height
-{            
+{             
 	return (-dsin(directionFacing + elementCurrent.rotationRelative) * elementCurrent.distance) - (-dsin(directionFacing + elementNext.rotationRelative) * elementNext.distance);
 	//if(is_array(elementCurrent[0])) {
 	//	return elementCurrent[11][2][1] - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // the 11-2-1 is the y value of the 3rd node of the limb ( [11] )  ( limb component! )

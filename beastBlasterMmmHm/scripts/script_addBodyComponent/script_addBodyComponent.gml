@@ -23,7 +23,7 @@ function script_addBodyComponent(creature, spineIndex, spriteArr, imageArr, rotR
 	viewAngle = viewAngleSet; 
 	viewCompressionMin = viewCompressionMinimum; 
 	color = colorSet; 
-	imageFromRotationAdjust = imgRotationAdjust; 
+	imageFromRotationAdjust = imgFromRotationAdjust; 
 	limb = false; // this component isn't a limb 0:
 	
 	array_push(creature.bodyComponents, self); // spine indexing? creature.spines[spineIndex] ?

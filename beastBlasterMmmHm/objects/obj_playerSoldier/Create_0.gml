@@ -16,7 +16,7 @@ yChange = 0;
 #endregion
 
 #region surf stuff
-surf = surface_create(256, 256); // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO
+surf = surface_create(256, 256); // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO - done!
 
 getSurf = function() {
 	if(!surface_exists(surf)) {
@@ -263,7 +263,7 @@ setTrack = function(dir, spd) {
 
 setFeetAtTrackBase = function(speedMoving) { // god i hate built in speed variable
 	var _trackProg = dsin(legRotation);
-	
+
 	var _trackXToEnd = dcos(trackDir) * trackLen;
 	var _trackYToEnd = -dsin(trackDir) * trackLen;
 	
@@ -297,43 +297,6 @@ limbArray = [  [[x, y, 0, limbLength, 5], [x, y, 0, limbLength, 5], [x, y, 0, li
 
 #region body components
 bodyComponents = [];
-
-///@desc Adds an array listing to the components array
-///@param sprite The sprite to use
-///@param image The sprite image to use
-///@param rotationRelative This is the off set from straight forward to draw the component
-///@param height The y offset to draw this component with
-///@param distance The distance from the player this item should rotate at unaffected by angle compression
-///@param xscale The horizontal scale of the image
-///@param yscale The vertical scale of the image
-///@param viewAngle The direction of the view of the image, for backpacks it would straight out aka 0, for something that sticks away and scales that way 90 would be "away" and the range 0 - 180 not -90 to 90, depends on the flatness of your perspective
-///@param viewCompressionMin The minimum horizontal visual scale that can be had based on the view angles, backpacks might be .4 for 40% width at off angle view
-///@param color The color blend to apply, standard stuff
-///@param imgRotationAdjust The angle to add to the view angle when getting the image for angle based images
-addToBodyComponents = function(sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color = c_white, imgRotationAdjust = 0) {
-	array_push(bodyComponents, [sprite, image, rotationRelative, height, distance, xscale, yscale, viewAngle, viewCompressionMin, color, imgRotationAdjust]);
-}  
-
-
-///@desc Adds an array listing to the components array, note though that with this because you are describing a limb with multiple segments all the drawing values will be arrays representing joint to limb tip (hand, foot, whatever). So the position is the origin of the limb but the sprite, scale, img ect are arrays of each segment
-///@param spriteArr The sprites to use
-///@param imageArr The sprite images to use
-///@param rotationRelative This is the off set from straight forward to draw the component
-///@param height The y offset to draw this component with
-///@param distance The distance from the player this item should rotate at unaffected by angle compression
-///@param xscaleArr The horizontal scale of the images
-///@param yscaleArr The vertical scale of the images
-///@param viewAngle The direction of the view of the image, for backpacks it would straight out aka 0, for something that sticks away and scales that way 90 would be "away" and the range 0 - 180 not -90 to 90, depends on the flatness of your perspective
-///@param viewCompressionMin The minimum horizontal visual scale that can be had based on the view angles, backpacks might be .4 for 40% width at off angle view
-///@param colorArr The color blend to apply, standard stuff
-///@param imgRotationAdjust The angle to add to the view angle when getting the image for angle based images
-///@param limbArrRef The array reference to get the nodes of drawing from, since arrays are ref passed you simply pass the [node1, node2, node3] limb array from wherever it is stored and this will sample from it
-///@param gunHoldOffset The array reference of the offset values for this gun and hold index (a rifle has two holding locations, right? So pass the sub array of the hold positions at the desired coords)
-addLimbToBodyComponents = function(spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr = c_white, imgRotationAdjust = 0, limbArrRef, gunHoldOffset) { // these limbs still need to adhere to rotation and position values because the sorting will use it the same way for all, or I can change it but seems easy enough as is
-	array_push(bodyComponents, [spriteArr, imageArr, rotationRelative, height, distance, xscaleArr, yscaleArr, viewAngle, viewCompressionMin, colorArr, imgRotationAdjust, limbArrRef, gunHoldOffset]); // limbSegLen array?
-}
-
-
 
 #endregion
 
@@ -369,5 +332,11 @@ new script_addBodyComponent(id, 0, spr_robeParts,  0,  -85,  12,   10, 1.6,   2,
 new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  80,   15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[0], gunHoldOffsets[0]); // arm arrays
 new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  -80,  15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[1], gunHoldOffsets[1]); // arm arrays
 new script_addBodyComponent(id, 0, spr_robeParts,  4,  0,    -2,    -6, 1.6,   2,      0,     .4,          #363622, 0); // cape
+
+//lag testing
+//repeat(5000) {
+	//new script_addBodyComponent(id, 0, spr_robeParts,  [9, 3],  irandom(360),    irandom_range(-40, 70),   irandom(50), 1.6,   2,      0,     .6,         #ffaaaa, 0); // head
+	//new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  irandom(360),  irandom_range(-20, 30),   irandom(40), [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[irandom(1)], gunHoldOffsets[irandom(1)]); // arm arrays
+//}
 
 setTurret(1);
