@@ -21,7 +21,7 @@ if(input_check_released("characterSwitch", playerIndex)) {
 }
 
 if(input_check_released("gunSwitch", playerIndex)) {
-	setTurret((gunType + 1) % 3);
+	setTurret((gunType + 1) % 4);
 }
 
 event_inherited();

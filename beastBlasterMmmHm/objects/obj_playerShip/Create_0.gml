@@ -19,6 +19,8 @@ airStrikeBeginningX = 0;
 airStrikeBeginningY = 0;
 airStrikeCharging = 0;
 airStrikeCoolDown = 0;
+
+homingLock = noone;
 #endregion
 
 #region function set
@@ -47,6 +49,11 @@ setTurret = function(turretType) {
 
 		bulletType = obj_icbm;
 		shotSpeed = 1;
+	} else if(turretType == 3) {
+		shotTimeLimit = 15;
+		
+		bulletType = obj_homingMissle;
+		shotSpeed = 8;
 	}
 	//such and things
 }
@@ -76,13 +83,17 @@ weaponControls = function() {
 			airStrikeBeginningY = input_cursor_y(playerIndex);
 		}
 	} else if(input_check_released("middleClick", playerIndex)) {
-		if(airStrikeCharging) {
-			airStrikeCharging = 0;
-			if(point_distance(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_x(playerIndex)) < 120) {
-				script_startAirStrike(input_cursor_x(playerIndex), input_cursor_y(playerIndex)); // point strike
-			} else {
-				script_startAirStrike(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_y(playerIndex), 2, 7,, 50, 288);
+		if(bulletType != obj_homingMissle) {
+			if(airStrikeCharging) {
+				airStrikeCharging = 0;
+				if(point_distance(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_x(playerIndex)) < 120) {
+					script_startAirStrike(input_cursor_x(playerIndex), input_cursor_y(playerIndex)); // point strike
+				} else {
+					script_startAirStrike(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_y(playerIndex), 2, 7,, 50, 288);
+				}
 			}
+		} else {
+			homingLock = instance_nearest(mouse_x, mouse_y, obj_enemy);
 		}
 	}
 }

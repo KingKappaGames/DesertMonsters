@@ -7,6 +7,7 @@ yChange = 0;
 
 bulletHeight = 100;
 bulletDrop = 4;
+bulletDirection = 0;
 
 bulletDamage = 1 + irandom(1);
 bulletSize = 2 + irandom(2);

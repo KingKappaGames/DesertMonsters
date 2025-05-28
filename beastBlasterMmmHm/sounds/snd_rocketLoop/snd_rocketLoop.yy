@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_rocketLoop",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":2.3097959,
+  "name":"snd_rocketLoop",
+  "parent":{
+    "name":"soundsOfWeapons",
+    "path":"folders/Sounds/soundsOfWeapons.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_rocketLoop.mp3",
+  "type":0,
+  "volume":0.74,
+}
