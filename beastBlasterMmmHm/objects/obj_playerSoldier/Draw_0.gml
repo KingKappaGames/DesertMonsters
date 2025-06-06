@@ -21,8 +21,10 @@ var _viewCompress = .5 + abs(dsin(directionFacing) / 2);
 var _speed = point_distance(0, 0, xChange, yChange);
 var _jostle = (dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * sqrt(_speed) * 3;
 
-var _leanAheadX = xChange * 9; // keep consistent i suppose
-var _leanAheadY = clamp(yChange, 0, 99) * 9; // keep consistent i suppose
+var _leanAheadX = xChange * 8; // keep consistent i suppose
+var _leanAheadY = clamp(yChange, 0, 99) * 8; // keep consistent i suppose
+var _leanAheadDir = point_direction(0, 0, xChange * 9, -spineMain.length + yChange); // the 30 here is the distance of the spine while standing straight up i guess? Needs to be standarized and set up proper
+spineMain.angle = _leanAheadDir;
 #endregion
 
 #region draw gun
@@ -39,8 +41,10 @@ weaponPosition[0] += _leanAheadX;
 weaponPosition[1] += _leanAheadY + _jostle / 2; // position the gun with body movement variations
 
 if(gunDrawBehind) {
-	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, x - _surfMidX, y - _surfMidY); // draw gun in front if supposed to be in front
+	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, spineMain.x - _surfMidX, spineMain.y - _surfMidY); // draw gun in front if supposed to be in front
 }
+
+mark(weaponPosition[0], weaponPosition[1])
 #endregion
 
 #region draw legs and feet and body
@@ -107,9 +111,6 @@ draw_circle(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 2, false
 draw_set_color(c_white);
 #endregion
 
-//BODY
-//draw_rectangle(x - 8 + _leanAheadX, y + _jostle + _leanAheadY - 14, x + 8 + _leanAheadX, y + 9 + _jostle + _leanAheadY, false); // BODY
-//draw_sprite_ext(bodySprite, 0, x + _leanAheadX, y + _jostle + _leanAheadY, 1, 1, 0, c_white, 1); // lean body towards movement, scale based on image like everything else?
 
 
 #endregion
@@ -134,7 +135,7 @@ _counter += script_drawComponents(0, _leanAheadX, _leanAheadY, _jostle, _cosFaci
 script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, false);
 
 if(!gunDrawBehind) {
-	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, x - _surfMidX, y - _surfMidY); // draw gun behind if supposed to be behind
+	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, spineMain.x - _surfMidX, spineMain.y - _surfMidY); // draw gun behind if supposed to be behind
 }
 
 surface_reset_target();

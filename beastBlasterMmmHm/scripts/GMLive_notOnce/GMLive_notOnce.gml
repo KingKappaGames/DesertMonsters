@@ -11,8 +11,8 @@ if (false) {
 	live_variable_delete("");
 	live_function_add("", f);
 	live_function_delete("");
-	gml_func_copy("", "");
-	gml_enum_create_builtin("");
+	live_api_func_copy("", "");
+	live_enum_create_builtin("");
 	
 	live_method(undefined, f);
 	live_method_get_self(f);
@@ -42,10 +42,10 @@ if (false) {
 		h_dump();
 		h_get_error_ptr();
 	}
-	v = new gml_std_haxe_Exception();
-	v = new haxe_ds_basic_map();
-	v = new mt_gml_std_haxe_class();
-	v = new mt_gml_std_haxe_enum();
+	v = new live_std_haxe_Exception();
+	v = new live_std_haxe_ds_BasicMap();
+	v = new mt_live_std_haxe_class();
+	v = new mt_live_std_haxe_enum();
 	
 	array_set_2D([[]], 0, 0, 0);
 }

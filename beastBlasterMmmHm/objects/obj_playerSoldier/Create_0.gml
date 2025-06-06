@@ -34,9 +34,10 @@ camY = camera_get_view_y(view_camera[0]);
 
 #region new body stuff
 feetOffY = 50;
-feetOffX = 0;
+feetOffX = 0; //??
 feetY = y + feetOffY;
-spineAngle = 90;
+
+spineMain = new script_createSpine(x, y, 90, 50);
 #endregion
 
 #region gun and bullet values
@@ -301,37 +302,14 @@ bodyComponents = [];
 #endregion
 
 #endregion
-
-//var _rand = 0;
-//repeat(24) {
-//	//addToBodyComponents(spr_backpack, irandom(sprite_get_number(spr_backpack) - 1), ir andom(360), random_range(-7, 10), 14, 1, 1, 0, .1);
-//	_rand += 15;
-//	addToBodyComponents(spr_backpack, 0, _rand, 0, 20 + irandom(30), 1, 3, 0, 0, make_color_rgb(_rand / 1.5, _rand / 1.5, _rand / 1.5));
-//}
-
-//addToBodyComponents(spr_feathers, 0, 150, -1, 5, 1, 1, 50, .1, c_black);
-//addToBodyComponents(spr_feathers, 1, 160, 3,  5, 1, 1, 60, .1, c_black);
-//addToBodyComponents(spr_feathers, 2, 170, 3,  5, 1, 1, 70, .2, c_black);
-//addToBodyComponents(spr_feathers, 3, 180, 3,  5, 1, 1, 90, .3, c_black); // feather array
-//addToBodyComponents(spr_feathers, 2, 190, 3,  5, 1, 1, 110, .2, c_black);
-//addToBodyComponents(spr_feathers, 1, 200, 3,  5, 1, 1, 120, .1, c_black);
-//addToBodyComponents(spr_feathers, 0, 210, -1, 5, 1, 1, 130, .1, c_black);
-
-//addToBodyComponents(spr_backpack, 10, 205, -6, 8, 3, 3, 90, .12, c_white); // dragon wings
-//addToBodyComponents(spr_backpack, 10, 155, -6, 8, 3, 3, 90, .12, c_white);
-
-////addToBodyComponents(spr_backpack, 11, 0, -25, 0, 1, 1, 0, .8, c_white);
-
-//addToBodyComponents(spr_backpack, 8, 180, 3, 12, 1, 1, 0, 0, c_white); // ruck sack 2 parts
-//addToBodyComponents(spr_backpack, 9, 115, -26, 33, 1, 1, 0, .99, c_white); // not possible with the current scaling of rotation move combined with image scaling, could add a supplement to match them up but... Sigh. Performance is already suffering...
-
-new script_addBodyComponent(id, 0, spr_robeParts,  [8, 1],  0,    0,     0, 1.6,   2,      0,     .6,         #3D3D29, 0); // body
-new script_addBodyComponent(id, 0, spr_robeParts,  [9, 3],  0,    22,   2, 1.6,   2,      0,     .6,         #ffaaaa, 0); // head
-new script_addBodyComponent(id, 0, spr_robeParts,  0,  85,   12,   10, 1.6,   2,      0,     .4,         #4D4D39, 0); // shoulder
-new script_addBodyComponent(id, 0, spr_robeParts,  0,  -85,  12,   10, 1.6,   2,      0,     .4,         #4D4D39, 0); // shoulder
-new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  80,   15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[0], gunHoldOffsets[0]); // arm arrays
-new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  -80,  15,   10, [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[1], gunHoldOffsets[1]); // arm arrays
-new script_addBodyComponent(id, 0, spr_robeParts,  4,  0,    -2,    -6, 1.6,   2,      0,     .4,          #363622, 0); // cape
+//                             target spine   sprite(s)                  image(s)  rotRel  height   dist,  xscl          yscl     viewAng   viewComp    color          imgGetRotAdd   fixedAngDraw       limbArrRef     gunOffArrRef
+new script_addBodyComponent(    id,    0,  spr_robeParts,                  [8, 1],   0,    0,        0,     1.6,           2,         0,      .6,      #3D3D29,               0,      undefined);                                          // body
+head = new script_addBodyComponent(    id,    0,  spr_robeParts,                  [9, 3],   0,    22,       2,     1.6,           2,         0,      .6,      #ffaaaa,               0,      0);                                          // head
+new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,        85,   12,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,        -85,  12,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   80,   15,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
+new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   -80,  15,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
+new script_addBodyComponent(    id,    0,  spr_robeParts,                  4,        0,    -2,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
 
 //lag testing
 //repeat(5000) {

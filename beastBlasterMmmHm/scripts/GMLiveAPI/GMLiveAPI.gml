@@ -1,4 +1,4 @@
-// Generated at 2024-05-24 23:09:21 (890ms) for v2.3+
+// Generated at 2025-03-13 00:27:56 (500ms) for v2.3+
 /// @lint nullToAny true
 // Feather disable all
 
@@ -9,7 +9,7 @@ function __lnc__std_gml_NativeTypeHelper_isNumber(l_v){
 
 if(live_enabled)
 function live_preinit_init_funcs(){
-	gml_func_add("gml_pragma(setting, ...)",function(){});
+	live_api_func_add("gml_pragma(setting, ...)",function(){});
 	var l_fm=ds_map_create();
 	var l_fl=ds_list_create();
 	var l_isJS=os_browser!=browser_not_a_browser;
@@ -47,13 +47,13 @@ function live_preinit_init_funcs(){
 				l_jsFunc=l_jsDummy
 			}
 			l_jsIndex++;
-			gml_func_add(l_sig,l_jsFunc);
+			live_api_func_add(l_sig,l_jsFunc);
 		} else {
 			var l_m=l_fm[?l_name];
 			if(l_m==undefined)continue;
 			l_m.used=true;
 			l_func=l_m.func;
-			gml_func_add(l_sig,l_func);
+			live_api_func_add(l_sig,l_func);
 		}
 	}
 	file_text_close(l_lines);
@@ -61,7 +61,7 @@ function live_preinit_init_funcs(){
 		for(var l_i=0,l__g1=ds_list_size(l_fl);l_i<l__g1;l_i++){
 			var l_m=l_fl[|l_i];
 			if(l_m.used)continue;
-			gml_func_add(":::"+l_m.name+"(...):",l_m.func);
+			live_api_func_add(":::"+l_m.name+"(...):",l_m.func);
 		}
 	}
 	ds_map_destroy(l_fm);
@@ -763,7 +763,7 @@ function live_preinit_init_consts(){
 	while(!file_text_eof(l_lines)){
 		var l_name=file_text_read_string(l_lines);
 		file_text_readln(l_lines);
-		gml_const_add(l_name,l_gmlConstValues[++l_index]);
+		live_api_const_add(l_name,l_gmlConstValues[++l_index]);
 	}
 	file_text_close(l_lines);
 }
@@ -771,532 +771,532 @@ function live_preinit_init_consts(){
 if(live_enabled)
 function live_preinit_init_new_consts(){
 	try{
-		gml_const_add("GM_project_filename",GM_project_filename)
+		live_api_const_add("GM_project_filename",GM_project_filename)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("GM_build_type",GM_build_type)
+		live_api_const_add("GM_build_type",GM_build_type)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("GM_is_sandboxed",GM_is_sandboxed)
+		live_api_const_add("GM_is_sandboxed",GM_is_sandboxed)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("_GMLINE_",_GMLINE_)
+		live_api_const_add("_GMLINE_",_GMLINE_)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("_GMFILE_",_GMFILE_)
+		live_api_const_add("_GMFILE_",_GMFILE_)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("_GMFUNCTION_",_GMFUNCTION_)
+		live_api_const_add("_GMFUNCTION_",_GMFUNCTION_)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("ev_pre_create",ev_pre_create)
+		live_api_const_add("ev_pre_create",ev_pre_create)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("ev_draw_normal",ev_draw_normal)
+		live_api_const_add("ev_draw_normal",ev_draw_normal)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("ev_audio_playback_ended",ev_audio_playback_ended)
+		live_api_const_add("ev_audio_playback_ended",ev_audio_playback_ended)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("ev_async_audio_playback_ended",ev_async_audio_playback_ended)
+		live_api_const_add("ev_async_audio_playback_ended",ev_async_audio_playback_ended)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("m_axisx",m_axisx)
+		live_api_const_add("m_axisx",m_axisx)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("m_axisy",m_axisy)
+		live_api_const_add("m_axisy",m_axisy)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("m_axisx_gui",m_axisx_gui)
+		live_api_const_add("m_axisx_gui",m_axisx_gui)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("m_axisy_gui",m_axisy_gui)
+		live_api_const_add("m_axisy_gui",m_axisy_gui)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("m_scroll_up",m_scroll_up)
+		live_api_const_add("m_scroll_up",m_scroll_up)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("m_scroll_down",m_scroll_down)
+		live_api_const_add("m_scroll_down",m_scroll_down)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("bm_min",bm_min)
+		live_api_const_add("bm_min",bm_min)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("bm_reverse_subtract",bm_reverse_subtract)
+		live_api_const_add("bm_reverse_subtract",bm_reverse_subtract)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("bm_eq_add",bm_eq_add)
+		live_api_const_add("bm_eq_add",bm_eq_add)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("bm_eq_max",bm_eq_max)
+		live_api_const_add("bm_eq_max",bm_eq_max)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("bm_eq_subtract",bm_eq_subtract)
+		live_api_const_add("bm_eq_subtract",bm_eq_subtract)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("bm_eq_min",bm_eq_min)
+		live_api_const_add("bm_eq_min",bm_eq_min)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("bm_eq_reverse_subtract",bm_eq_reverse_subtract)
+		live_api_const_add("bm_eq_reverse_subtract",bm_eq_reverse_subtract)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("audio_falloff_inverse_distance_scaled",audio_falloff_inverse_distance_scaled)
+		live_api_const_add("audio_falloff_inverse_distance_scaled",audio_falloff_inverse_distance_scaled)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("audio_falloff_exponent_distance_scaled",audio_falloff_exponent_distance_scaled)
+		live_api_const_add("audio_falloff_exponent_distance_scaled",audio_falloff_exponent_distance_scaled)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("audio_3D",audio_3D)
+		live_api_const_add("audio_3D",audio_3D)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_rgba8unorm",surface_rgba8unorm)
+		live_api_const_add("surface_rgba8unorm",surface_rgba8unorm)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_r16float",surface_r16float)
+		live_api_const_add("surface_r16float",surface_r16float)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_r32float",surface_r32float)
+		live_api_const_add("surface_r32float",surface_r32float)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_rgba4unorm",surface_rgba4unorm)
+		live_api_const_add("surface_rgba4unorm",surface_rgba4unorm)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_r8unorm",surface_r8unorm)
+		live_api_const_add("surface_r8unorm",surface_r8unorm)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_rg8unorm",surface_rg8unorm)
+		live_api_const_add("surface_rg8unorm",surface_rg8unorm)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_rgba16float",surface_rgba16float)
+		live_api_const_add("surface_rgba16float",surface_rgba16float)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("surface_rgba32float",surface_rgba32float)
+		live_api_const_add("surface_rgba32float",surface_rgba32float)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("video_format_rgba",video_format_rgba)
+		live_api_const_add("video_format_rgba",video_format_rgba)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("video_format_yuv",video_format_yuv)
+		live_api_const_add("video_format_yuv",video_format_yuv)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("video_status_closed",video_status_closed)
+		live_api_const_add("video_status_closed",video_status_closed)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("video_status_preparing",video_status_preparing)
+		live_api_const_add("video_status_preparing",video_status_preparing)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("video_status_playing",video_status_playing)
+		live_api_const_add("video_status_playing",video_status_playing)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("video_status_paused",video_status_paused)
+		live_api_const_add("video_status_paused",video_status_paused)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("sprite_add_ext_error_unknown",sprite_add_ext_error_unknown)
+		live_api_const_add("sprite_add_ext_error_unknown",sprite_add_ext_error_unknown)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("sprite_add_ext_error_cancelled",sprite_add_ext_error_cancelled)
+		live_api_const_add("sprite_add_ext_error_cancelled",sprite_add_ext_error_cancelled)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("sprite_add_ext_error_spritenotfound",sprite_add_ext_error_spritenotfound)
+		live_api_const_add("sprite_add_ext_error_spritenotfound",sprite_add_ext_error_spritenotfound)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("sprite_add_ext_error_loadfailed",sprite_add_ext_error_loadfailed)
+		live_api_const_add("sprite_add_ext_error_loadfailed",sprite_add_ext_error_loadfailed)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("sprite_add_ext_error_decompressfailed",sprite_add_ext_error_decompressfailed)
+		live_api_const_add("sprite_add_ext_error_decompressfailed",sprite_add_ext_error_decompressfailed)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("sprite_add_ext_error_setupfailed",sprite_add_ext_error_setupfailed)
+		live_api_const_add("sprite_add_ext_error_setupfailed",sprite_add_ext_error_setupfailed)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("fa_none",fa_none)
+		live_api_const_add("fa_none",fa_none)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("ps_mode_stream",ps_mode_stream)
+		live_api_const_add("ps_mode_stream",ps_mode_stream)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("ps_mode_burst",ps_mode_burst)
+		live_api_const_add("ps_mode_burst",ps_mode_burst)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("os_gdk",os_gdk)
+		live_api_const_add("os_gdk",os_gdk)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("os_gxgames",os_gxgames)
+		live_api_const_add("os_gxgames",os_gxgames)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("tm_systemtiming",tm_systemtiming)
+		live_api_const_add("tm_systemtiming",tm_systemtiming)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_socket_wss",network_socket_wss)
+		live_api_const_add("network_socket_wss",network_socket_wss)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_type_up",network_type_up)
+		live_api_const_add("network_type_up",network_type_up)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_type_up_failed",network_type_up_failed)
+		live_api_const_add("network_type_up_failed",network_type_up_failed)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_type_down",network_type_down)
+		live_api_const_add("network_type_down",network_type_down)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_send_binary",network_send_binary)
+		live_api_const_add("network_send_binary",network_send_binary)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_send_text",network_send_text)
+		live_api_const_add("network_send_text",network_send_text)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_config_websocket_protocol",network_config_websocket_protocol)
+		live_api_const_add("network_config_websocket_protocol",network_config_websocket_protocol)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_config_enable_multicast",network_config_enable_multicast)
+		live_api_const_add("network_config_enable_multicast",network_config_enable_multicast)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_config_disable_multicast",network_config_disable_multicast)
+		live_api_const_add("network_config_disable_multicast",network_config_disable_multicast)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_connect_none",network_connect_none)
+		live_api_const_add("network_connect_none",network_connect_none)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_connect_blocking",network_connect_blocking)
+		live_api_const_add("network_connect_blocking",network_connect_blocking)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_connect_nonblocking",network_connect_nonblocking)
+		live_api_const_add("network_connect_nonblocking",network_connect_nonblocking)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_connect_active",network_connect_active)
+		live_api_const_add("network_connect_active",network_connect_active)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("network_connect_passive",network_connect_passive)
+		live_api_const_add("network_connect_passive",network_connect_passive)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_home",gp_home)
+		live_api_const_add("gp_home",gp_home)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_extra1",gp_extra1)
+		live_api_const_add("gp_extra1",gp_extra1)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_extra2",gp_extra2)
+		live_api_const_add("gp_extra2",gp_extra2)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_extra3",gp_extra3)
+		live_api_const_add("gp_extra3",gp_extra3)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_extra4",gp_extra4)
+		live_api_const_add("gp_extra4",gp_extra4)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_paddler",gp_paddler)
+		live_api_const_add("gp_paddler",gp_paddler)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_paddlel",gp_paddlel)
+		live_api_const_add("gp_paddlel",gp_paddlel)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_paddlerb",gp_paddlerb)
+		live_api_const_add("gp_paddlerb",gp_paddlerb)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_paddlelb",gp_paddlelb)
+		live_api_const_add("gp_paddlelb",gp_paddlelb)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_touchpadbutton",gp_touchpadbutton)
+		live_api_const_add("gp_touchpadbutton",gp_touchpadbutton)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_extra5",gp_extra5)
+		live_api_const_add("gp_extra5",gp_extra5)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("gp_extra6",gp_extra6)
+		live_api_const_add("gp_extra6",gp_extra6)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("texturegroup_status_unloaded",texturegroup_status_unloaded)
+		live_api_const_add("texturegroup_status_unloaded",texturegroup_status_unloaded)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("texturegroup_status_loading",texturegroup_status_loading)
+		live_api_const_add("texturegroup_status_loading",texturegroup_status_loading)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("texturegroup_status_loaded",texturegroup_status_loaded)
+		live_api_const_add("texturegroup_status_loaded",texturegroup_status_loaded)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("texturegroup_status_fetched",texturegroup_status_fetched)
+		live_api_const_add("texturegroup_status_fetched",texturegroup_status_fetched)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtracktype_text",seqtracktype_text)
+		live_api_const_add("seqtracktype_text",seqtracktype_text)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtracktype_particlesystem",seqtracktype_particlesystem)
+		live_api_const_add("seqtracktype_particlesystem",seqtracktype_particlesystem)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtracktype_audioeffect",seqtracktype_audioeffect)
+		live_api_const_add("seqtracktype_audioeffect",seqtracktype_audioeffect)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtextkey_left",seqtextkey_left)
+		live_api_const_add("seqtextkey_left",seqtextkey_left)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtextkey_center",seqtextkey_center)
+		live_api_const_add("seqtextkey_center",seqtextkey_center)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtextkey_right",seqtextkey_right)
+		live_api_const_add("seqtextkey_right",seqtextkey_right)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtextkey_justify",seqtextkey_justify)
+		live_api_const_add("seqtextkey_justify",seqtextkey_justify)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtextkey_top",seqtextkey_top)
+		live_api_const_add("seqtextkey_top",seqtextkey_top)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtextkey_middle",seqtextkey_middle)
+		live_api_const_add("seqtextkey_middle",seqtextkey_middle)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("seqtextkey_bottom",seqtextkey_bottom)
+		live_api_const_add("seqtextkey_bottom",seqtextkey_bottom)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("animcurvetype_bezier",animcurvetype_bezier)
+		live_api_const_add("animcurvetype_bezier",animcurvetype_bezier)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_global",time_source_global)
+		live_api_const_add("time_source_global",time_source_global)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_game",time_source_game)
+		live_api_const_add("time_source_game",time_source_game)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_units_seconds",time_source_units_seconds)
+		live_api_const_add("time_source_units_seconds",time_source_units_seconds)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_units_frames",time_source_units_frames)
+		live_api_const_add("time_source_units_frames",time_source_units_frames)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_expire_nearest",time_source_expire_nearest)
+		live_api_const_add("time_source_expire_nearest",time_source_expire_nearest)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_expire_after",time_source_expire_after)
+		live_api_const_add("time_source_expire_after",time_source_expire_after)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_state_initial",time_source_state_initial)
+		live_api_const_add("time_source_state_initial",time_source_state_initial)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_state_active",time_source_state_active)
+		live_api_const_add("time_source_state_active",time_source_state_active)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_state_paused",time_source_state_paused)
+		live_api_const_add("time_source_state_paused",time_source_state_paused)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("time_source_state_stopped",time_source_state_stopped)
+		live_api_const_add("time_source_state_stopped",time_source_state_stopped)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("audio_bus_main",audio_bus_main)
+		live_api_const_add("audio_bus_main",audio_bus_main)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("AudioEffectType",AudioEffectType)
+		live_api_const_add("AudioEffectType",AudioEffectType)
 	}catch(l__g){
 		
 	}
 	try{
-		gml_const_add("AudioLFOType",AudioLFOType)
+		live_api_const_add("AudioLFOType",AudioLFOType)
 	}catch(l__g){
 		
 	}
@@ -1304,296 +1304,296 @@ function live_preinit_init_new_consts(){
 
 if(live_enabled)
 function live_preinit_init_arrays(){
-	gml_var_add("instance_count*",function(l_set,l_val){
+	live_api_var_add("instance_count*",function(l_set,l_val){
 		return instance_count
 	});
-	gml_var_add("room_speed",function(l_set,l_val){
+	live_api_var_add("room_speed",function(l_set,l_val){
 		if(l_set){
 			room_speed=l_val;
 			return undefined;
 		} else return room_speed
 	});
-	gml_var_add("fps*",function(l_set,l_val){
+	live_api_var_add("fps*",function(l_set,l_val){
 		return fps
 	});
-	gml_var_add("fps_real*",function(l_set,l_val){
+	live_api_var_add("fps_real*",function(l_set,l_val){
 		return fps_real
 	});
-	gml_var_add("current_time*",function(l_set,l_val){
+	live_api_var_add("current_time*",function(l_set,l_val){
 		return current_time
 	});
-	gml_var_add("current_year*",function(l_set,l_val){
+	live_api_var_add("current_year*",function(l_set,l_val){
 		return current_year
 	});
-	gml_var_add("current_month*",function(l_set,l_val){
+	live_api_var_add("current_month*",function(l_set,l_val){
 		return current_month
 	});
-	gml_var_add("current_day*",function(l_set,l_val){
+	live_api_var_add("current_day*",function(l_set,l_val){
 		return current_day
 	});
-	gml_var_add("current_weekday*",function(l_set,l_val){
+	live_api_var_add("current_weekday*",function(l_set,l_val){
 		return current_weekday
 	});
-	gml_var_add("current_hour*",function(l_set,l_val){
+	live_api_var_add("current_hour*",function(l_set,l_val){
 		return current_hour
 	});
-	gml_var_add("current_minute*",function(l_set,l_val){
+	live_api_var_add("current_minute*",function(l_set,l_val){
 		return current_minute
 	});
-	gml_var_add("current_second*",function(l_set,l_val){
+	live_api_var_add("current_second*",function(l_set,l_val){
 		return current_second
 	});
-	gml_var_add("room",function(l_set,l_val){
+	live_api_var_add("room",function(l_set,l_val){
 		if(l_set){
 			room=l_val;
 			return undefined;
 		} else return room
 	});
-	gml_var_add("room_first*",function(l_set,l_val){
+	live_api_var_add("room_first*",function(l_set,l_val){
 		return room_first
 	});
-	gml_var_add("room_last*",function(l_set,l_val){
+	live_api_var_add("room_last*",function(l_set,l_val){
 		return room_last
 	});
-	gml_var_add("room_width*",function(l_set,l_val){
+	live_api_var_add("room_width*",function(l_set,l_val){
 		return room_width
 	});
-	gml_var_add("room_height*",function(l_set,l_val){
+	live_api_var_add("room_height*",function(l_set,l_val){
 		return room_height
 	});
-	gml_var_add("room_persistent",function(l_set,l_val){
+	live_api_var_add("room_persistent",function(l_set,l_val){
 		if(l_set){
 			room_persistent=l_val;
 			return undefined;
 		} else return room_persistent
 	});
-	gml_var_add("score",function(l_set,l_val){
+	live_api_var_add("score",function(l_set,l_val){
 		if(l_set){
 			score=l_val;
 			return undefined;
 		} else return score
 	});
-	gml_var_add("lives",function(l_set,l_val){
+	live_api_var_add("lives",function(l_set,l_val){
 		if(l_set){
 			lives=l_val;
 			return undefined;
 		} else return lives
 	});
-	gml_var_add("health",function(l_set,l_val){
+	live_api_var_add("health",function(l_set,l_val){
 		if(l_set){
 			health=l_val;
 			return undefined;
 		} else return health
 	});
-	gml_var_add("event_type*",function(l_set,l_val){
+	live_api_var_add("event_type*",function(l_set,l_val){
 		return event_type
 	});
-	gml_var_add("event_number*",function(l_set,l_val){
+	live_api_var_add("event_number*",function(l_set,l_val){
 		return event_number
 	});
-	gml_var_add("event_object*",function(l_set,l_val){
+	live_api_var_add("event_object*",function(l_set,l_val){
 		return event_object
 	});
-	gml_var_add("event_action*",function(l_set,l_val){
+	live_api_var_add("event_action*",function(l_set,l_val){
 		return event_action
 	});
-	gml_var_add("application_surface*",function(l_set,l_val){
+	live_api_var_add("application_surface*",function(l_set,l_val){
 		return application_surface
 	});
-	gml_var_add("debug_mode*",function(l_set,l_val){
+	live_api_var_add("debug_mode*",function(l_set,l_val){
 		return debug_mode
 	});
-	gml_var_add("font_texture_page_size",function(l_set,l_val){
+	live_api_var_add("font_texture_page_size",function(l_set,l_val){
 		if(l_set){
 			font_texture_page_size=l_val;
 			return undefined;
 		} else return font_texture_page_size
 	});
-	gml_var_add("keyboard_key",function(l_set,l_val){
+	live_api_var_add("keyboard_key",function(l_set,l_val){
 		if(l_set){
 			keyboard_key=l_val;
 			return undefined;
 		} else return keyboard_key
 	});
-	gml_var_add("keyboard_lastkey",function(l_set,l_val){
+	live_api_var_add("keyboard_lastkey",function(l_set,l_val){
 		if(l_set){
 			keyboard_lastkey=l_val;
 			return undefined;
 		} else return keyboard_lastkey
 	});
-	gml_var_add("keyboard_lastchar",function(l_set,l_val){
+	live_api_var_add("keyboard_lastchar",function(l_set,l_val){
 		if(l_set){
 			keyboard_lastchar=l_val;
 			return undefined;
 		} else return keyboard_lastchar
 	});
-	gml_var_add("keyboard_string",function(l_set,l_val){
+	live_api_var_add("keyboard_string",function(l_set,l_val){
 		if(l_set){
 			keyboard_string=l_val;
 			return undefined;
 		} else return keyboard_string
 	});
-	gml_var_add("mouse_x*",function(l_set,l_val){
+	live_api_var_add("mouse_x*",function(l_set,l_val){
 		return mouse_x
 	});
-	gml_var_add("mouse_y*",function(l_set,l_val){
+	live_api_var_add("mouse_y*",function(l_set,l_val){
 		return mouse_y
 	});
-	gml_var_add("mouse_button",function(l_set,l_val){
+	live_api_var_add("mouse_button",function(l_set,l_val){
 		if(l_set){
 			mouse_button=l_val;
 			return undefined;
 		} else return mouse_button
 	});
-	gml_var_add("mouse_lastbutton",function(l_set,l_val){
+	live_api_var_add("mouse_lastbutton",function(l_set,l_val){
 		if(l_set){
 			mouse_lastbutton=l_val;
 			return undefined;
 		} else return mouse_lastbutton
 	});
-	gml_var_add("cursor_sprite",function(l_set,l_val){
+	live_api_var_add("cursor_sprite",function(l_set,l_val){
 		if(l_set){
 			cursor_sprite=l_val;
 			return undefined;
 		} else return cursor_sprite
 	});
-	gml_var_add("background_colour£",function(l_set,l_val){
+	live_api_var_add("background_colour£",function(l_set,l_val){
 		if(l_set){
 			background_colour=l_val;
 			return undefined;
 		} else return background_colour
 	});
-	gml_var_add("background_showcolour£",function(l_set,l_val){
+	live_api_var_add("background_showcolour£",function(l_set,l_val){
 		if(l_set){
 			background_showcolour=l_val;
 			return undefined;
 		} else return background_showcolour
 	});
-	gml_var_add("background_color$",function(l_set,l_val){
+	live_api_var_add("background_color$",function(l_set,l_val){
 		if(l_set){
 			background_color=l_val;
 			return undefined;
 		} else return background_color
 	});
-	gml_var_add("background_showcolor$",function(l_set,l_val){
+	live_api_var_add("background_showcolor$",function(l_set,l_val){
 		if(l_set){
 			background_showcolor=l_val;
 			return undefined;
 		} else return background_showcolor
 	});
-	gml_var_add("view_enabled",function(l_set,l_val){
+	live_api_var_add("view_enabled",function(l_set,l_val){
 		if(l_set){
 			view_enabled=l_val;
 			return undefined;
 		} else return view_enabled
 	});
-	gml_var_add("view_current*",function(l_set,l_val){
+	live_api_var_add("view_current*",function(l_set,l_val){
 		return view_current
 	});
-	gml_var_add("view_visible[]",function(l_set,l_val,l_ind){
+	live_api_var_add("view_visible[]",function(l_set,l_val,l_ind){
 		if(l_ind<0||l_ind>7)return gml_thread_error("Index ("+string(l_ind)+") is out of range [0..7]");
 		if(l_set){
 			view_visible[l_ind] = l_val;
 			return undefined;
 		} else return view_visible[l_ind];
 	});
-	gml_var_add("view_xport[]",function(l_set,l_val,l_ind){
+	live_api_var_add("view_xport[]",function(l_set,l_val,l_ind){
 		if(l_ind<0||l_ind>7)return gml_thread_error("Index ("+string(l_ind)+") is out of range [0..7]");
 		if(l_set){
 			view_xport[l_ind] = l_val;
 			return undefined;
 		} else return view_xport[l_ind];
 	});
-	gml_var_add("view_yport[]",function(l_set,l_val,l_ind){
+	live_api_var_add("view_yport[]",function(l_set,l_val,l_ind){
 		if(l_ind<0||l_ind>7)return gml_thread_error("Index ("+string(l_ind)+") is out of range [0..7]");
 		if(l_set){
 			view_yport[l_ind] = l_val;
 			return undefined;
 		} else return view_yport[l_ind];
 	});
-	gml_var_add("view_wport[]",function(l_set,l_val,l_ind){
+	live_api_var_add("view_wport[]",function(l_set,l_val,l_ind){
 		if(l_ind<0||l_ind>7)return gml_thread_error("Index ("+string(l_ind)+") is out of range [0..7]");
 		if(l_set){
 			view_wport[l_ind] = l_val;
 			return undefined;
 		} else return view_wport[l_ind];
 	});
-	gml_var_add("view_hport[]",function(l_set,l_val,l_ind){
+	live_api_var_add("view_hport[]",function(l_set,l_val,l_ind){
 		if(l_ind<0||l_ind>7)return gml_thread_error("Index ("+string(l_ind)+") is out of range [0..7]");
 		if(l_set){
 			view_hport[l_ind] = l_val;
 			return undefined;
 		} else return view_hport[l_ind];
 	});
-	gml_var_add("view_surface_id[]",function(l_set,l_val,l_ind){
+	live_api_var_add("view_surface_id[]",function(l_set,l_val,l_ind){
 		if(l_ind<0||l_ind>7)return gml_thread_error("Index ("+string(l_ind)+") is out of range [0..7]");
 		if(l_set){
 			view_surface_id[l_ind] = l_val;
 			return undefined;
 		} else return view_surface_id[l_ind];
 	});
-	gml_var_add("view_camera[]",function(l_set,l_val,l_ind){
+	live_api_var_add("view_camera[]",function(l_set,l_val,l_ind){
 		if(l_ind<0||l_ind>7)return gml_thread_error("Index ("+string(l_ind)+") is out of range [0..7]");
 		if(l_set){
 			view_camera[l_ind] = l_val;
 			return undefined;
 		} else return view_camera[l_ind];
 	});
-	gml_var_add("game_id*",function(l_set,l_val){
+	live_api_var_add("game_id*",function(l_set,l_val){
 		return game_id
 	});
-	gml_var_add("game_display_name*",function(l_set,l_val){
+	live_api_var_add("game_display_name*",function(l_set,l_val){
 		return game_display_name
 	});
-	gml_var_add("game_project_name*",function(l_set,l_val){
+	live_api_var_add("game_project_name*",function(l_set,l_val){
 		return game_project_name
 	});
-	gml_var_add("game_save_id*",function(l_set,l_val){
+	live_api_var_add("game_save_id*",function(l_set,l_val){
 		return game_save_id
 	});
-	gml_var_add("working_directory*",function(l_set,l_val){
+	live_api_var_add("working_directory*",function(l_set,l_val){
 		return working_directory
 	});
-	gml_var_add("temp_directory*",function(l_set,l_val){
+	live_api_var_add("temp_directory*",function(l_set,l_val){
 		return temp_directory
 	});
-	gml_var_add("cache_directory*",function(l_set,l_val){
+	live_api_var_add("cache_directory*",function(l_set,l_val){
 		return cache_directory
 	});
-	gml_var_add("program_directory*",function(l_set,l_val){
+	live_api_var_add("program_directory*",function(l_set,l_val){
 		return program_directory
 	});
-	gml_var_add("browser_width*",function(l_set,l_val){
+	live_api_var_add("browser_width*",function(l_set,l_val){
 		return browser_width
 	});
-	gml_var_add("browser_height*",function(l_set,l_val){
+	live_api_var_add("browser_height*",function(l_set,l_val){
 		return browser_height
 	});
-	gml_var_add("os_type*",function(l_set,l_val){
+	live_api_var_add("os_type*",function(l_set,l_val){
 		return os_type
 	});
-	gml_var_add("os_device*",function(l_set,l_val){
+	live_api_var_add("os_device*",function(l_set,l_val){
 		return os_device
 	});
-	gml_var_add("os_browser*",function(l_set,l_val){
+	live_api_var_add("os_browser*",function(l_set,l_val){
 		return os_browser
 	});
-	gml_var_add("os_version*",function(l_set,l_val){
+	live_api_var_add("os_version*",function(l_set,l_val){
 		return os_version
 	});
-	gml_var_add("display_aa*",function(l_set,l_val){
+	live_api_var_add("display_aa*",function(l_set,l_val){
 		return display_aa
 	});
-	gml_var_add("async_load*",function(l_set,l_val){
+	live_api_var_add("async_load*",function(l_set,l_val){
 		return async_load
 	});
-	gml_var_add("delta_time*",function(l_set,l_val){
+	live_api_var_add("delta_time*",function(l_set,l_val){
 		return delta_time
 	});
-	gml_var_add("webgl_enabled*",function(l_set,l_val){
+	live_api_var_add("webgl_enabled*",function(l_set,l_val){
 		return webgl_enabled
 	});
-	gml_var_add("event_data*",function(l_set,l_val){
+	live_api_var_add("event_data*",function(l_set,l_val){
 		return event_data
 	});
 }

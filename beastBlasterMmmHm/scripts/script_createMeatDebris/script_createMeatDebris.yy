@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"script_createMeatDebris",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/Scripts.yy",
+    "name":"effectStuff",
+    "path":"folders/Scripts/effectStuff.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

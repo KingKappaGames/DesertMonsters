@@ -2,19 +2,32 @@
 function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, cosFacing, moveDir, frontDraw){
 	live_auto_call
 	
-	var _spineAngle = spineAngle;
+	#region spine value setting 
+	var _spineX = 0;
+	var _spineY = 0;
+	var _spineLength = 0;
+	var _spineAngle = 0;
+	with(spineMain) { // with set because faster or something idk
+		_spineX = x;
+		_spineY = y;
+		_spineLength = length;
+		_spineAngle = angle;
+	}
+	#endregion
+	
 	var _counter = 0; // index counter for main component drawing loop (continues outside this function, hence why it's returned by this)
 	var _componentCount = array_length(bodyComponents);
 	
+//	spineAngle += .2;
+	
 	var _x = 0, _y = 0;
-	var distance = 14; // standard body distance? OR should this be a value in the array?
 	var _ang = 0;
 	
 	var _surf = getSurf();
 	var _surfMidX = surface_get_width(_surf) / 2;
 	var _surfMidY = surface_get_height(_surf) / 2; 
-	var _surfOffX = x - _surfMidX; 
-	var _surfOffY = y - _surfMidY;
+	var _surfOffX = _spineX - _surfMidX; 
+	var _surfOffY = _spineY - _surfMidY;
 	 
 	var _creatureId = id; // whatever calls this will get stored, ez 
 	
@@ -27,6 +40,7 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 				_x = _surfMidX + leanAheadX + dcos(_netAngle) * distance + dcos(_spineAngle) * height;
 				_y = _surfMidY + leanAheadY - dsin(_netAngle) * distance * .6 + jostle - dsin(_spineAngle) * height;   // applying sin/cos to height offset created some strange results because of sprite positions, perhaps drawing the body to a surface then rotating would be better? Correcting for absolute angle by removing body angle.. I dunno.
 				var _compress = 1;
+				var _drawAngle = fixedDrawAngle == 999 ? _spineAngle - 90 : fixedDrawAngle; // if 999 dont use, otherwise set to fixed angle
 				if(!is_array(sprite)) { // single sprite
 					if(viewCompressionMin != 1) {
 						_compress = dsin(_netAngle + viewAngle) * (1 - viewCompressionMin);
@@ -52,7 +66,7 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 						_image = image;
 					}
 				
-					draw_sprite_ext(_sprite, _image, _x, _y, xscale * _compress, yscale, _spineAngle - 90, color, 1);
+					draw_sprite_ext(_sprite, _image, _x, _y, xscale * _compress, yscale, _drawAngle, color, 1);
 					//draw behind components?
 				} else { // drawing limbs!
 					var _limb = limbArrayRef; // store the reference to the array that holds the arrays at this index that holds the nodes of this limb for drawing with, specify the collection and where in that collection, basically
@@ -72,7 +86,7 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 					script_setIKJoints(_limb, _limb[0][limbNode.len], _limbDist, _limbDir, cosFacing);
 					#endregion
 		
-					script_drawIKLimb(_limb, self, _creatureId.x - _surfMidX, _creatureId.y - _surfMidY); // surf position top left at x
+					script_drawIKLimb(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY); // surf position top left at x
 				}
 				_counter++;
 			} else {
