@@ -44,7 +44,6 @@ if(gunDrawBehind) {
 	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, spineMain.x - _surfMidX, spineMain.y - _surfMidY); // draw gun in front if supposed to be in front
 }
 
-mark(weaponPosition[0], weaponPosition[1])
 #endregion
 
 #region draw legs and feet and body
@@ -138,9 +137,17 @@ if(!gunDrawBehind) {
 	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, spineMain.x - _surfMidX, spineMain.y - _surfMidY); // draw gun behind if supposed to be behind
 }
 
+draw_rectangle(1, 1, 254, 254, true);
+
 surface_reset_target();
 
 //var _ang = current_time / 10; 
 //var _dist = (_surfMidX) * 1.4142; // the radius of the surf is the sqrt((width/2^2) + (height/2^2)) not just width / 2 but also just paste in a real for sqrt(2) which is that number
 //draw_surface_ext(_surf, x + dcos(_ang + 135) * _dist, y - dsin(_ang + 135) * _dist, 1, 1, _ang, c_white, 1);
-draw_surface(_surf, x - _surfMidX, y - _surfMidY);
+draw_surface(_surf, x - _surfMidX, feetY - _surfMidY);
+
+draw_set_alpha(.3);
+draw_circle_color(x, feetY, 10, c_grey, c_grey, false);
+draw_set_alpha(1);
+
+draw_text(x + 100, y, feetOffY)

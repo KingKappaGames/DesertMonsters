@@ -7,6 +7,7 @@
 function script_createSpine(xx, yy, angleSet, anglelengthSet = 0) constructor {
 	x = 0;
 	y = 0;
+	height = 0;
 	angle = 0;
 	length = 50;
 	

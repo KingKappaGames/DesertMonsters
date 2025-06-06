@@ -16,6 +16,8 @@ function script_drawIKLimb(limb, bodyPart, surfOffX = -1, surfOffY = -1) {
 			var _lengthMultX = point_distance(_segBeginX, _segBeginY, _segEndX, _segEndY) / sprite_get_width(_sprite);
 			
 			draw_sprite_ext(_sprite, image[_limbSegI], _segBeginX - surfOffX, _segBeginY - surfOffY, _lengthMultX, yscale[_limbSegI], _segmentDir, color[_limbSegI], 1);
+			
+			mark(_segBeginX, _segBeginY, c_green);
 		}
 	}
 }

@@ -13,12 +13,13 @@ yChange -= dsin(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick; // push i
 
 x += xChange;
 y += yChange;
-feetY = y + feetOffY;
+feetY = y + feetOffY * .7;
 //depth = - (y + 60); // this project doesn't use depth... YET??? Maybe, I assume when i start making trees and walls and buildings I'll switch to -y depth but for now it's simpler to do surfaces with out any depth consideration. Especially the dust and debris... That'll be a pain with surfaces unless I go full layer stacking and do what main game does... Though I don't know if I have the height for it here... Too many layers required I think.
 xChange *= speedDecay;
 yChange *= speedDecay;
 spineMain.x = x - 30;
 spineMain.y = feetY;
+spineMain.height = feetOffY; // spine represents center here, but with feet height center is not at feet, obviously
 
 var _spineX = spineMain.x;
 var _spineY = spineMain.y; // get which spine to use maybe? That would do the proper multiple spines to use functionality...
@@ -70,6 +71,12 @@ gunShakeX *= .95;
 gunShakeY *= .95;
 
 #endregion
+
+if(keyboard_check(vk_add)) {
+	feetOffY += 1;
+} else if(keyboard_check(vk_subtract)) {
+	feetOffY -= 1;
+}
 
 #region player controls, camera, and info maintenance
 
@@ -128,12 +135,11 @@ depth = -((y + feetOffY) - global.depthOffset);
 
 #endregion
 
-mark(x, y);
 
-mark(spineMain.x, spineMain.y)
+mark(spineMain.x, spineMain.y, c_yellow)
 
-mark(x, feetY);
+mark(x, feetY, #aa7700);
 
-mark(weaponPosition[0], weaponPosition[1])
+mark(weaponPosition[0], weaponPosition[1], c_red)
 
-mark(gunTipPosition[0], gunTipPosition[1])
+mark(gunTipPosition[0], gunTipPosition[1], c_orange)

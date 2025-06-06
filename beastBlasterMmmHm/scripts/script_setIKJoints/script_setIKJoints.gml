@@ -23,4 +23,6 @@ function script_setIKJoints(nodeArray, segmentLength, endDist, endDir, facingCos
 	nodeArray[_joints][0] = _limbMidX + _jointOffX;
 	nodeArray[_joints][1] = _limbMidY + _jointOffY;
 	nodeArray[_joints][2] = _limbMidZ;// + _jointOffZ;
+	
+	mark(nodeArray[_joints][0], nodeArray[_joints][1] - nodeArray[_joints][2] * .7, c_aqua);
 }

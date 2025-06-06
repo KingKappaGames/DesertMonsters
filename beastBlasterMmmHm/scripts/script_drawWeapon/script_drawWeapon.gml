@@ -11,11 +11,14 @@ function script_drawWeapon(sprite, position, angle, holdDownAngleAdjust, surfOff
 	
 	var _x = position[0];
 	var _y = position[1] - position[2] * .7;
+	
+	mark(_x, _y, c_purple);
+	
 	for(var _i = 0; _i < _gunLayers; _i++) {
 		draw_sprite_ext(sprite, _i, _x - surfOffX, _y - surfOffY  + _yAdd * _i, .65 + abs(_cos) * .35, 1, angle + holdDownAngleAdjust, c_white, 1);
 	}
 	
 	gunTipPosition[0] = _x + _cos * gunLength;
-	gunTipPosition[1] = _y - dsin(angle) * gunLength - gunTipHeightOff; // position to position with layer offset for sprite stacking y and length push forwards from gun origin to tip, hopefully
+	gunTipPosition[1] = _y  - dsin(angle) * gunLength - gunTipHeightOff; // position to position with layer offset for sprite stacking y and length push forwards from gun origin to tip, hopefully
 	gunTipPosition[2] = position[2] + gunTipHeightOff; // height not taken into account for shot position so do y and height separately i guess?
 }
