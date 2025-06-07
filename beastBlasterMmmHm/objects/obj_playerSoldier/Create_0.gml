@@ -30,6 +30,8 @@ getSurf = function() {
 #region camera
 camX = camera_get_view_x(view_camera[0]);
 camY = camera_get_view_y(view_camera[0]);
+
+camera_set_view_size(view_camera[playerIndex], 800, 450);
 #endregion
 
 #region new body stuff
@@ -310,6 +312,8 @@ new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,   
 new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   80,   12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
 new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   -80,  21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
 new script_addBodyComponent(    id,    0,  spr_robeParts,                  4,        0,    -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
+new script_addBodyComponent(    id,    0,  spr_backpack,                  10,        135,   13,       10,    1.6,           1.5,         90,      .0,      #9D9D79,               0,      undefined);                                          // wing tests
+new script_addBodyComponent(    id,    0,  spr_backpack,                  10,        -135,  13,       10,    1.6,           1.5,         90,      .0,      #9D9D79,               0,      undefined);                                          // wing tests
 
 //lag testing
 //repeat(5000) {

@@ -55,7 +55,7 @@ if(abs(_aimToFacingDifference) >= gunAimRange) { // if aiming outside of range
 
 weaponPosition[0] = _spineX + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
 weaponPosition[1] = _spineY - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7; // lower and bring in gun when not holding up
-weaponPosition[2] = feetOffY - ((gunHeldDown * 6) + ((1 - gunHeldDown) * (3 - _holdDistMult * 17)));
+weaponPosition[2] = feetOffY - ((gunHeldDown * 6) + ((1 - gunHeldDown) * (22 - _holdDistMult * 22)));
 if(point_distance(_spineX, _spineY, weaponPosition[0], weaponPosition[1]) > limbLength * 2) {
 	weaponPosition[0] = _spineX + dcos(gunHoldDirection) * 20;
 	weaponPosition[1] = _spineY - dsin(gunHoldDirection) * 13;
@@ -136,10 +136,10 @@ depth = -((y + feetOffY) - global.depthOffset);
 #endregion
 
 
-mark(spineMain.x, spineMain.y, c_yellow)
-
-mark(x, feetY, #aa7700);
-
-mark(weaponPosition[0], weaponPosition[1], c_red)
-
-mark(gunTipPosition[0], gunTipPosition[1], c_orange)
+//mark(spineMain.x, spineMain.y, c_yellow)
+//
+//mark(x, feetY, #aa7700);
+//
+//mark(weaponPosition[0], weaponPosition[1], c_red)
+//
+//mark(gunTipPosition[0], gunTipPosition[1], c_orange)

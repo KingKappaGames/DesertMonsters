@@ -4,6 +4,23 @@ event_inherited();
 
 //draw_text(x, y - 100, weaponPosition[2]);
 
+//spine nonsense find a better place for this..
+var _leanAheadX = xChange * 8; // keep consistent i suppose
+var _leanAheadY = clamp(yChange, 0, 99) * 8; // keep consistent i suppose
+var _leanAheadDir = point_direction(0, 0, xChange * 9, -spineMain.length + yChange); // the 30 here is the distance of the spine while standing straight up i guess? Needs to be standarized and set up proper
+spineMain.angle = _leanAheadDir;
+
+if(keyboard_check(ord("N"))) {
+	spineMain.angle = point_direction(x, y, mouse_x, mouse_y); // testing cheat direction
+}
+
+var _spineX = spineMain.x;
+var _spineY = spineMain.y; // setting spine locals
+
+draw_set_alpha(.75);
+draw_circle_color(_spineX + _leanAheadX, _spineY + 50, 16, #333333, #333333, false); // shadow! Remove when you have a better way!
+draw_set_alpha(1);
+
 var _surf = getSurf(); // the surface you draw to
 var _surfMidX = surface_get_width(_surf) / 2;
 var _surfMidY = surface_get_height(_surf) / 2;
@@ -20,11 +37,6 @@ directionFacing = _dirMoving;
 var _viewCompress = .5 + abs(dsin(directionFacing) / 2);
 var _speed = point_distance(0, 0, xChange, yChange);
 var _jostle = (dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * sqrt(_speed) * 3;
-
-var _leanAheadX = xChange * 8; // keep consistent i suppose
-var _leanAheadY = clamp(yChange, 0, 99) * 8; // keep consistent i suppose
-var _leanAheadDir = point_direction(0, 0, xChange * 9, -spineMain.length + yChange); // the 30 here is the distance of the spine while standing straight up i guess? Needs to be standarized and set up proper
-spineMain.angle = _leanAheadDir;
 #endregion
 
 #region draw gun
@@ -41,7 +53,7 @@ weaponPosition[0] += _leanAheadX;
 weaponPosition[1] += _leanAheadY + _jostle / 2; // position the gun with body movement variations
 
 if(gunDrawBehind) {
-	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, spineMain.x - _surfMidX, spineMain.y - _surfMidY); // draw gun in front if supposed to be in front
+	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun in front if supposed to be in front
 }
 
 #endregion
@@ -98,12 +110,12 @@ var _jointRY = dsin(_dirRFoot + 90) * -sign(_cosFacing) * _footRJointDist;
 var _offX = x - _surfMidX;
 var _offY = y - _surfMidY;
 
-draw_set_color(c_red);
-draw_line_width(_hipRX - _offX, _hipRY - _offY, _legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 5); // right leg
-draw_line_width(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, footRX - _offX, footRY - _offY, 3);
+draw_set_color(#525426);
+draw_line_width(_hipRX - _offX, _hipRY - _offY, _legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 6); // right leg
+draw_line_width(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, footRX - _offX, footRY - _offY, 4);
 
-draw_line_width(_hipLX - _offX, _hipLY - _offY, _legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 5); // left leg
-draw_line_width(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, footLX - _offX, footLY - _offY, 3);
+draw_line_width(_hipLX - _offX, _hipLY - _offY, _legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 6); // left leg
+draw_line_width(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, footLX - _offX, footLY - _offY, 4);
 
 draw_circle(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 2, false); // both knees
 draw_circle(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 2, false);
@@ -134,20 +146,16 @@ _counter += script_drawComponents(0, _leanAheadX, _leanAheadY, _jostle, _cosFaci
 script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, false);
 
 if(!gunDrawBehind) {
-	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, spineMain.x - _surfMidX, spineMain.y - _surfMidY); // draw gun behind if supposed to be behind
+	script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun behind if supposed to be behind
 }
 
-draw_rectangle(1, 1, 254, 254, true);
+//draw_rectangle(1, 1, 254, 254, true);
 
 surface_reset_target();
 
 //var _ang = current_time / 10; 
 //var _dist = (_surfMidX) * 1.4142; // the radius of the surf is the sqrt((width/2^2) + (height/2^2)) not just width / 2 but also just paste in a real for sqrt(2) which is that number
 //draw_surface_ext(_surf, x + dcos(_ang + 135) * _dist, y - dsin(_ang + 135) * _dist, 1, 1, _ang, c_white, 1);
-draw_surface(_surf, x - _surfMidX, feetY - _surfMidY);
+draw_surface(_surf, _spineX - _surfMidX, _spineY - _surfMidY);
 
-draw_set_alpha(.3);
-draw_circle_color(x, feetY, 10, c_grey, c_grey, false);
-draw_set_alpha(1);
-
-draw_text(x + 100, y, feetOffY)
+//draw_text(x + 100, y, feetOffY)

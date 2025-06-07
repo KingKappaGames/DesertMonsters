@@ -20,7 +20,7 @@ depth = 50;
 audio_falloff_set_model(audio_falloff_exponent_distance);
 audio_listener_orientation(0, -1, 0, 0, 0, -1); 
 global.muted = 0;
-audio_group_set_gain(audiogroup_default, .4, 0);
+audio_group_set_gain(audiogroup_default, .25, 0);
 
 global.windStrength = 0;
 global.gravityStrength = 0;
