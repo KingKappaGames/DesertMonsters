@@ -2,22 +2,22 @@ if (live_call()) return live_result;
 
 #region sound control kiinda ...
 if(keyboard_check_released(ord("M"))) {
-	if(global.muted != 0) {
-		global.muted = 0;
+	if(global.masterVolume != 0) {
+		global.masterVolume = 0;
 	} else {
-		global.muted = .3;
+		global.masterVolume = .2;
 	}
-	audio_group_set_gain(audiogroup_default, global.muted, 250);
+	audio_group_set_gain(audiogroup_default, global.masterVolume, 250);
 }
 #endregion
 
 #region surface saving
 surfaceTimer++;
-if(surfaceTimer > 120) { // save current debris surface to buffer
+if(surfaceTimer > 720) { // save current debris surface to buffer
 	surfaceTimer = 0;
 	var _surface = getDebrisSurface();
 	buffer_get_surface(debrisSurfaceBuffer, _surface, 0);
-} else if(surfaceTimer == 60) {
+} else if(surfaceTimer == 72) {
 	clearMapVisuals();
 }
 #endregion

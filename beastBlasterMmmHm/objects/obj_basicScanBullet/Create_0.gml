@@ -40,5 +40,6 @@ hit = function(hitX, hitY, hitId = noone, finalHit = false, hardness = 0) {
 		if(finalHit && random(3) < hardness) {
 			part_particles_create(sys, hitX, hitY, debris, 1 /* * bulletDamage*/);
 		}
+		script_drawDebris(spr_sandSprayDecalCrater, 0, hitX, hitY, .3, .3, irandom(360), c_white, .7) 
 	}
 }

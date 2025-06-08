@@ -27,13 +27,10 @@ hit = function() {
 	part_particles_create(sys, x, y, debris, bulletSize * 20 /* * bulletDamage*/);
 	part_particles_create(sys, x, y, shockwaveLead, bulletSize * 100 /* * bulletDamage*/);
 	
-	#region debris surface stuff..?
-	surface_set_target(manager.getDebrisSurface());
-	repeat(10) {
-		draw_sprite_ext(spr_sandSprayDecalCrater, 0, x, y, 10, 10, irandom(360), c_white, .4);
+	repeat(7) {
+		script_drawDebris(spr_sandSprayDecalCrater, 0, x, y, 13, 13, irandom(360), c_white, .4);
 	}
-	surface_reset_target();
-	#endregion
+	script_drawDebris(spr_wideCrater, 0, x, y, 2.5, 3.3, 0, c_white, .6);
 	
 	#endregion
 	

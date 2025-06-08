@@ -27,9 +27,7 @@ hit = function() {
 	part_particles_create(sys, x, y, debris, bulletSize /* * bulletDamage*/);
 	
 	#region debris surface stuff..?
-	surface_set_target(manager.getDebrisSurface());
-	draw_sprite_ext(spr_sandSprayDecalFlat, 0, x, y, 1, 1, irandom(360), c_white, 1);
-	surface_reset_target();
+	script_drawDebris(spr_sandSprayDecalFlat, 0, x, y, .7, .7, irandom(360), c_white, .6);
 	#endregion
 	
 	#region collisions

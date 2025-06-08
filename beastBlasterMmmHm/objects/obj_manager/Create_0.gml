@@ -19,8 +19,8 @@ depth = 50;
 
 audio_falloff_set_model(audio_falloff_exponent_distance);
 audio_listener_orientation(0, -1, 0, 0, 0, -1); 
-global.muted = 0;
-audio_group_set_gain(audiogroup_default, .25, 0);
+global.masterVolume = .2;
+audio_group_set_gain(audiogroup_default, global.masterVolume, 0);
 
 global.windStrength = 0;
 global.gravityStrength = 0;
@@ -55,17 +55,32 @@ camHeight = camera_get_view_height(view_camera[0]);
 
 #region debris surface set up
 surfaceTimer = 0;
+#macro debrisSurfSize 2048
 debrisSurfaceBuffer = buffer_create(67108864, buffer_fixed, 1);
-debrisSurface = surface_create(2048, 2048);
+debrisSurface = surface_create(debrisSurfSize, debrisSurfSize);
+debrisHoldSurface = surface_create(debrisSurfSize, debrisSurfSize);
 buffer_set_surface(debrisSurfaceBuffer, debrisSurface, 0);
+
+debrisSurfaceLastX = x;
+debrisSurfaceLastY = y;
+debrisSurfaceDrawX = x;
+debrisSurfaceDrawY = y;
 
 getDebrisSurface = function() { // IF SURFACE NOT WORKING CHECK ROOM DEPTH OF BACKGROUND
 	if(surface_exists(debrisSurface)) {
 		return debrisSurface;
 	} else {
-		debrisSurface = surface_create(2048, 2048);
+		debrisSurface = surface_create(debrisSurfSize, debrisSurfSize);
 		buffer_set_surface(debrisSurfaceBuffer, debrisSurface, 0);
 		return debrisSurface;
+	}
+}
+getHoldSurface = function() { // IF SURFACE NOT WORKING CHECK ROOM DEPTH OF BACKGROUND
+	if(surface_exists(debrisHoldSurface)) {
+		return debrisHoldSurface;
+	} else {
+		debrisHoldSurface = surface_create(debrisSurfSize, debrisSurfSize);
+		return debrisHoldSurface;
 	}
 }
 #endregion

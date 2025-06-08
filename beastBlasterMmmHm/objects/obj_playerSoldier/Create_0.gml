@@ -304,16 +304,17 @@ bodyComponents = [];
 #endregion
 
 #endregion
+var _fu = 0;
 //                             target spine   sprite(s)                  image(s)  rotRel  height   dist,  xscl          yscl     viewAng   viewComp    color          imgGetRotAdd   fixedAngDraw       limbArrRef     gunOffArrRef
-new script_addBodyComponent(    id,    0,  spr_robeParts,                  [8, 1],   0,    0,        0,     1.6,           2,         0,      .6,      #3D3D29,               0,      undefined);                                          // body
-head = new script_addBodyComponent(    id,    0,  spr_robeParts,           [9, 3],   0,    31,       2,     1.6,           2,         0,      .6,      #ffaaaa,               0,      0);                                          // head
-new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,        85,   17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,        -85,  17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   80,   12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
-new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   -80,  21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
-new script_addBodyComponent(    id,    0,  spr_robeParts,                  4,        0,    -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
-new script_addBodyComponent(    id,    0,  spr_backpack,                  10,        135,   13,       10,    1.6,           1.5,         90,      .0,      #9D9D79,               0,      undefined);                                          // wing tests
-new script_addBodyComponent(    id,    0,  spr_backpack,                  10,        -135,  13,       10,    1.6,           1.5,         90,      .0,      #9D9D79,               0,      undefined);                                          // wing tests
+_fu = new script_addBodyComponent(    id,    0,  spr_robeParts,                  [8, 1],   0,     0,        0,     1.6,           2,         0,      .6,      #3D3D29,               0,      undefined);                                          // body
+head = new script_addBodyComponent(   id,    0,  spr_robeParts,                  [9, 3],   0,     31,       2,     1.6,           2,         0,      .6,      #ffaaaa,               0,      0);                                          // head
+_fu = new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,        85,    17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+_fu = new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,        -85,   17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+_fu = new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   80,    12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
+_fu = new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],   -80,   21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
+_fu = new script_addBodyComponent(    id,    0,  spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
+//_fu = new script_addBodyComponent(    id,    0,  spr_backpack,                   10,       135,   13,       8,     2,             2,         90,      .0,     #9D9D79,               0,      undefined);                                          // wing tests
+//_fu = new script_addBodyComponent(    id,    0,  spr_backpack,                   10,       -135,  13,       8,     2,             2,         90,      .0,     #9D9D79,               0,      undefined);                                          // wing tests
 
 //lag testing
 //repeat(5000) {
@@ -322,3 +323,5 @@ new script_addBodyComponent(    id,    0,  spr_backpack,                  10,   
 //}
 
 setTurret(1);
+
+feetOffY = 1;

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"script_drawDebris",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"script_drawDebris",
+  "parent":{
+    "name":"effectStuff",
+    "path":"folders/Scripts/effectStuff.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
