@@ -31,7 +31,11 @@ enum limbNode { // values for limb nodes to ref (in array!)
 	yy, 
 	zz, 
 	len, 
-	thickness 
+}
+enum limbTypes {
+	leg = 0,
+	arm = 1,
+	//others?
 }
 enum component {
 	sprite,

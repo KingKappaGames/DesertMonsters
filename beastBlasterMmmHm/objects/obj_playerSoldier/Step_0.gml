@@ -17,6 +17,9 @@ feetY = y + feetOffY * .7;
 //depth = - (y + 60); // this project doesn't use depth... YET??? Maybe, I assume when i start making trees and walls and buildings I'll switch to -y depth but for now it's simpler to do surfaces with out any depth consideration. Especially the dust and debris... That'll be a pain with surfaces unless I go full layer stacking and do what main game does... Though I don't know if I have the height for it here... Too many layers required I think.
 xChange *= speedDecay;
 yChange *= speedDecay;
+currentSpeed = point_distance(0, 0, xChange, yChange);
+currentDir = point_direction(0, 0, xChange, yChange);
+
 spineMain.x = x - 30;
 spineMain.y = feetY;
 spineMain.height = feetOffY; // spine represents center here, but with feet height center is not at feet, obviously
@@ -34,8 +37,99 @@ legRotationSpeed = 4.1 * clamp(sqrt(_speed / 2), .17, .85); //proportional to sp
 legRotation = (legRotation + legRotationSpeed) % 360;
 
 hipYBob = lerp(hipYBob, clamp((-1 + _speed) * 7.5, -7.5, 0) + clamp((dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * _speed, -3, 15), .03);
+#endregion
 
-placeFeetFull(point_direction(0, 0, xChange, yChange), _speed);
+
+#region NEW LEG STUFF
+
+stepUpdateDist = stepUpdateDistBase * sqrt(currentSpeed) * 1.25;
+
+//animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (basic overall positioning, then calculating step positions and goals and moving the legs, then calculating the animations based on the positions)
+
+hipDir = point_direction(0, 0, xChange, yChange);
+var _cosFacing = dcos(hipDir);
+var _sinFacing = -dsin(hipDir);
+
+var _legCount = array_length(stepTimings); //TODO proxy for leg count, should always line up  (get all limbs and iterate with a check for (if leg) and use that index
+
+var _allFeetOnGround = true; // DO PROGRESS SETTING
+for(var _legI = 0; _legI < _legCount; _legI++) { // check leg progresses to allow or disallow new steps in legs
+	var _limbNodes = legArray[_legI];
+	var _stepTiming = stepTimings[_legI];
+	var _stepGoal = stepPositionsGoal[_legI]
+	var _stepDuration = _stepTiming[stepTimeEnum.endTime] - _stepTiming[stepTimeEnum.startTime];
+	_stepTiming[stepTimeEnum.progress] = clamp((current_time - _stepTiming[stepTimeEnum.startTime]) / (_stepDuration), 0, 1);
+	if(_stepTiming[stepTimeEnum.progress] < 1) { // still in the air, then add momentum to goal as well as body, this keeps feet aligned with object movement without having to predict some crazy future point
+		_stepGoal[0] += xChange;
+		_stepGoal[1] += yChange; // add height?
+	}
+	if(_allFeetOnGround && _stepTiming[stepTimeEnum.progress] != 1) {
+		
+		#region containing step goals within reasonable range AND bringing in step goals when slowing down
+		var _hip = _limbNodes[0]; // first node of limb (array that contains data about it)
+		var _stepDist = point_distance(_hip[0], _hip[1], _stepGoal[0], _stepGoal[1]);
+		if(_stepDist > stepUpdateDist) {
+			var _distOverMultiply = stepUpdateDist / _stepDist;
+			
+			_stepTiming[stepTimeEnum.endTime] = lerp(_stepTiming[stepTimeEnum.endTime], _stepTiming[stepTimeEnum.startTime], 1 - _distOverMultiply); // reduce time for step along with distance, basically, drop your foot sooner than planned if changing course
+		
+			_stepGoal[0] = lerp(_hip[0], _stepGoal[0], _distOverMultiply);
+			_stepGoal[1] = lerp(_hip[1], _stepGoal[1], _distOverMultiply);
+		}
+		#endregion
+		
+		_allFeetOnGround = false;
+	}
+}
+
+//DO STEP AND PLACEMENTS (AFTER PROGRESSES ALL DONE)
+for(var _legI = 0; _legI < _legCount; _legI++) {
+	#region setting the local values from stored variables
+	var _hip = legArray[_legI][0];
+	var _stepInitial = stepPositionsInitial[_legI];
+	var _stepCurrent = legArray[_legI][2];
+	var _stepGoal = stepPositionsGoal[_legI];
+	#endregion convenience value setting ^^^
+	
+	#region doing the step positions and updates		
+	var _stepPlacement = array_create(2, 0);
+	_stepPlacement[0] = _hip[0];
+	_stepPlacement[1] = _hip[1];
+	
+	var _progress = stepTimings[_legI][stepTimeEnum.progress];
+	
+	var _stepHeight = dsin(180 * _progress) * legSegLen * .7;
+	
+	_stepCurrent[2] = _stepHeight;
+	_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _progress); // move foot over range of movement according to time progress
+	_stepCurrent[1] = lerp(_stepInitial[1], _stepGoal[1], _progress);
+	
+	if(_allFeetOnGround && _progress == 1) { // there needs to be some way to deal with changing step lengths and repositions i think, for now just not stepping when already stepping works but has a bunch of issues
+		var _stepPlacementDist = point_distance(_stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1]); // add the height to the value but remove it when checking distance to step
+		if(_stepPlacementDist > stepUpdateDist) {
+			placeStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed);
+			_allFeetOnGround = false;
+		}
+	}
+	
+	#endregion
+	
+	var _footDist = point_distance_3d(_hip[0], _hip[1], _hip[2], _stepCurrent[0], _stepCurrent[1], _stepCurrent[2]);
+	var _footDir = point_direction(_hip[0], _hip[1], _stepCurrent[0], _stepCurrent[1]);
+
+	#region clamp the foot distance to leg length to create rounded extensions, more of a fix or QA check than a feature but does create mild angled foot movements too
+	if(_footDist > legSegLen * 2) {
+		var _distOverMultiply = (legSegLen * 2) / _footDist;
+		
+		_stepCurrent[0] = lerp(_hip[0], _stepCurrent[0], _distOverMultiply);
+		_stepCurrent[1] = lerp(_hip[1], _stepCurrent[1], _distOverMultiply); // fancy reducing way to clamp 3d distance to hip
+		_stepCurrent[2] = lerp(_hip[2], _stepCurrent[2], _distOverMultiply);
+		
+		_footDist = legSegLen * 2; // assume dist is now what it's been clamped to, you know?
+	}
+	#endregion
+}
+
 #endregion
 
 #region gun placing in hand basics
@@ -56,7 +150,7 @@ if(abs(_aimToFacingDifference) >= gunAimRange) { // if aiming outside of range
 weaponPosition[0] = _spineX + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
 weaponPosition[1] = _spineY - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7; // lower and bring in gun when not holding up
 weaponPosition[2] = feetOffY - ((gunHeldDown * 6) + ((1 - gunHeldDown) * (22 - _holdDistMult * 22)));
-if(point_distance(_spineX, _spineY, weaponPosition[0], weaponPosition[1]) > limbLength * 2) {
+if(point_distance(_spineX, _spineY, weaponPosition[0], weaponPosition[1]) > legSegLen * 2) {
 	weaponPosition[0] = _spineX + dcos(gunHoldDirection) * 20;
 	weaponPosition[1] = _spineY - dsin(gunHoldDirection) * 13;
 }
@@ -71,12 +165,6 @@ gunShakeX *= .95;
 gunShakeY *= .95;
 
 #endregion
-
-if(keyboard_check(vk_add)) {
-	feetOffY += 1;
-} else if(keyboard_check(vk_subtract)) {
-	feetOffY -= 1;
-}
 
 #region player controls, camera, and info maintenance
 
@@ -135,11 +223,8 @@ depth = -((y + feetOffY) - global.depthOffset);
 
 #endregion
 
-
-//mark(spineMain.x, spineMain.y, c_yellow)
-//
-//mark(x, feetY, #aa7700);
-//
-//mark(weaponPosition[0], weaponPosition[1], c_red)
-//
-//mark(gunTipPosition[0], gunTipPosition[1], c_orange)
+if(keyboard_check(vk_add)) {
+	feetOffY += 1;
+} else if(keyboard_check(vk_subtract)) { // move the spine up and down but not actually..? I'm not sure where the disconnect is
+	feetOffY -= 1;
+}
