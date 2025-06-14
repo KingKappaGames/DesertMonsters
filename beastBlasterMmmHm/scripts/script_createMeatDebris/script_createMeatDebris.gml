@@ -10,7 +10,7 @@ function script_createMeatDebris(xx, yy, radialSpeed, pushSpeed, pushDir, pushVe
 		_randDir = irandom(360);
 		_randHeight = random(1);
 		_piece = instance_create_layer(xx, yy, "Instances", obj_meatDebris);
-		_piece.xChange = (dcos(_randDir) * _speedRandHold * (1 - sqrt(_randHeight))) + (dcos(pushDir) * pushSpeed) + pushVertical;
+		_piece.xChange = (dcos(_randDir) * _speedRandHold * (1 - sqrt(_randHeight))) + (dcos(pushDir) * pushSpeed);
 		_piece.yChange = -1 * (   (dsin(_randDir) * _speedRandHold * (1 - sqrt(_randHeight))) + (dsin(pushDir) * pushSpeed) + pushVertical   );
 		_piece.heightChange = (sqrt(_randHeight) * _speedRandHold) + pushVertical;
 		

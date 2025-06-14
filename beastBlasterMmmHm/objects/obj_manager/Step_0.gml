@@ -19,6 +19,19 @@ if(surfaceTimer > 720) { // save current debris surface to buffer
 	buffer_get_surface(debrisSurfaceBuffer, _surface, 0);
 } else if(surfaceTimer == 72) {
 	clearMapVisuals();
+	
+	#region //this doesn't need to be here I just needed a periodic call
+	var _partDeleteList = global.particleGrinderQueue;
+	var _removeTime = current_time;
+	for(var _deleteI = array_length(_partDeleteList) - 1; _deleteI >= 0; _deleteI--) {
+		if(_partDeleteList[_deleteI][1] < _removeTime) {
+			part_type_destroy(_partDeleteList[_deleteI][0]);
+			array_delete(_partDeleteList, _deleteI, 1); // remove part then remove array index for it
+		} else {
+			break; // found the first non removed, ergo stop checking down
+		}
+	}
+	#endregion
 }
 #endregion
 

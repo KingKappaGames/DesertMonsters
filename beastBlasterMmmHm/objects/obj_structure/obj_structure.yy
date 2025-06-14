@@ -1,18 +1,21 @@
 {
   "$GMObject":"",
-  "%Name":"obj_mapVisual",
+  "%Name":"obj_structure",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_mapVisual",
+  "name":"obj_structure",
   "overriddenProperties":[],
   "parent":{
     "name":"obj_group_props",
     "path":"folders/Objects/obj_group_props.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_mapVisual",
+    "path":"objects/obj_mapVisual/obj_mapVisual.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

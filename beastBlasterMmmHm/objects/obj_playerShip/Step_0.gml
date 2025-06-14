@@ -12,6 +12,23 @@ if(global.cameraSplitOption == true) {
 }
 #endregion
 
+if(keyboard_check_released(ord("B"))) {
+	instance_create_depth(x + 100, y - 200, depth, obj_structure);
+}
+
+if(keyboard_check_released(ord("N"))) {
+	var _hitList = ds_list_create();
+	collision_circle_list(mouse_x, mouse_y, 700, obj_structure, false, true, _hitList, false); // hit structures //TODO remove at some point or find a better place for it
+	for(var _i = ds_list_size(_hitList) - 1; _i > -1; _i--) {
+		//_hitList[| _i].hurt(irandom(bulletDamage), point_direction(x, y, _hitList[| _i].x, _hitList[| _i].y)); 
+		var _hit = _hitList[| _i];
+		var _distFalloff = clamp(1 - (point_distance(mouse_x, mouse_y, _hit.x, _hit.y) / 700), 0, 10);
+		var _hitDir = point_direction(mouse_x, mouse_y, _hit.x, _hit.y);
+		_hit.damageStructure(_distFalloff * 2, 0, _hitDir, 2 * _distFalloff);
+	}
+	ds_list_destroy(_hitList);
+}
+
 if(input_check_released("characterSwitch", playerIndex)) {
 	var _player = instance_create_layer(x, y, "Instances", obj_playerHeli);
 	_player.playerIndex = playerIndex;

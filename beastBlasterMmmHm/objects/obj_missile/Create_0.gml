@@ -5,8 +5,7 @@ event_inherited();
 bulletDamage = 4 + irandom(6)
 bulletSize = 5 + irandom(3);
 
-hit = function() {
-	
+hit = function() { 
 	//TODO get data from what has been hit to create other sorts of explosion effects, for example hitting open sand would
 	// give different debris than hitting cement or dirt, this doesn't include cars and such with their own particle yield
 	// but does determine the ratios of what particles are created for which outcomes in some way
@@ -33,7 +32,6 @@ hit = function() {
 	
 	hitIds = ds_list_create();
 	#region collisions
-	msg($"size initial check {20 * bulletSize + 50}");
 	collision_circle_list(x, y, 25 * bulletSize, obj_enemy, false, true, hitIds, false);
 	
 	for(var _i = ds_list_size(hitIds) - 1; _i > -1; _i--) {

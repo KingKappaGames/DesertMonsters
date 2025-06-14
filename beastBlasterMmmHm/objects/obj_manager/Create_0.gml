@@ -25,6 +25,8 @@ audio_group_set_gain(audiogroup_default, global.masterVolume, 0);
 global.windStrength = 0;
 global.gravityStrength = 0;
 
+global.particleGrinderQueue = []; // partId, time (absolute milliseconds to destroy)
+
 #region enums
 enum limbNode { // values for limb nodes to ref (in array!)
 	xx, 

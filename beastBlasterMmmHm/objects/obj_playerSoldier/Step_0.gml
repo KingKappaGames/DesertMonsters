@@ -39,7 +39,6 @@ legRotation = (legRotation + legRotationSpeed) % 360;
 hipYBob = lerp(hipYBob, clamp((-1 + _speed) * 7.5, -7.5, 0) + clamp((dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * _speed, -3, 15), .03);
 #endregion
 
-
 #region NEW LEG STUFF
 
 stepUpdateDist = stepUpdateDistBase * sqrt(currentSpeed) * 1.25;
