@@ -18,11 +18,21 @@ hurt3D = function(damage, knockback, radius, dropOffPower = 1, hitSourceId = noo
 		var _hitX = hitSourceId.x;
 		var _hitY = hitSourceId.y;
 		
-		//var _nodeCount = array_length(structureNodes);
-		//for(var _hitI = 0; _hitI < _nodeCount; _hitI++) {
-		//	var _node = 
-		//	var _dist = point_distance(
-		//}
+		knockback *= .25;
+		
+		var _nodeCount = array_length(structureNodes);
+		for(var _hitI = 0; _hitI < _nodeCount; _hitI++) {
+			var _node = structureNodes[_hitI];
+			with(_node) {
+				var _dist = point_distance(x, y, _hitX, _hitY);
+				var _dir = point_direction(_hitX, _hitY, x, y);
+				
+				var _pushFinal = knockback * power(1 - (_dist / radius), dropOffPower) / (connectionRigidity + .1);
+				
+				xChange = _pushFinal * dcos(_dir);
+				yChange = _pushFinal * -dsin(_dir);
+			}
+		}
 	}
 }
 //hurt3D = function(damage, knockback, radius, dropOffPower = 1, hitSourceId = noone) {

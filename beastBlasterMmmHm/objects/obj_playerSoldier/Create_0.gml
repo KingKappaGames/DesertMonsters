@@ -275,13 +275,15 @@ placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed =
 	_previousStepPos[1] = _goalPos[1];
 	
 	//TODO x/y should be spine x/y
-	_goalPos[0] = x + clamp((goalX - currentX) * .26, -legSegLen * .65, legSegLen * .65) + xChange * legSegLen; // this takes into acount the dist from previous step, the leg length, the duration of the step, add more for accuracy perhaps
-	_goalPos[1] = y + clamp((goalY - currentY) * .26, -legSegLen * .65, legSegLen * .65) + yChange * legSegLen;
+	_goalPos[0] = spineMain.x + clamp((goalX - currentX) * .26, -legSegLen * .65, legSegLen * .65) + xChange * legSegLen; // this takes into acount the dist from previous step, the leg length, the duration of the step, add more for accuracy perhaps
+	_goalPos[1] = spineMain.y + clamp((goalY - currentY) * .26, -legSegLen * .65, legSegLen * .65) + yChange * legSegLen;
 	
 	var _stepAhead = point_distance(x, y, _goalPos[0], _goalPos[1]);
 	//msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
-	var _stepTime = (_stepAhead / (moveSpeed * 2)) * (game_get_speed(gamespeed_microseconds) / 1000) * 3 * (legSegLen / 100); // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
+	var _stepTime = (_stepAhead + 10) / (moveSpeed + .1) * (game_get_speed(gamespeed_microseconds) / 1000) * 2 * (legSegLen / 100); // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
+	
+	msg("stepDuration: " + string(_stepTime));
 	
 	setStepTimings(legIndex, _stepTime, moveSpeed);
 }
@@ -292,6 +294,8 @@ setStepTimings = function(legIndex, duration, speedRef) {
 	_timeInfo[2] = current_time + duration; // step end time
 	_timeInfo[1] = current_time; // current time duh
 	_timeInfo[0] = 0; // step (expected!) progress set (starts at 0)
+	
+	//msg("step timing sets: " + string(duration));
 }
 #endregion
 
@@ -317,8 +321,8 @@ _fu = new script_addBodyComponent(    id,    0,                 spr_robeParts,  
 _fu = new script_addLimbBodyComponent(id,    0, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
 _fu = new script_addLimbBodyComponent(id,    0, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
 _fu = new script_addBodyComponent(    id,    0,                 spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
-_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_armParts,   spr_armParts], [0, 0],   80,    12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
-_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_armParts,   spr_armParts], [0, 0],   -80,   21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 0); // leg arrays
+_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_armParts,   spr_armParts], [0, 0],   80,    -10,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
+_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_armParts,   spr_armParts], [0, 0],   -80,   -10,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 0); // leg arrays
 
 //lag testing
 //repeat(5000) {
@@ -328,5 +332,3 @@ _fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_armParts,  
 #endregion
 
 setTurret(1);
-
-feetOffY = 1;

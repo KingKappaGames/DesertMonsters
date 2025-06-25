@@ -4,4 +4,5 @@ function script_createShockHurter(xSpawn, ySpawn, radiusIncrease, duration, tick
 	_shockwave.tickCount = tickCount;
 	_shockwave.radius = initialRadius;
 	_shockwave.duration = duration;
+	_shockwave.durationMax = duration;
 }

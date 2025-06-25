@@ -20,7 +20,7 @@ yChange *= speedDecay;
 currentSpeed = point_distance(0, 0, xChange, yChange);
 currentDir = point_direction(0, 0, xChange, yChange);
 
-spineMain.x = x - 30;
+spineMain.x = x;
 spineMain.y = feetY;
 spineMain.height = feetOffY; // spine represents center here, but with feet height center is not at feet, obviously
 
@@ -55,20 +55,20 @@ var _allFeetOnGround = true; // DO PROGRESS SETTING
 for(var _legI = 0; _legI < _legCount; _legI++) { // check leg progresses to allow or disallow new steps in legs
 	var _limbNodes = legArray[_legI];
 	var _stepTiming = stepTimings[_legI];
-	var _stepGoal = stepPositionsGoal[_legI]
+	var _stepGoal = stepPositionsGoal[_legI];
 	var _stepDuration = _stepTiming[stepTimeEnum.endTime] - _stepTiming[stepTimeEnum.startTime];
 	_stepTiming[stepTimeEnum.progress] = clamp((current_time - _stepTiming[stepTimeEnum.startTime]) / (_stepDuration), 0, 1);
 	if(_stepTiming[stepTimeEnum.progress] < 1) { // still in the air, then add momentum to goal as well as body, this keeps feet aligned with object movement without having to predict some crazy future point
 		_stepGoal[0] += xChange;
 		_stepGoal[1] += yChange; // add height?
 	}
-	if(_allFeetOnGround && _stepTiming[stepTimeEnum.progress] != 1) {
+	if(_allFeetOnGround && _stepTiming[stepTimeEnum.progress] < 1) {
 		
 		#region containing step goals within reasonable range AND bringing in step goals when slowing down
 		var _hip = _limbNodes[0]; // first node of limb (array that contains data about it)
 		var _stepDist = point_distance(_hip[0], _hip[1], _stepGoal[0], _stepGoal[1]);
 		if(_stepDist > stepUpdateDist) {
-			var _distOverMultiply = stepUpdateDist / _stepDist;
+			var _distOverMultiply = stepUpdateDist / (_stepDist + 1);
 			
 			_stepTiming[stepTimeEnum.endTime] = lerp(_stepTiming[stepTimeEnum.endTime], _stepTiming[stepTimeEnum.startTime], 1 - _distOverMultiply); // reduce time for step along with distance, basically, drop your foot sooner than planned if changing course
 		
@@ -126,6 +126,8 @@ for(var _legI = 0; _legI < _legCount; _legI++) {
 		
 		_footDist = legSegLen * 2; // assume dist is now what it's been clamped to, you know?
 	}
+	
+	//msg("foot details (x,y,z,len): " + string(_stepCurrent));
 	#endregion
 }
 

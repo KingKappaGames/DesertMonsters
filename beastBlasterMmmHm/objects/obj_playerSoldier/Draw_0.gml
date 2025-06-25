@@ -63,66 +63,64 @@ if(gunDrawBehind) {
 var _cosFacing = dcos(_dirMoving);
 var _sinFacing = dsin(_dirMoving);
 
-#region set initial hip left and right positions
-var _hipLX = x + _leanAheadX - _sinFacing * hipWidth;
-var _hipLY = y + hipYOff + _jostle + _leanAheadY - _cosFacing * hipWidth;
-var _hipRX = x + _leanAheadX + _sinFacing * hipWidth;
-var _hipRY = y + hipYOff + _jostle + _leanAheadY + _cosFacing * hipWidth;
-#endregion
-
-#region get distances and directions for both feet from hip
-var _distLFoot = point_distance(_hipLX, _hipLY, footLX, footLY); // dist
-var _distRFoot = point_distance(_hipRX, _hipRY, footRX, footRY);
-var _dirLFoot = point_direction(_hipLX, _hipLY, footLX, footLY); // dir
-var _dirRFoot = point_direction(_hipRX, _hipRY, footRX, footRY);
-#endregion
-
-#region clamp the foot distance to leg length to create rounded extensions, more of a fix or QA check than a feature but does create mild angled foot movements too
-if(_distLFoot > legSegLen * 2) {
-	footLX = _hipLX + dcos(_dirLFoot) * legSegLen * 2; // left
-	footLY = _hipLY - dsin(_dirLFoot) * legSegLen * 2; 
-	_distLFoot = legSegLen * 2;
-}
-if(_distRFoot > legSegLen * 2) {
-	footRX = _hipRX + dcos(_dirRFoot) * legSegLen * 2; // right
-	footRY = _hipRY - dsin(_dirRFoot) * legSegLen * 2;
-	_distRFoot = legSegLen * 2;
-}
-#endregion
-
-#region getting joint positions from trig distances
-var _footLJointDist = sqrt(clamp(sqr(legSegLen) - sqr(_distLFoot / 2), 0, 999999)); // outwardness of joint
-var _footRJointDist = sqrt(clamp(sqr(legSegLen) - sqr(_distRFoot / 2), 0, 999999)); // please stop returning negatives to the sqrt functions -managment
-
-var _legMidLX = _hipLX + (footLX - _hipLX) / 2;
-var _legMidLY = _hipLY + (footLY - _hipLY) / 2; // visual mid point simply between hip and foot
-var _legMidRX = _hipRX + (footRX - _hipRX) / 2;
-var _legMidRY = _hipRY + (footRY - _hipRY) / 2;
-
-var _jointLX = dcos(_dirLFoot + 90) * _cosFacing * _footLJointDist;
-var _jointLY = dsin(_dirLFoot + 90) * -sign(_cosFacing) * _footLJointDist; // final joint positions
-var _jointRX = dcos(_dirRFoot + 90) * _cosFacing * _footRJointDist; 
-var _jointRY = dsin(_dirRFoot + 90) * -sign(_cosFacing) * _footRJointDist;
-#endregion
-
-#region draw thigh and calf segments and circle to round the knee and close visual gap
-
-var _offX = x - _surfMidX;
-var _offY = y - _surfMidY;
-
-draw_set_color(#525426);
-draw_line_width(_hipRX - _offX, _hipRY - _offY, _legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 6); // right leg
-draw_line_width(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, footRX - _offX, footRY - _offY, 4);
-
-draw_line_width(_hipLX - _offX, _hipLY - _offY, _legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 6); // left leg
-draw_line_width(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, footLX - _offX, footLY - _offY, 4);
-
-draw_circle(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 2, false); // both knees
-draw_circle(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 2, false);
-draw_set_color(c_white);
-#endregion
-
-
+//#region set initial hip left and right positions
+//var _hipLX = x + _leanAheadX - _sinFacing * hipWidth;
+//var _hipLY = y + hipYOff + _jostle + _leanAheadY - _cosFacing * hipWidth;
+//var _hipRX = x + _leanAheadX + _sinFacing * hipWidth;
+//var _hipRY = y + hipYOff + _jostle + _leanAheadY + _cosFacing * hipWidth;
+//#endregion
+//
+//#region get distances and directions for both feet from hip
+//var _distLFoot = point_distance(_hipLX, _hipLY, footLX, footLY); // dist
+//var _distRFoot = point_distance(_hipRX, _hipRY, footRX, footRY);
+//var _dirLFoot = point_direction(_hipLX, _hipLY, footLX, footLY); // dir
+//var _dirRFoot = point_direction(_hipRX, _hipRY, footRX, footRY);
+//#endregion
+//
+//#region clamp the foot distance to leg length to create rounded extensions, more of a fix or QA check than a feature but does create mild angled foot movements too
+//if(_distLFoot > legSegLen * 2) {
+	//footLX = _hipLX + dcos(_dirLFoot) * legSegLen * 2; // left
+	//footLY = _hipLY - dsin(_dirLFoot) * legSegLen * 2; 
+	//_distLFoot = legSegLen * 2;
+//}
+//if(_distRFoot > legSegLen * 2) {
+	//footRX = _hipRX + dcos(_dirRFoot) * legSegLen * 2; // right
+	//footRY = _hipRY - dsin(_dirRFoot) * legSegLen * 2;
+	//_distRFoot = legSegLen * 2;
+//}
+//#endregion
+//
+//#region getting joint positions from trig distances
+//var _footLJointDist = sqrt(clamp(sqr(legSegLen) - sqr(_distLFoot / 2), 0, 999999)); // outwardness of joint
+//var _footRJointDist = sqrt(clamp(sqr(legSegLen) - sqr(_distRFoot / 2), 0, 999999)); // please stop returning negatives to the sqrt functions -managment
+//
+//var _legMidLX = _hipLX + (footLX - _hipLX) / 2;
+//var _legMidLY = _hipLY + (footLY - _hipLY) / 2; // visual mid point simply between hip and foot
+//var _legMidRX = _hipRX + (footRX - _hipRX) / 2;
+//var _legMidRY = _hipRY + (footRY - _hipRY) / 2;
+//
+//var _jointLX = dcos(_dirLFoot + 90) * _cosFacing * _footLJointDist;
+//var _jointLY = dsin(_dirLFoot + 90) * -sign(_cosFacing) * _footLJointDist; // final joint positions
+//var _jointRX = dcos(_dirRFoot + 90) * _cosFacing * _footRJointDist; 
+//var _jointRY = dsin(_dirRFoot + 90) * -sign(_cosFacing) * _footRJointDist;
+//#endregion
+//
+//#region draw thigh and calf segments and circle to round the knee and close visual gap
+//
+//var _offX = x - _surfMidX;
+//var _offY = y - _surfMidY;
+//
+//draw_set_color(#525426);
+//draw_line_width(_hipRX - _offX, _hipRY - _offY, _legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 6); // right leg
+//draw_line_width(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, footRX - _offX, footRY - _offY, 4);
+//
+//draw_line_width(_hipLX - _offX, _hipLY - _offY, _legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 6); // left leg
+//draw_line_width(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, footLX - _offX, footLY - _offY, 4);
+//
+//draw_circle(_legMidRX + _jointRX - _offX, _legMidRY + _jointRY - _offY, 2, false); // both knees
+//draw_circle(_legMidLX + _jointLX - _offX, _legMidLY + _jointLY - _offY, 2, false);
+//draw_set_color(c_white);
+//#endregion
 
 #endregion
 
@@ -152,6 +150,15 @@ if(!gunDrawBehind) {
 //draw_rectangle(1, 1, 254, 254, true);
 
 surface_reset_target();
+
+draw_circle(legArray[0][2][0], legArray[0][2][1] - legArray[0][2][2] * .65, 5, true);
+draw_circle(legArray[1][2][0], legArray[1][2][1] - legArray[1][2][2] * .65, 5, true);
+
+draw_circle(spineMain.x, spineMain.y, 3, true)
+draw_circle(x, y, 4, true)
+draw_text(x, y - 100, feetOffY)
+
+
 
 //var _ang = current_time / 10; 
 //var _dist = (_surfMidX) * 1.4142; // the radius of the surf is the sqrt((width/2^2) + (height/2^2)) not just width / 2 but also just paste in a real for sqrt(2) which is that number

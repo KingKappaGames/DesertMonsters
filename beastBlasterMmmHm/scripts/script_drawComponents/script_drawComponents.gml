@@ -97,7 +97,11 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 					var _limbDir = point_direction(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
 					if(limbType == limbTypes.leg) {
 						var _limbDist = point_distance_3d(_limb[0][0], _limb[0][1], _limb[0][2], _limb[2][0], _limb[2][1], _limb[2][2]); // no respect for non 3 length limbs..
-						script_setIKJoints3D(_limb, _limb[0][limbNode.len], _limbDist, _limbDir, cosFacing, _directionSin);
+						var _limbLen = _limb[0][limbNode.len];
+						
+						
+						
+						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin);
 					} else {
 						var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
 						script_setIKJoints(_limb, _limb[0][limbNode.len], _limbDist, _limbDir, cosFacing);
