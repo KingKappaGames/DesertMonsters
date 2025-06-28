@@ -100,6 +100,8 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 						var _limbLen = _limb[0][limbNode.len];
 						
 						
+						draw_text(180, 100, "dist " + string(_limbDist));
+						draw_text(180, 140, "len " + string(_limbLen));
 						
 						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin);
 					} else {

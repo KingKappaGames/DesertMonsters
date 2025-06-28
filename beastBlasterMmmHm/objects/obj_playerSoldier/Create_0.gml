@@ -321,8 +321,8 @@ _fu = new script_addBodyComponent(    id,    0,                 spr_robeParts,  
 _fu = new script_addLimbBodyComponent(id,    0, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
 _fu = new script_addLimbBodyComponent(id,    0, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
 _fu = new script_addBodyComponent(    id,    0,                 spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
-_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_armParts,   spr_armParts], [0, 0],   80,    -10,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
-_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_armParts,   spr_armParts], [0, 0],   -80,   -10,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 0); // leg arrays
+_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   80,    -10,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
+_fu = new script_addLimbBodyComponent(id,    0, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   -80,   -10,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 0); // leg arrays
 
 //lag testing
 //repeat(5000) {

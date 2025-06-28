@@ -18,7 +18,7 @@ var _spineX = spineMain.x;
 var _spineY = spineMain.y; // setting spine locals
 
 draw_set_alpha(.75);
-draw_circle_color(_spineX + _leanAheadX, _spineY + 50, 16, #333333, #333333, false); // shadow! Remove when you have a better way!
+draw_circle_color(_spineX + _leanAheadX, _spineY, 16, #333333, #333333, false); // shadow! Remove when you have a better way!
 draw_set_alpha(1);
 
 var _surf = getSurf(); // the surface you draw to
@@ -151,13 +151,6 @@ if(!gunDrawBehind) {
 
 surface_reset_target();
 
-draw_circle(legArray[0][2][0], legArray[0][2][1] - legArray[0][2][2] * .65, 5, true);
-draw_circle(legArray[1][2][0], legArray[1][2][1] - legArray[1][2][2] * .65, 5, true);
-
-draw_circle(spineMain.x, spineMain.y, 3, true)
-draw_circle(x, y, 4, true)
-draw_text(x, y - 100, feetOffY)
-
 
 
 //var _ang = current_time / 10; 
@@ -166,3 +159,21 @@ draw_text(x, y - 100, feetOffY)
 draw_surface(_surf, _spineX - _surfMidX, _spineY - _surfMidY);
 
 //draw_text(x + 100, y, feetOffY)
+
+
+
+draw_circle(legArray[0][2][0], legArray[0][2][1] - legArray[0][2][2] * .65, 5, true);
+draw_circle(legArray[1][2][0], legArray[1][2][1] - legArray[1][2][2] * .65, 5, true);
+
+draw_circle(spineMain.x, spineMain.y, 3, true)
+draw_circle_color(x, y, 4, c_green, c_green, false)
+draw_text(x + 170, y - 20, feetOffY)
+
+draw_circle_color(stepPositionsGoal[0][0], stepPositionsGoal[0][1], 4, c_red, c_red, false);
+draw_circle_color(stepPositionsGoal[1][0], stepPositionsGoal[1][1], 4, c_red, c_red, false);
+
+draw_circle_color(stepPositionsInitial[0][0], stepPositionsInitial[0][1], 4, c_yellow, c_yellow, false);
+draw_circle_color(stepPositionsInitial[1][0], stepPositionsInitial[1][1], 4, c_yellow, c_yellow, false);
+
+draw_line(x + 200, spineMain.y - spineMain.height * .65, x + 200, feetY);
+draw_line_color(x + 180, y, x + 180, feetY, c_black, c_black);

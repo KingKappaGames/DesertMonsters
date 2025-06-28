@@ -97,7 +97,7 @@ for(var _legI = 0; _legI < _legCount; _legI++) {
 	
 	var _progress = stepTimings[_legI][stepTimeEnum.progress];
 	
-	var _stepHeight = dsin(180 * _progress) * legSegLen * .7;
+	var _stepHeight = dsin(180 * _progress) * legSegLen * .7 * 1;
 	
 	_stepCurrent[2] = _stepHeight;
 	_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _progress); // move foot over range of movement according to time progress

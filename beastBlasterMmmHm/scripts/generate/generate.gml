@@ -79,13 +79,13 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 		
 								_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
 								if(_heightVal > .8) {
-									_grass.image_blend = #158a6e;
+									_grass.image_blend = #DBE7FF;
 								} else if(_heightVal > .6) {
-									_grass.image_blend = #19bf4e;
+									_grass.image_blend = #dfffdf;
 								} else if(_heightVal > .4) {
-									_grass.image_blend = #badc60;
+									_grass.image_blend = #D0FFC1;
 								} else {
-									_grass.image_blend = #a12c1d;
+									_grass.image_blend = #FFC6C3;
 								}
 							//}
 						}
@@ -114,13 +114,13 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 		
 							_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
 							if(_heightVal > .8) {
-								_grass.image_blend = #158a6e;
+								_grass.image_blend = #DBE7FF;
 							} else if(_heightVal > .6) {
-								_grass.image_blend = #19bf4e;
+								_grass.image_blend = #dfffdf;
 							} else if(_heightVal > .4) {
-								_grass.image_blend = #badc60;
+								_grass.image_blend = #D0FFC1;
 							} else {
-								_grass.image_blend = #a12c1d;
+								_grass.image_blend = #FFC6C3;
 							}
 						//}
 					}

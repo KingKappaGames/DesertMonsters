@@ -585,6 +585,7 @@
     {"id":{"name":"spr_feathers","path":"sprites/spr_feathers/spr_feathers.yy",},},
     {"id":{"name":"spr_heliStack","path":"sprites/spr_heliStack/spr_heliStack.yy",},},
     {"id":{"name":"spr_jeep","path":"sprites/spr_jeep/spr_jeep.yy",},},
+    {"id":{"name":"spr_legParts","path":"sprites/spr_legParts/spr_legParts.yy",},},
     {"id":{"name":"spr_machineGun","path":"sprites/spr_machineGun/spr_machineGun.yy",},},
     {"id":{"name":"spr_meatPiece","path":"sprites/spr_meatPiece/spr_meatPiece.yy",},},
     {"id":{"name":"spr_perlinBlock","path":"sprites/spr_perlinBlock/spr_perlinBlock.yy",},},
