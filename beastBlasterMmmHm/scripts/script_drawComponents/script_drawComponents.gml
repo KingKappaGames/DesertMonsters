@@ -104,13 +104,13 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 						draw_text(180, 140, "len " + string(_limbLen));
 						
 						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin);
+						script_drawLimbSegIn3d(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY);
 					} else {
 						var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
 						script_setIKJoints(_limb, _limb[0][limbNode.len], _limbDist, _limbDir, cosFacing);
+						script_drawIKLimb(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY); // surf position top left at x
 					}
 					#endregion
-					
-					script_drawIKLimb(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY); // surf position top left at x
 				}
 				_counter++;
 			} else {

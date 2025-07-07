@@ -162,18 +162,15 @@ draw_surface(_surf, _spineX - _surfMidX, _spineY - _surfMidY);
 
 
 
-draw_circle(legArray[0][2][0], legArray[0][2][1] - legArray[0][2][2] * .65, 5, true);
-draw_circle(legArray[1][2][0], legArray[1][2][1] - legArray[1][2][2] * .65, 5, true);
-
-draw_circle(spineMain.x, spineMain.y, 3, true)
-draw_circle_color(x, y, 4, c_green, c_green, false)
+draw_circle(spineMain.x, spineMain.y, 2, true)
+draw_circle_color(x, y, 3, c_green, c_green, false)
 draw_text(x + 170, y - 20, feetOffY)
 
-draw_circle_color(stepPositionsGoal[0][0], stepPositionsGoal[0][1], 4, c_red, c_red, false);
-draw_circle_color(stepPositionsGoal[1][0], stepPositionsGoal[1][1], 4, c_red, c_red, false);
+draw_circle_color(stepPositionsGoal[0][0], stepPositionsGoal[0][1], 3, c_red, c_red, false);
+draw_circle_color(stepPositionsGoal[1][0], stepPositionsGoal[1][1], 3, c_red, c_red, false);
 
-draw_circle_color(stepPositionsInitial[0][0], stepPositionsInitial[0][1], 4, c_yellow, c_yellow, false);
-draw_circle_color(stepPositionsInitial[1][0], stepPositionsInitial[1][1], 4, c_yellow, c_yellow, false);
+draw_circle_color(stepPositionsInitial[0][0], stepPositionsInitial[0][1], 3, c_dkgray, c_dkgray, false);
+draw_circle_color(stepPositionsInitial[1][0], stepPositionsInitial[1][1], 3, c_dkgray, c_dkgray, false);
 
 draw_line(x + 200, spineMain.y - spineMain.height * .65, x + 200, feetY);
 draw_line_color(x + 180, y, x + 180, feetY, c_black, c_black);

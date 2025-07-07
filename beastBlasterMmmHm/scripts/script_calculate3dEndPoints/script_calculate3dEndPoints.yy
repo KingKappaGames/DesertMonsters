@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"script_calculate3dEndPoints",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"script_calculate3dEndPoints",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -9,8 +9,8 @@
 function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin, joints) { // which direction they bend for up or down angles
 	live_auto_call
 	
-	if(endDist > nodeArray[0][3]) {
-		endDist = nodeArray[0][3]; // [0][3] is length for this node of the limb, ergo check it as a max also this is stupid //TODO fix this nonsense with mismatching distances vs the draw and step
+	if(endDist > nodeArray[0][3] * 2) {
+		endDist = nodeArray[0][3] * 2; // [0][3] is length for this node of the limb, ergo check it as a max also this is stupid //TODO fix this nonsense with mismatching distances vs the draw and step
 	}
 	
 	var _joints =  array_length(nodeArray) - 2;  //_limbCount > 1 ? array_length(nodeArray) : array_length(nodeArray[_limbI]);
@@ -23,6 +23,8 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 	//}
 	
 	var _jointOutDist = sqrt(max(sqr(segmentLength) - sqr(endDist / 2), 0)); // outwardness of joint (respecting 3d)
+	
+	//msg(_jointOutDist, "joint out distance (horizontal out)", "set ik joints 3d script");
 	
 	var _originNode = nodeArray[0]; // "socket" node, aka shoulder, hip, wherever this limb starts
 	var _endNode = nodeArray[_joints + 1]; // end node, aka hand, foot, wherever it ends
