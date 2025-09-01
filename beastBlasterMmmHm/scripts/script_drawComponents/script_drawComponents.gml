@@ -100,8 +100,8 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 						var _limbLen = _limb[0][limbNode.len];
 						
 						
-						draw_text(180, 100, "dist " + string(_limbDist));
-						draw_text(180, 140, "len " + string(_limbLen));
+						//draw_text(180, 100, "dist " + string(_limbDist));
+						//draw_text(180, 140, "len " + string(_limbLen));
 						
 						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin);
 						script_drawLimbSegIn3d(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY);

@@ -18,7 +18,7 @@ var _spineX = spineMain.x;
 var _spineY = spineMain.y; // setting spine locals
 
 draw_set_alpha(.75);
-draw_circle_color(_spineX + _leanAheadX, _spineY, 16, #333333, #333333, false); // shadow! Remove when you have a better way!
+//draw_circle_color(_spineX + _leanAheadX, _spineY, 16, #333333, #333333, false); // shadow! Remove when you have a better way!
 draw_set_alpha(1);
 
 var _surf = getSurf(); // the surface you draw to
@@ -36,7 +36,7 @@ directionFacing = _dirMoving;
 
 var _viewCompress = .5 + abs(dsin(directionFacing) / 2);
 var _speed = point_distance(0, 0, xChange, yChange);
-var _jostle = (dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * sqrt(_speed) * 3;
+var _jostle = (dsin(legRotation * .5 * (1.5 + sqrt(_speed) / 3) - 90) + .4) * sqrt(_speed) * 3;
 #endregion
 
 #region draw gun
@@ -160,7 +160,11 @@ draw_surface(_surf, _spineX - _surfMidX, _spineY - _surfMidY);
 
 //draw_text(x + 100, y, feetOffY)
 
+/*
 
+draw_set_color(c_black);
+draw_circle(spineMain.x, spineMain.y, stepUpdateDist, true);
+draw_set_color(c_white);
 
 draw_circle(spineMain.x, spineMain.y, 2, true)
 draw_circle_color(x, y, 3, c_green, c_green, false)
@@ -172,5 +176,54 @@ draw_circle_color(stepPositionsGoal[1][0], stepPositionsGoal[1][1], 3, c_red, c_
 draw_circle_color(stepPositionsInitial[0][0], stepPositionsInitial[0][1], 3, c_dkgray, c_dkgray, false);
 draw_circle_color(stepPositionsInitial[1][0], stepPositionsInitial[1][1], 3, c_dkgray, c_dkgray, false);
 
-draw_line(x + 200, spineMain.y - spineMain.height * .65, x + 200, feetY);
-draw_line_color(x + 180, y, x + 180, feetY, c_black, c_black);
+//draw_line(x + 200, spineMain.y - spineMain.height * .65, x + 200, feetY);
+//draw_line_color(x + 180, y, x + 180, feetY, c_black, c_black);
+
+draw_line(x + dcos(currentDir) * 10, y - dsin(currentDir) * 10, x, y);
+
+var _speedChange = sqr(abs(currentSpeed - previousSpeed) * 2);
+var _dirChange = sqrt(1 + (abs(currentDir - previousDir) / 22.5)) - 1;
+
+draw_line(x + 100, y, x + 100, y - 150 * (_speedChange + _dirChange));
+draw_line(x + 130, y, x + 130, y - 150 * _dirChange);
+draw_line(x + 160, y, x + 160, y - 150 * _speedChange);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

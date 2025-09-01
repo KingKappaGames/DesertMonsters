@@ -73,7 +73,7 @@ refreshCameras = function(split = -1) {
 	window_set_size(camWidth, camHeight);
 	surface_resize(application_surface, camWidth, camHeight);
 	
-	global.generator.updatePerlinGrid();
+	//global.generator.updatePerlinGrid();
 }
 
 resetCamera = function(index) {

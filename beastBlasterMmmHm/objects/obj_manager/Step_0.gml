@@ -18,7 +18,7 @@ if(surfaceTimer > 720) { // save current debris surface to buffer
 	var _surface = getDebrisSurface();
 	buffer_get_surface(debrisSurfaceBuffer, _surface, 0);
 } else if(surfaceTimer == 72) {
-	clearMapVisuals();
+	//clearMapVisuals();
 	
 	#region //this doesn't need to be here I just needed a periodic call
 	var _partDeleteList = global.particleGrinderQueue;
@@ -36,6 +36,7 @@ if(surfaceTimer > 720) { // save current debris surface to buffer
 #endregion
 
 #region enemy spawning
+/*
 if(instance_count < 30) {
 	if(irandom(880) == 0) {
 		if(instance_exists(obj_playerParent)) {
@@ -49,6 +50,7 @@ if(instance_count < 30) {
 		}
 	}
 }
+*/
 #endregion
 
 #region ambient sounds

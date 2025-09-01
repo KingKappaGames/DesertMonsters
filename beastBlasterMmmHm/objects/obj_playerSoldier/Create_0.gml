@@ -7,7 +7,9 @@ bodySprite = spr_bodyVultureCoat;
 
 directionFacing = 0;
 currentSpeed = 0;
+previousSpeed = 0;
 currentDir = 0;
+previousDir = 0;
 
 moveSpeed = .024;
 speedDecay = .98;
@@ -37,7 +39,8 @@ camera_set_view_size(view_camera[playerIndex], 800, 450);
 #endregion
 
 #region new body stuff
-feetOffY = 50;
+feetOffYBase = 73;
+feetOffY = feetOffYBase;
 feetOffX = 0; //??
 feetY = y + feetOffY;
 
@@ -237,6 +240,7 @@ footRY = 0;
 legRotation = 0;
 legRotationSpeed = 6.4;
 
+hipDir = 0;
 hipYOff = 5;
 hipWidth = 5;
 hipYBob = 0;
@@ -263,10 +267,21 @@ stepTimings = [[0, current_time, current_time, 0], [0, current_time, current_tim
 thighWidth = 20;
 shinWidth = 10; // reset down below for size of animal
 
+debugClamp = .09;
+debugOverStep = .1;
+debugPushAhead = .68;
+
+debugPart = part_type_create();
+part_type_life(debugPart, 144, 144);
+part_type_shape(debugPart, pt_shape_disk);
+part_type_size(debugPart, .05, .05, 0, 0);
+
+
 placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed = -1) { // goal here is the desired place to step to below the creature, not the ultimate target (with this goal added to prediction dist)
 	live_auto_call
 	var _goalPos = stepPositionsGoal[legIndex]; // this goal IS the actual step goal used to place the foot
 	var _previousStepPos = stepPositionsInitial[legIndex]; // this goal IS the actual step goal used to place the foot
+	var _leg = legArray[legIndex];
 	if(moveSpeed == -1) {
 		moveSpeed = point_distance(0, 0, xChange, yChange);
 	}
@@ -274,14 +289,15 @@ placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed =
 	_previousStepPos[0] = _goalPos[0];
 	_previousStepPos[1] = _goalPos[1];
 	
-	//TODO x/y should be spine x/y
-	_goalPos[0] = spineMain.x + clamp((goalX - currentX) * .26, -legSegLen * .65, legSegLen * .65) + xChange * legSegLen; // this takes into acount the dist from previous step, the leg length, the duration of the step, add more for accuracy perhaps
-	_goalPos[1] = spineMain.y + clamp((goalY - currentY) * .26, -legSegLen * .65, legSegLen * .65) + yChange * legSegLen;
 	
-	var _stepAhead = point_distance(x, y, _goalPos[0], _goalPos[1]);
+	
+	_goalPos[0] = _leg[0][0] + clamp((goalX - currentX) * debugOverStep, -legSegLen * debugClamp, legSegLen * debugClamp) + xChange * legSegLen * debugPushAhead; // this takes into acount the dist from previous step, the leg length, the duration of the step, add more for accuracy perhaps
+	_goalPos[1] = _leg[0][1] + clamp((goalY - currentY) * debugOverStep, -legSegLen * debugClamp, legSegLen * debugClamp) + yChange * legSegLen * debugPushAhead;
+	
+	var _stepAhead = point_distance(_leg[0][0], _leg[0][1], _goalPos[0], _goalPos[1]);
 	//msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
-	var _stepTime = (_stepAhead + 10) / (moveSpeed + .1) * (game_get_speed(gamespeed_microseconds) / 1000) * 2 * (legSegLen / 100); // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
+	var _stepTime = (_stepAhead + 3) / (moveSpeed + .05) * (game_get_speed(gamespeed_microseconds) / 1000) * 2; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
 	
 	msg("stepDuration: " + string(_stepTime));
 	
@@ -316,11 +332,11 @@ var _fu = 0;
 //                                   target   spine        [limbType]       sprite(s)                 image(s)  rotRel  height   dist,  xscl          yscl     viewAng   viewComp    color          imgGetRotAdd   fixedAngDraw       limbArrRef     gunOffArrRef
 _fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  [8, 1],   0,     0,        0,     1.6,           2,         0,      .6,      #3D3D29,               0,      undefined);                                          // body
 head = new script_addBodyComponent(   id,    spineMain,                 spr_robeParts,                  [9, 3],   0,     31,       2,     1.6,           2,         0,      .6,      #ffaaaa,               0,      0);                                          // head
-_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        85,    17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        -85,   17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
-_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        85,    17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        -85,   17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+//_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
+//_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
 _fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   80,    -10,       7,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
 _fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   -80,   -10,       7,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 0); // leg arrays
 

@@ -1,5 +1,11 @@
 if (live_call()) return live_result;
 
+if(keyboard_check(vk_comma)) {
+	game_set_speed(36, gamespeed_fps);
+} else {
+	game_set_speed(144, gamespeed_fps); // the legs are moving too fast which allows for them to both jump ahead then have dead time before either needs to move again, that's what's causing the clumping
+}
+
 #region movement and move contols
 var _cursorX = input_cursor_x(playerIndex);
 var _cursorY = input_cursor_y(playerIndex);
@@ -11,15 +17,26 @@ var _distMoveStick = clamp(point_distance(0, 0, _inputs[0] - _inputs[1], _inputs
 xChange += dcos(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick;
 yChange -= dsin(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick; // push in dir and distance of stick
 
+
 x += xChange;
 y += yChange;
-feetY = y + feetOffY * .7;
 //depth = - (y + 60); // this project doesn't use depth... YET??? Maybe, I assume when i start making trees and walls and buildings I'll switch to -y depth but for now it's simpler to do surfaces with out any depth consideration. Especially the dust and debris... That'll be a pain with surfaces unless I go full layer stacking and do what main game does... Though I don't know if I have the height for it here... Too many layers required I think.
 xChange *= speedDecay;
 yChange *= speedDecay;
+
+previousSpeed = currentSpeed;
 currentSpeed = point_distance(0, 0, xChange, yChange);
+
+previousDir = currentDir;
 currentDir = point_direction(0, 0, xChange, yChange);
 
+var _speedChange = sqr(abs(currentSpeed - previousSpeed) * 5);
+var _dirChange = (sqrt(1 + (abs(angle_difference(currentDir, previousDir)) / 22.5)) - 1) * 1.1;
+
+var _prevOffY = feetOffY;
+feetOffY = lerp(feetOffY, feetOffYBase * lerp(1, .85, power(currentSpeed * .75, 1.5)), .02) - min(sqrt((_speedChange + _dirChange) * 7) * 1.2, feetOffYBase * .2);
+y -= feetOffY - _prevOffY;
+feetY = y + feetOffY * .7;
 spineMain.x = x;
 spineMain.y = feetY;
 spineMain.height = feetOffY; // spine represents center here, but with feet height center is not at feet, obviously
@@ -31,17 +48,15 @@ var _spineY = spineMain.y; // get which spine to use maybe? That would do the pr
 #endregion
 
 #region leg stuff!!
-var _speed = point_distance(0, 0, xChange, yChange);
-
-legRotationSpeed = 4.1 * clamp(sqrt(_speed / 2), .17, .85); //proportional to speed
+legRotationSpeed = 4.1 * clamp(sqrt(currentSpeed / 2), .17, .85); //proportional to speed
 legRotation = (legRotation + legRotationSpeed) % 360;
 
-hipYBob = lerp(hipYBob, clamp((-1 + _speed) * 7.5, -7.5, 0) + clamp((dsin(legRotation * (1.5 + sqrt(_speed) / 3) - 90) + .4) * _speed, -3, 15), .03);
+hipYBob = lerp(hipYBob, clamp((-1 + currentSpeed) * 7.5, -7.5, 0) + clamp((dsin(legRotation * (1.5 + sqrt(currentSpeed) / 3) - 90) + .4) * currentSpeed, -3, 15), .03);
 #endregion
 
 #region NEW LEG STUFF
 
-stepUpdateDist = stepUpdateDistBase * sqrt(currentSpeed) * 1.25;
+stepUpdateDist = max(stepUpdateDistBase * sqrt(currentSpeed) * 1.1, 19);
 
 //animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (basic overall positioning, then calculating step positions and goals and moving the legs, then calculating the animations based on the positions)
 
@@ -82,6 +97,8 @@ for(var _legI = 0; _legI < _legCount; _legI++) { // check leg progresses to allo
 }
 
 //DO STEP AND PLACEMENTS (AFTER PROGRESSES ALL DONE)
+var _maxFootDistFromNeutral = -1;
+var _maxDistLeg = -1;
 for(var _legI = 0; _legI < _legCount; _legI++) {
 	#region setting the local values from stored variables
 	var _hip = legArray[_legI][0];
@@ -97,7 +114,7 @@ for(var _legI = 0; _legI < _legCount; _legI++) {
 	
 	var _progress = stepTimings[_legI][stepTimeEnum.progress];
 	
-	var _stepHeight = dsin(180 * _progress) * legSegLen * .7 * 1;
+	var _stepHeight = dsin(180 * _progress) * legSegLen * .9;
 	
 	_stepCurrent[2] = _stepHeight;
 	_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _progress); // move foot over range of movement according to time progress
@@ -105,6 +122,10 @@ for(var _legI = 0; _legI < _legCount; _legI++) {
 	
 	if(_allFeetOnGround && _progress == 1) { // there needs to be some way to deal with changing step lengths and repositions i think, for now just not stepping when already stepping works but has a bunch of issues
 		var _stepPlacementDist = point_distance(_stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1]); // add the height to the value but remove it when checking distance to step
+		if(_maxFootDistFromNeutral < _stepPlacementDist) {
+			_maxFootDistFromNeutral = _stepPlacementDist;
+			_maxDistLeg = _legI;
+		}
 		if(_stepPlacementDist > stepUpdateDist) {
 			placeStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed);
 			_allFeetOnGround = false;
@@ -127,8 +148,17 @@ for(var _legI = 0; _legI < _legCount; _legI++) {
 		_footDist = legSegLen * 2; // assume dist is now what it's been clamped to, you know?
 	}
 	
+	//part_particles_create(global.particleSystem, _stepCurrent[0], _stepCurrent[1] - _stepCurrent[2] * .7, debugPart, 1);
+	
 	//msg("foot details (x,y,z,len): " + string(_stepCurrent));
 	#endregion
+}
+
+if(_allFeetOnGround) {
+	if(_maxFootDistFromNeutral > legSegLen * .4) {
+		var _leg = legArray[_maxDistLeg];
+		placeStepGoal(_maxDistLeg, _leg[2][0], _leg[2][1], _leg[0][0], _leg[0][1]);
+	}
 }
 
 #endregion
@@ -224,8 +254,12 @@ depth = -((y + feetOffY) - global.depthOffset);
 
 #endregion
 
-if(keyboard_check(vk_add)) {
+if(keyboard_check(ord("Y"))) {
 	feetOffY += 1;
-} else if(keyboard_check(vk_subtract)) { // move the spine up and down but not actually..? I'm not sure where the disconnect is
+} else if(keyboard_check(ord("H"))) { // move the spine up and down but not actually..? I'm not sure where the disconnect is
 	feetOffY -= 1;
 }
+
+debugClamp *= 1 + (keyboard_check(ord("U")) - keyboard_check(ord("J"))) * .0035;
+debugOverStep *= 1 + (keyboard_check(ord("I")) - keyboard_check(ord("K"))) * .0035;
+debugPushAhead *= 1 + (keyboard_check(ord("O")) - keyboard_check(ord("L"))) * .0035;

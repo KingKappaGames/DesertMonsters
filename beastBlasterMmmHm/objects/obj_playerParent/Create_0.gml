@@ -1,6 +1,6 @@
 if (live_call()) return live_result;
 
-seed = obj_generator.seed;
+seed = 0//global.generator.seed;
 
 manager = global.manager;
 array_push(global.players, id);
