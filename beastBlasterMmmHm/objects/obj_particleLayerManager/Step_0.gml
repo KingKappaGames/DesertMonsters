@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 var _camY = (camera_get_view_y(view_camera[0]) div sysSpacing) * sysSpacing; // cam is correctly rounded to 4
 var _depthChange = abs(previousCamY - _camY) // depth change ranges 0 - 100 in 4s (correct)

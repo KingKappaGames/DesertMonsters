@@ -1,5 +1,5 @@
 function script_shootBulletScan(shotX, shotY, shotDir, shotGoalX, shotGoalY, bulletType, funcPassing = [], shotVariance = 0, shotSound = -1, damageMult = 1, tracerSet = false) {
-	live_auto_call
+	//live_auto_call
 	
 	if(shotSound == -1) {
 		audio_play_sound(snd_PuffyRifleShot, 0, 0,,,random_range(.85, 1.2));

@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 event_inherited();
 
@@ -56,7 +56,7 @@ minigunChargeMax = 300;
 
 #region set shooting data
 setTurret = function(turretType) {
-	live_auto_call
+	//live_auto_call
 	gunType = turretType;
 	
 	if(turretType == 0) { // standard bullets 
@@ -81,7 +81,7 @@ setTurret = function(turretType) {
 
 weaponControls = function() {
 	var _aimDir = point_direction(x, y - height / 4, input_cursor_x(playerIndex), input_cursor_y(playerIndex));
-	live_auto_call
+	//live_auto_call
 	if(input_check("leftClick", playerIndex)) {
 		if(asset_has_any_tag(bulletType, "scan", asset_object)) {
 			script_shootBulletScan(x, y - height / 4, _aimDir, input_cursor_x(playerIndex), input_cursor_y(playerIndex), bulletType,, .1);

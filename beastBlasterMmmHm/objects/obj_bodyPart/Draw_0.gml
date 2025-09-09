@@ -6,7 +6,7 @@
 
 //draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true)
 
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 //draw thigh and calf segments and circle to round the knee and close visual gap
 draw_line_width_color(hipRX, hipRY, jointRX, jointRY, thighWidth, thighColor, thighColor); // right leg

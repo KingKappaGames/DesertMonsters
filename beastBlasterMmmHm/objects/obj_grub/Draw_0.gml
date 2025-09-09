@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 var _rotate = (current_time % 1440) / 4;
 var _speed = point_distance(0, 0, xChange, yChange);

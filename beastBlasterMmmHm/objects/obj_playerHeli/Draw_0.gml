@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 draw_set_alpha(clamp(.5 - (height / 800), 0, 1));
 draw_circle_color(x, y, height / 4 + 20, c_black, c_gray, false);

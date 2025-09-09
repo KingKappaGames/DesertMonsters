@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 //do step once and destroy
 collision_line_list(x, y, goalX, goalY, obj_enemy, false, true, hitIds, true);

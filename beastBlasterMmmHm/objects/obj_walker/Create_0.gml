@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 enum legSides {
 	right, // 0
@@ -44,7 +44,7 @@ thighWidth = 20;
 shinWidth = 10; // reset down below for size of animal
 
 placeStepGoal = function(legIndex, currentX, currentY, goalX, goalY, moveSpeed = -1) { // goal here is the desired place to step to below the creature, not the ultimate target (with this goal added to prediction dist)
-	//live_auto_call
+	////live_auto_call
 	var _goalPos = stepPositions[legIndex][2]; // this goal IS the actual step goal used to place the foot
 	var _previousStepPos = stepPositions[legIndex][0]; // this goal IS the actual step goal used to place the foot
 	if(moveSpeed == -1) {

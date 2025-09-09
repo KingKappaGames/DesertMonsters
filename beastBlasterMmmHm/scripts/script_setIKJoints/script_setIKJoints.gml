@@ -7,7 +7,7 @@
 ///@param joints Integer count! Not a list or positions, simply the amount of bends to use
 ///@param bendDirGoal This is the direction to bend towards, in any 90 degree bending system it must choose to bend +90 or -90 from the original angle, this is the angle that it will prefer when bending
 function script_setIKJoints(nodeArray, segmentLength, endDist, endDir, facingCos, bendDirGoal = 270) { // which direction they bend for up or down angles
-	live_auto_call
+	//live_auto_call
 
 	var _joints =  array_length(nodeArray) - 2;  //_limbCount > 1 ? array_length(nodeArray) : array_length(nodeArray[_limbI]);
 	var _jointOutDist = sqrt(max(sqr(segmentLength) - sqr(endDist / 2), 0)); // outwardness of joint

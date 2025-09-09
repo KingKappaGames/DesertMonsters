@@ -17,7 +17,7 @@
 ///@param yBias             The degree that the speeds of burst only apply to y, 0 is normal radial, 1 is just y axis variance. (eq is x *= 1 - bias)
 #endregion
 function script_burstPartSpawners(burstX, burstY, burstSpeed, burstSpread, dir, dirSpeed, speedDecay, duration, spawnerCount, partSpawn, partSpawnChance, partSpawnCount, burstAmplify = 1, upwardAdjust = -1, yBias = 0){
-	live_auto_call
+	//live_auto_call
 	var _xFlat = dcos(dir) * dirSpeed;
 	var _yFlat = -dsin(dir) * dirSpeed;
 	

@@ -42,7 +42,7 @@ debrisRefs = []; // I think I should set up the debris system in main game to be
 
 /// @desc Deal damage to a structure with direction and magnitude ect, will destroy if enough damage has been done
 damageStructure = function(damage, type, direction, knockback) {
-    live_auto_call
+    //live_auto_call
 	if(Health <= damage) { // broken
 		breakStructure(damage, type, direction, knockback); // forward hit info to destroy function
 		return true; // true being destroyed?
@@ -65,7 +65,7 @@ damageStructure = function(damage, type, direction, knockback) {
 
 ///@desc Called when the structure breaks for the last time, basically, remove it from the game and do the effects inherit to that
 breakStructure = function(damage, type, direction, knockback) { // direction, force, type of break, level, damage done? What else/these do we need?
-    live_auto_call
+    //live_auto_call
     
 	script_createMeatDebris(x, y, .5 + knockback * .3, knockback * .4, direction, knockback * .3, sqr(damage * .2 + 1.5), random(size[0]));
 	script_burstParticlesConcentrated(x, y, particleArray[0], sqr(damage + 1) + 5, direction, 40, 2, knockback, true, global.particleSystem);

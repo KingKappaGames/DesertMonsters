@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 var _playerSin = dsin(playerDirection);
 var _playerCos = dcos(playerDirection);

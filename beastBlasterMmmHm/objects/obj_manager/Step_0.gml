@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 #region sound control kiinda ...
 if(keyboard_check_released(ord("M"))) {

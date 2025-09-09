@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 x += (input_check("right", playerIndex) - input_check("left", playerIndex)) * playerSpeed;
 y -= (input_check("up", playerIndex) - input_check("down", playerIndex)) * playerSpeed;

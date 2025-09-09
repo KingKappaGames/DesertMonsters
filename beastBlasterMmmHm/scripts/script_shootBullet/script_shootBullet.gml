@@ -1,5 +1,5 @@
 function script_shootBullet(shotX, shotY, shotSpeed, shotDir, bulletType, shotHeight = 100, shotHeightDrop = 4, funcPassing = [], shotVariance = 0, damageMult = 1) {
-	live_auto_call
+	//live_auto_call
 	
 	if(bulletType != obj_basicBullet) {
 		audio_play_sound(snd_SnappyShotLong, 0, 0,,,random_range(.85, 1.2));

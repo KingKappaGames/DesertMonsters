@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 if(keyboard_check(vk_comma)) {
 	game_set_speed(36, gamespeed_fps);

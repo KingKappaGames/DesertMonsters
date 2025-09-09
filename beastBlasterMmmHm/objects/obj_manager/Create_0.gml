@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 sprite_set_live(spr_robeParts, true);
 

@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 #region prevVars for speed deduction (before inherited runs and adds xChange, yChange
 prevFootLX = footLX;

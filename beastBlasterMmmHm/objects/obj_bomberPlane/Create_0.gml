@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 bombsRemaining = 99;
 accuracy = 0; // 0 to radius (ish)

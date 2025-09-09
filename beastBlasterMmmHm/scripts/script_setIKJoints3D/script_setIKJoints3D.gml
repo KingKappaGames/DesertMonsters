@@ -8,7 +8,7 @@
 ///@param joints Integer count! Not a list or positions, simply the amount of bends to use
 function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin, joints) { // which direction they bend for up or down angles
 	live_auto_call
-	
+
 	if(endDist > nodeArray[0][3] * 2) {
 		endDist = nodeArray[0][3] * 2; // [0][3] is length for this node of the limb, ergo check it as a max also this is stupid //TODO fix this nonsense with mismatching distances vs the draw and step
 	}
@@ -29,7 +29,11 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 	var _originNode = nodeArray[0]; // "socket" node, aka shoulder, hip, wherever this limb starts
 	var _endNode = nodeArray[_joints + 1]; // end node, aka hand, foot, wherever it ends
 	
-	var _kneeHeightAngle = darctan2((_endNode[2] - _originNode[2]), _jointOutDist) + 90; // horizontal dist over height diff (opposite / adjacent) gives the angle relative to the flat plane along this legs direction (+ 90 for the bend)
+	var _horizontalDist = point_distance(_originNode[0], _originNode[1], _endNode[0], _endNode[1]);
+	var _kneeHeightAngle = (darctan2(_originNode[2] - _endNode[2], _horizontalDist) * sign(_originNode[0] - _endNode[0])) - (90 * sign(_originNode[0] - _endNode[0])); // COOKED COKKED IDK MAN WHY DOES IK ALWAYS TURN INTO TINY ADJUSTMENTS TO PROJECTION ANGLES??????
+	
+	//show_debug_message(_kneeHeightAngle); // using distance means it clamps to one quadrant (dist is positive) instead of ranging full x to -x WHICH IS WRONG
+	
 	var _kneeSin = dsin(_kneeHeightAngle); // this value could be gotten from a flipped x/y of the leg without needing to trig convert it.. maybe
 	var _kneeCos = dcos(_kneeHeightAngle);
 	
@@ -39,5 +43,5 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 
 	nodeArray[1][0] = _jointX + facingCos * _jointOutDist * _kneeCos;
 	nodeArray[1][1] = _jointY + facingSin * _jointOutDist * _kneeCos; // final joint positions
-	nodeArray[1][2] = _jointZ - _kneeSin * _jointOutDist;
+	nodeArray[1][2] = _jointZ + _kneeSin * _jointOutDist;
 }

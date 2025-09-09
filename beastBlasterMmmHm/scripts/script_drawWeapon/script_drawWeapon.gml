@@ -4,7 +4,7 @@
 ///@param angle The direction to aim the weapon sprite when drawing, duh
 ///@param holdDownAngleAdjust This is added to the angle when holding down (if you pass it, it will be applied, but pass them both for reasons..)
 function script_drawWeapon(sprite, position, angle, holdDownAngleAdjust, surfOffX = -1, surfOffY = -1) {
-	live_auto_call
+	//live_auto_call
 	var _gunLayers = sprite_get_number(sprite);
 	var _yAdd = -3; // the up push of each layer
 	var _cos = dcos(angle);

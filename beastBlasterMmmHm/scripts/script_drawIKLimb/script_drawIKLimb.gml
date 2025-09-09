@@ -1,5 +1,5 @@
 function script_drawIKLimb(limb, bodyPart, surfOffX = -1, surfOffY = -1) {
-	live_auto_call
+	//live_auto_call
 	with(bodyPart) {
 		for(var _limbSegI = array_length(limb) - 2; _limbSegI >= 0; _limbSegI--) { // repeat nodes - 1, so n-n+1, n+1-n+2, n+2-n+3, ect but cut off one early, 3 nodes = 2 segments
 			var _limbSegStart = limb[_limbSegI];

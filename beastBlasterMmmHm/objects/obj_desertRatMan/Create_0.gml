@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 event_inherited();
 
@@ -500,7 +500,7 @@ placeFeetFull = function(dir, spd) {
 
 holdingPart = -1;
 clickLogicDebug = function() {
-	live_auto_call
+	//live_auto_call
 	holdingPart = -1;
 	if(!ragdolling) {
 		ragdollEnemy(9999999);
@@ -555,7 +555,7 @@ setLegVisuals = function(thighThickness = thighWidth, shinThickness = shinWidth,
 }
 
 clickHoldLogicDebug = function() {
-	live_auto_call
+	//live_auto_call
 	if(ragdolling) {
 		if(holdingPart != -1) {
 			if(holdingPart == 0) {

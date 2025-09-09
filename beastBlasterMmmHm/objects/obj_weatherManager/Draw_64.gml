@@ -1,4 +1,4 @@
-if (live_call()) return live_result;
+//if (live_call()) return live_result;
 
 //draw_set_alpha(.5 + dcos((current_time % 324000) / 900) / 2);
 //draw_set_alpha(light);
