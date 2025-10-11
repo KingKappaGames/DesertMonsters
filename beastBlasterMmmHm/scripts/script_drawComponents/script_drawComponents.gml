@@ -93,35 +93,16 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 						_limb[2][1] = _creatureId.weaponPosition[1] + gunHoldOffset[1] * dsin(_creatureId.gunHoldDirection); // y (duh)
 						_limb[2][2] = _creatureId.weaponPosition[2] + gunHoldOffset[2]; // height //TODO height of gun is relevant but maybe y can do this ? But then it's faked and will surely break at some point
 					}
-					
-					//if(limbType == limbTypes.leg) {
-					//	var _len = _limb[0][limbNode.len];
-						
-					//	_limb[0][0] = _surfOffX + _x;
-					//	_limb[0][1] = _surfOffY + _y;
-					//	_limb[0][2] = other.feetOffY;
-						
-					//	_limb[1][0] = _surfOffX + _x + dcos(other.currentDir) * _len * .75;
-					//	_limb[1][1] = _surfOffY + _y - dsin(other.currentDir) * _len * .75;
-					//	_limb[1][2] = other.feetOffY - _len * .75;
-						
-					//	_limb[2][0] = _surfOffX + _x + dcos(other.currentDir) * _len * 1.5;
-					//	_limb[2][1] = _surfOffY + _y - dsin(other.currentDir) * _len * 1.5;
-					//	_limb[2][2] = other.feetOffY;
-
-					//	//show_debug_message("hhhh");
-					//}
 				
 					var _limbDir = point_direction(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
 					if(limbType == limbTypes.leg) {
 						var _limbDist = point_distance_3d(_limb[0][0], _limb[0][1], _limb[0][2], _limb[2][0], _limb[2][1], _limb[2][2]); // no respect for non 3 length limbs..
 						var _limbLen = _limb[0][limbNode.len];
 						
-						
 						//draw_text(180, 100, "dist " + string(_limbDist));
 						//draw_text(180, 140, "len " + string(_limbLen));
 						
-						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin, 1);
+						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin, 1, _creatureId.directionFacing);
 						script_drawLimbSegIn3d(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY);
 					} else {
 						var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);

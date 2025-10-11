@@ -5,8 +5,7 @@ function script_drawLimbSegIn3d(limb, componentId, surfOffX, surfOffY, perspecti
 	var _segVisualLength = sprite_get_width(componentId.sprite[0]);//limb[0][3];
 	//var _spineX = component.spine.x;
 	var _spineY = componentId.spine.y;
-	//show_debug_message(limb);
-	//game_end();
+	
 	for(var _i = array_length(limb) - 1; _i > 0; _i--) { // from n - 1 to 1 (cut off 1 on either side)
 		var _startNode = limb[_i - 1];
 		var _endNode = limb[_i];
@@ -24,12 +23,12 @@ function script_drawLimbSegIn3d(limb, componentId, surfOffX, surfOffY, perspecti
 		
 		//var _visualCompression = _visualDist / itemLength; // dist is a multiplier not a pixel length... Oops (switched to non variable in the script call below, but maybe I change my mind later)
 		
-		//draw_sprite_ext(componentId.sprite[_i - 1], componentId.image[_i - 1], _startX - surfOffX, _startY - surfOffY, _visualDist / _segVisualLength, componentId.yscale[_i - 1], _visualDir, componentId.color[_i - 1], 1); // this only works with left to right sprites, add an offset if you want I guess? (the compressions won't work if it's diagonally sprited...) (There are now horizontal sprites "spr_game_...  !)
+		draw_sprite_ext(componentId.sprite[_i - 1], componentId.image[_i - 1], _startX - surfOffX, _startY - surfOffY, _visualDist / _segVisualLength, componentId.yscale[_i - 1], _visualDir, componentId.color[_i - 1], 1); // this only works with left to right sprites, add an offset if you want I guess? (the compressions won't work if it's diagonally sprited...) (There are now horizontal sprites "spr_game_...  !)
 		
-		var _xx = _startX - surfOffX;
-		var _yy = _startY - surfOffY;
-		draw_set_color([c_black, c_white, c_orange][_i]);
-		draw_line(_xx, _yy, _xx + dcos(_visualDir) * _visualDist, _yy - dsin(_visualDir) * _visualDist);
-		draw_set_color(c_white);
+		//var _xx = _startX - surfOffX;
+		//var _yy = _startY - surfOffY;
+		//draw_set_color([c_black, c_white, c_orange][_i]);
+		//draw_line(_xx, _yy, _xx + dcos(_visualDir) * _visualDist, _yy - dsin(_visualDir) * _visualDist);
+		//draw_set_color(c_white);
 	}
 }

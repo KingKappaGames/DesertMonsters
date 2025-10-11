@@ -1,7 +1,11 @@
-//if (live_call()) return live_result;
+if (live_call()) return live_result;
 
 if(keyboard_check(vk_comma)) {
-	game_set_speed(36, gamespeed_fps);
+	game_set_speed(60, gamespeed_fps);
+} else if(keyboard_check(vk_period)) {
+	game_set_speed(18, gamespeed_fps);
+} else if(keyboard_check(vk_fslash)) {
+	game_set_speed(9, gamespeed_fps);
 } else {
 	game_set_speed(144, gamespeed_fps); // the legs are moving too fast which allows for them to both jump ahead then have dead time before either needs to move again, that's what's causing the clumping
 }

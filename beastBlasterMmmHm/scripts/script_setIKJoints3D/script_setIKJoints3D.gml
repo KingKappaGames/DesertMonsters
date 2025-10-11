@@ -6,7 +6,7 @@
 ///@param facingCos The visual compression (as a -1-1 cos output) of the limb horizontally, if facing you for example any out will be irelavant ect
 ///@param facingSin The visual compression (as a -1-1 cos output) of the limb vertically
 ///@param joints Integer count! Not a list or positions, simply the amount of bends to use
-function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin, joints) { // which direction they bend for up or down angles
+function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin, joints, facingDirection) { // which direction they bend for up or down angles
 	live_auto_call
 
 	if(endDist > nodeArray[0][3] * 2) {
@@ -22,26 +22,31 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 		//_bendAngle *= -1;
 	//}
 	
-	var _jointOutDist = sqrt(max(sqr(segmentLength) - sqr(endDist / 2), 0)); // outwardness of joint (respecting 3d)
+	var _jointOutDist = sqrt(max(sqr(segmentLength) - sqr(endDist / 2), 0)); // outwardness of joint (in 3d)
 	
-	//msg(_jointOutDist, "joint out distance (horizontal out)", "set ik joints 3d script");
-	
-	var _originNode = nodeArray[0]; // "socket" node, aka shoulder, hip, wherever this limb starts
-	var _endNode = nodeArray[_joints + 1]; // end node, aka hand, foot, wherever it ends
-	
-	var _horizontalDist = point_distance(_originNode[0], _originNode[1], _endNode[0], _endNode[1]);
-	var _kneeHeightAngle = (darctan2(_originNode[2] - _endNode[2], _horizontalDist) * sign(_originNode[0] - _endNode[0])) - (90 * sign(_originNode[0] - _endNode[0])); // COOKED COKKED IDK MAN WHY DOES IK ALWAYS TURN INTO TINY ADJUSTMENTS TO PROJECTION ANGLES??????
-	
-	//show_debug_message(_kneeHeightAngle); // using distance means it clamps to one quadrant (dist is positive) instead of ranging full x to -x WHICH IS WRONG
-	
-	var _kneeSin = dsin(_kneeHeightAngle); // this value could be gotten from a flipped x/y of the leg without needing to trig convert it.. maybe
-	var _kneeCos = dcos(_kneeHeightAngle);
+	var _originNode = nodeArray[0]; // "socket"
+	var _endNode = nodeArray[_joints + 1]; // foot/hand/ect
 	
 	var _jointX = ((_originNode[0] + _endNode[0]) / 2);
-	var _jointY = ((_originNode[1] + _endNode[1]) / 2); // visual mid point simply between hip and foot
+	var _jointY = ((_originNode[1] + _endNode[1]) / 2); // visual mid point simply between hip and foot (or other limb types)
 	var _jointZ = ((_originNode[2] + _endNode[2]) / 2);
+	
+	var _endFromOriginX = _originNode[0] - _endNode[0]; // TURNS OUT THIS IS DOT PRODUCT STUFF
+	var _endFromOriginY = _originNode[1] - _endNode[1];
+	
+	var _footAheadDist = dot_product(_endFromOriginX, _endFromOriginY, facingCos, -facingSin);
+
+	var _kneeHeightAngle = (darctan2((_originNode[2] - _endNode[2]), _footAheadDist) - 90); 
+// first step is distance which is joint out dist, the second angle is direction facing, the third angle is vertical tilt which is a nightmare to get. How to convert tilt, direction, and out dist to points I'm not sure... 
+
+	var _kneeSin = dsin(_kneeHeightAngle); // this value could be gotten from a flipped x/y of the leg without needing to trig convert it.. maybe
+	var _kneeCos = dcos(_kneeHeightAngle);
 
 	nodeArray[1][0] = _jointX + facingCos * _jointOutDist * _kneeCos;
-	nodeArray[1][1] = _jointY + facingSin * _jointOutDist * _kneeCos; // final joint positions
+	nodeArray[1][1] = _jointY - facingSin * _jointOutDist * _kneeCos; // final joint positions
 	nodeArray[1][2] = _jointZ + _kneeSin * _jointOutDist;
+	
+	var _legIndex = array_get_index(global.players[0].legArray, nodeArray); // I should probably just pass this but who tf knows
+	
+	global.players[0].kneeAngles[_legIndex] = _kneeHeightAngle;
 }

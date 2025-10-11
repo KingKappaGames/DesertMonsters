@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.574694,
+  "duration":0.5229705,
   "name":"snd_highTone",
   "parent":{
     "name":"Sounds",
