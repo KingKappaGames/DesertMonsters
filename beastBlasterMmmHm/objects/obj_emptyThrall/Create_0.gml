@@ -1,7 +1,5 @@
 if (live_call()) return live_result;
 
-event_inherited();
-
 script_mdlCreateInit();
 
 #region player values
@@ -23,12 +21,6 @@ kneeAnglesDebug = [0, 0];
 
 surf = -1; // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO - done!
 
-#region camera
-camX = camera_get_view_x(view_camera[0]);
-camY = camera_get_view_y(view_camera[0]);
-
-camera_set_view_size(view_camera[playerIndex], 800, 450);
-#endregion
 
 #region new body stuff
 feetOffYBase = 74;

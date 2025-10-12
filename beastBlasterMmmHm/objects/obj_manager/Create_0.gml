@@ -92,6 +92,12 @@ getHoldSurface = function() { // IF SURFACE NOT WORKING CHECK ROOM DEPTH OF BACK
 #endregion
 
 #region particles (long as hell)
+global.debugPartRound = part_type_create();
+debugPartRound = global.debugPartRound;
+part_type_life(debugPartRound, 144, 144);
+part_type_shape(debugPartRound, pt_shape_disk);
+part_type_size(debugPartRound, .05, .05, 0, 0);
+
 global.particleSystem = part_system_create();
 sys = global.particleSystem;
 part_system_depth(global.particleSystem, -1001);
@@ -303,7 +309,7 @@ part_type_orientation(heliDust, 0, 360, 0, 0, 0);
 
 #region enum crap
 
-enum stepTimeEnum {
+enum E_step {
 	progress = 0,
 	startTime = 1,
 	endTime = 2,

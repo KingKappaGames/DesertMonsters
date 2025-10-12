@@ -34,13 +34,13 @@ if(alive == 1) {
 	for(var _legI = 0; _legI < _legCount; _legI++) { // check leg progresses to allow or disallow new steps in legs
 		var _stepTiming = stepTimings[_legI];
 		var _stepGoal = stepPositions[_legI][2];
-		var _stepDuration = _stepTiming[stepTimeEnum.endTime] - _stepTiming[stepTimeEnum.startTime];
-		_stepTiming[stepTimeEnum.progress] = clamp((current_time - _stepTiming[stepTimeEnum.startTime]) / (_stepDuration), 0, 1);
-		if(_stepTiming[stepTimeEnum.progress] < 1) { // still in the air, then add momentum to goal as well as body, this keeps feet aligned with object movement without having to predict some crazy future point
+		var _stepDuration = _stepTiming[E_step.endTime] - _stepTiming[E_step.startTime];
+		_stepTiming[E_step.progress] = clamp((current_time - _stepTiming[E_step.startTime]) / (_stepDuration), 0, 1);
+		if(_stepTiming[E_step.progress] < 1) { // still in the air, then add momentum to goal as well as body, this keeps feet aligned with object movement without having to predict some crazy future point
 			_stepGoal[0] += xChange;
 			_stepGoal[1] += yChange; // add height?
 		}
-		if(_allFeetOnGround && _stepTiming[stepTimeEnum.progress] != 1) {
+		if(_allFeetOnGround && _stepTiming[E_step.progress] != 1) {
 			
 			#region containing step goals within reasonable range AND bringing in step goals when slowing down
 			var _hip = hipPositions[_legI];
@@ -48,7 +48,7 @@ if(alive == 1) {
 			if(_stepDist > stepUpdateDist) {
 				var _distOverMultiply = stepUpdateDist / _stepDist;
 				
-				_stepTiming[stepTimeEnum.endTime] = lerp(_stepTiming[stepTimeEnum.endTime], _stepTiming[stepTimeEnum.startTime], 1 - _distOverMultiply); // reduce time for step along with distance, basically, drop your foot sooner than planned if changing course
+				_stepTiming[E_step.endTime] = lerp(_stepTiming[E_step.endTime], _stepTiming[E_step.startTime], 1 - _distOverMultiply); // reduce time for step along with distance, basically, drop your foot sooner than planned if changing course
 			
 				_stepGoal[0] = lerp(_hip[0], _stepGoal[0], _distOverMultiply);
 				_stepGoal[1] = lerp(_hip[1], _stepGoal[1], _distOverMultiply);
@@ -79,7 +79,7 @@ if(alive == 1) {
 		_stepPlacement[0] = _hip[0];
 		_stepPlacement[1] = _hip[1];
 		
-		var _progress = stepTimings[_legI][stepTimeEnum.progress];
+		var _progress = stepTimings[_legI][E_step.progress];
 		
 		var _stepHeight = dsin(180 * _progress) * legSegLen * .7;
 		
@@ -90,7 +90,7 @@ if(alive == 1) {
 		if(_allFeetOnGround && _progress == 1) { // there needs to be some way to deal with changing step lengths and repositions i think, for now just not stepping when already stepping works but has a bunch of issues
 			var _stepPlacementDist = point_distance(_stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1]); // add the height to the value but remove it when checking distance to step
 			if(_stepPlacementDist > stepUpdateDist) {
-				placeStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed);
+				script_mdlPlaceStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed);
 				_allFeetOnGround = false;
 			}
 		}

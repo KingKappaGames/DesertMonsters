@@ -28,9 +28,9 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 	var _x = 0, _y = 0, _heightY = 0;
 	var _ang = 0;
 	
-	var _surf = getSurf();
-	var _surfMidX = surface_get_width(_surf) / 2;
-	var _surfMidY = surface_get_height(_surf) / 2; 
+	var _mdlSurf = script_mdlGetSurf();
+	var _surfMidX = mdlSurfWidth / 2;
+	var _surfMidY = mdlSurfHeight / 2; 
 	var _surfOffX = _spineX - _surfMidX; 
 	var _surfOffY = _spineY - _surfMidY;
 	 

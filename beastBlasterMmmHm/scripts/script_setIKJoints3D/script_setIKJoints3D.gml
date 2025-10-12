@@ -46,7 +46,7 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 	nodeArray[1][1] = _jointY - facingSin * _jointOutDist * _kneeCos; // final joint positions
 	nodeArray[1][2] = _jointZ + _kneeSin * _jointOutDist;
 	
-	var _legIndex = array_get_index(global.players[0].legArray, nodeArray); // I should probably just pass this but who tf knows
+	//var _legIndex = array_get_index(global.players[0].legArray, nodeArray); // I should probably just pass this but who tf knows
 	
-	global.players[0].kneeAngles[_legIndex] = _kneeHeightAngle;
+	//global.players[0].kneeAnglesDebug[_legIndex] = _kneeHeightAngle;
 }
