@@ -6,9 +6,7 @@
 ///@param facingCos The visual compression (as a -1-1 cos output) of the limb horizontally, if facing you for example any out will be irelavant ect
 ///@param facingSin The visual compression (as a -1-1 cos output) of the limb vertically
 ///@param joints Integer count! Not a list or positions, simply the amount of bends to use
-function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin, joints, facingDirection) { // which direction they bend for up or down angles
-	live_auto_call
-
+function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin, joints) { // which direction they bend for up or down angles
 	if(endDist > nodeArray[0][3] * 2) {
 		endDist = nodeArray[0][3] * 2; // [0][3] is length for this node of the limb, ergo check it as a max also this is stupid //TODO fix this nonsense with mismatching distances vs the draw and step
 	}

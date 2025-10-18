@@ -1,4 +1,4 @@
-////if (live_call()) return live_result;
+if (live_call()) return live_result;
 
 global.particleSystemManager = id;
 
@@ -14,7 +14,11 @@ previousCamY = camera_get_view_y(view_camera[0]);
 previousEdgeY = previousCamY - sysUpdateRange;
 
 currentSysEdge = 0;
-sysCollectionMoveSign = 0;
+
+drawPart = part_type_create();
+part_type_size(drawPart, 40, 40, 0, 0);
+part_type_color1(drawPart, c_green);
+part_type_life(drawPart, 99999999, 99999999);
 
 global.sysBottom = part_system_create();
 part_system_depth(global.sysBottom, 1000); // bottom, where ever that is V  (not part of the moving system! But often times you will want a particle layer that goes over everything)
@@ -38,7 +42,7 @@ repeat(sysCount) {
 ///@param {BOOL} useCameraAsArea The normal use case for this system is wrapping depth around the camera space plus margins, if you need something else then turn this off (but then what? You'll have to custom make the else case I guess))
 ///@param {REAL} forceSystemCount The quantity of systems to use (will update the collection to have this many systems)
 ///@param {REAL} camIndex The index number for the camera to calculate positions with (default 0)
-setSpacing = function(borderWidth = 20, systemSpacing = 1, useCameraAsArea = true, forceSystemCount = -1, camIndex = 0) {	
+setSpacing = function(borderWidth = 20, systemSpacing = 1, useCameraAsArea = true, forceSystemCount = -1, camIndex = 0) {
 	sysUpdateRange = borderWidth; // the margins above and below the screen (only really useful for preventing movement from showing off the screen (which isn't even a problem BUT the particles created when doing so will be dropped to the nearest depth.. And you'll notice that when you go far enough to see them in a position they shouldn't be (clumped on the edge vs placed along the range they were intended to have))
 	sysSpacing = systemSpacing;
 	
@@ -78,28 +82,72 @@ setSpacing = function(borderWidth = 20, systemSpacing = 1, useCameraAsArea = tru
 ///@param {BOOL} useCamera This uses the current camera to place the collection arounds
 ///@param {REAL} forcePosition This passes in a position instead of the camera, if for some reason you want to arrange the collection around y = 1000 when the camera is somewhere else
 setCollectionPosition = function(useCamera = true, forcePosition = undefined) {
+	// on spawn camera is moved after this and so this updates to wrong position
 	if(useCamera) { // place the systems around the camera with the established margins
-		previousCamY = camera_get_view_y(view_camera[0]);
-		previousEdgeY = previousCamY - sysUpdateRange;
+		var _holdCamY = previousCamY;
+		var _holdEdge = currentSysEdge;
+		
+		previousCamY = (camera_get_view_y(view_camera[0]) div sysSpacing) * sysSpacing;
+		//previousEdgeY = previousCamY - sysUpdateRange;
+		
+		var _yChange = previousCamY - _holdCamY;
 
 		var _sysSet = sysCollection;
 		var _startY = (((is_undefined(forcePosition) ? previousCamY : forcePosition) - sysUpdateRange) div sysSpacing) * sysSpacing; // rounding to a number is basically div number * number to create a 1 rounded factor of the desired round. It works.
 		var _depthOfInitial = -_startY; // depth origin is negative up so adding it outside the negative means adding -200 for up 200 will decrease the depth of this position by 200 which is correct (i think)
-		currentSysEdge = 0;
-		var _sysAddI = 0;//(currentSysEdge - (_startY - previousCamY) div sysSpacing) % sysCount; // offset current edge (the position in the cycle) by the changed position (this is the starting position that will be looped during the setting loops)
-		//if(_sysAddI < 0) {
-		//	_sysAddI = sysCount + _sysAddI;
-		//}
+		currentSysEdge = (currentSysEdge + (_yChange div sysSpacing)) % sysCount;
+		if(currentSysEdge < 0) {
+			currentSysEdge += sysCount;
+		}
+		var _sysAddI = currentSysEdge;
+	
+		var _depthSet = _depthOfInitial;
 		repeat(sysCount) { // for every system
-			part_system_depth(_sysSet[_sysAddI], _depthOfInitial - _sysAddI * sysSpacing); // down screen / positive y / less depth (negative)
-			particleLayerDepthArray[_sysAddI] = _depthOfInitial - _sysAddI * sysSpacing;
+			msg(_sysAddI);
+			part_system_depth(_sysSet[_sysAddI], _depthSet); // down screen / positive y / less depth (negative)
+			particleLayerDepthArray[_sysAddI] = _depthSet;
 			_sysAddI += 1;
-			//if(_sysAddI >= sysCount) { // loop position if over max while cycling
-			//	_sysAddI = 0;
-			//}
+			_depthSet -= sysSpacing;
+			if(_sysAddI >= sysCount) { // loop position if over max while cycling
+				_sysAddI = 0;
+			}
 		}
 	}
 }
+
+moveCollection = function() { // camY here should be switched with goal screen top and you can move it as you wish, though, perhaps that would never happen anyway
+	var _camY = (camera_get_view_y(view_camera[0]) div sysSpacing) * sysSpacing;
+	var _depthChange = abs(previousCamY - _camY)
+	
+	if(_depthChange >= (sysUpdateRange div sysSpacing) * sysSpacing / 2) { // margins are updated when they reach half the size, this is arbitrary
+		
+		var _depthAdjustOverflow = 0;
+		if(_depthChange >= sysSpacing * sysCount) { // wrapped more than a whole screen at once just jump to the set position functions instead
+			setCollectionPosition();
+			return;
+		}
+		
+		var _stepSign = sign(_camY - previousCamY); // which way to iterate the list updating depths
+		var _isStepForward = _stepSign == 1 ? 1 : 0;
+		
+		var _updateDepth = particleLayerDepthArray[currentSysEdge - _isStepForward]; // round the depth and offset by origin (also the first layer is 0 so -1 to the count when multiplying)
+		
+		var _updatePos = currentSysEdge - _isStepForward;
+		repeat((_depthChange div sysSpacing) % sysCount) {
+			_updateDepth -= _stepSign * sysSpacing;
+			_updatePos = (_updatePos + _stepSign + sysCount) % sysCount;
+			
+			part_system_depth(sysCollection[_updatePos], _updateDepth);
+			particleLayerDepthArray[_updatePos] = _updateDepth;
+		}
+		
+		previousCamY = _camY;
+		previousEdgeY = previousCamY - sysUpdateRange;
+		currentSysEdge = _updatePos + _isStepForward;
+	}
+}
+
+
 
 ///@param drawSystems This toggles whether the paused systems should keep drawing   (not used without draw systems toggle!)
 pauseAll = function(/*drawSystems = false*/) {
@@ -126,10 +174,6 @@ unpauseAll = function(forceDrawState = true) {
 	}
 }
 
-part = global.sandBurstDust;
-
 mouseLayer = 0;
 
 particleLayerDepthArray = array_create(sysCount, 0);
-
-setSpacing(300, 5, true);

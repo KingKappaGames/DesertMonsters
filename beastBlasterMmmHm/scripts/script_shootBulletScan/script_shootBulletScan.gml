@@ -17,6 +17,9 @@ function script_shootBulletScan(shotX, shotY, shotDir, shotGoalX, shotGoalY, bul
 	_bullet.bulletDamage *= damageMult;
 	_bullet.tracer = tracerSet;
 	
+	xChange -= dcos(shotDir) * .15;
+	yChange += dsin(shotDir) * .15;
+	
 	#region function passing
 	//uh huh
 	#endregion

@@ -67,7 +67,7 @@ function script_mdlStep() {
 	var _dirChange = (sqrt(1 + (abs(angle_difference(currentDir, previousDir)) / 22.5)) - 1) * 1.1;
 	
 	var _prevOffY = feetOffY;
-	feetOffY = lerp(feetOffY, feetOffYBase * lerp(1, .85, power(currentSpeed * .75, 1.5)), .02) - min(sqrt((_speedChange + _dirChange) * 7) * 1.2, feetOffYBase * .2);
+	feetOffY = lerp(feetOffY, feetOffYBase * lerp(1, .89, power(currentSpeed * .75, 1.5)), .025) - min(sqrt((_speedChange + _dirChange) * 5) * 1.2, feetOffYBase * .2);
 	y -= feetOffY - _prevOffY;
 	feetY = y + feetOffY * .7;
 	spineMain.x = x;
@@ -87,8 +87,6 @@ function script_mdlStep() {
 	//animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (basic overall positioning, then calculating step positions and goals and moving the legs, then calculating the animations based on the positions)
 	
 	hipDir = point_direction(0, 0, xChange, yChange);
-	var _cosFacing = dcos(hipDir);
-	var _sinFacing = -dsin(hipDir);
 	
 	var _legCount = array_length(stepTimings); //TODO proxy for leg count, should always line up  (get all limbs and iterate with a check for (if leg) and use that index
 	
@@ -258,12 +256,12 @@ function script_mdlDraw() {
 	
 	#region bunch of things for general positioning, needs to be established first
 	//var _dirMoving = point_direction(x, y, mouse_x, mouse_y);
-	var _dirMoving = point_direction(0, 0, xChange, yChange);
+	var _dirMoving = mouse_check_button(mb_right) ? point_direction(0, 0, xChange, yChange) : point_direction(x, y, mouse_x, mouse_y);
 	directionFacing = _dirMoving;
 	
 	var _viewCompress = .5 + abs(dsin(directionFacing) / 2);
 	var _speed = point_distance(0, 0, xChange, yChange);
-	var _jostle = 0;//(dsin(legRotation * .5 * (1.5 + sqrt(_speed) / 3) - 90) + .4) * sqrt(_speed) * 3;
+	var _jostle = (dsin((stepTimings[0][E_step.progress] + stepTimings[1][E_step.progress]) * 180 * (1.5 + sqrt(_speed) / 3) - 90) + .4) * sqrt(_speed) * 1.4;
 	#endregion
 	
 	#region draw gun

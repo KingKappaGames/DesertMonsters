@@ -362,6 +362,8 @@ deactivateThings = function() {
 	instance_activate_object(obj_camera);
 	instance_activate_object(obj_particleLayerManager);
 	instance_activate_object(obj_generator);
+	
+	instance_activate_object(obj_followingDebugBlock);
 }
 
 switchRoomFake = function(roomDestination) {
@@ -371,9 +373,9 @@ switchRoomFake = function(roomDestination) {
 
 //global.player = instance_create_layer(x, y, "Instances", obj_playerShip);
 
-//var _off = -200;
-//repeat(20) {
-//	var _yuh0 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
-//	_yuh0.yOffset = _off;
-//	_off += 20;
+//var _off = -500;
+//repeat(40) {
+	//var _yuh0 = instance_create_layer(x, y, "Instances", obj_followingDebugBlock);
+	//_yuh0.yOffset = _off;
+	//_off += 25;
 //}

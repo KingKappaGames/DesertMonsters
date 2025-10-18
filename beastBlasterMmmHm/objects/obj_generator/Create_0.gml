@@ -6,7 +6,7 @@ global.generator = id;
 
 seed = round(random_range(1000000,10000000));
 
-#macro blockSize 24 // the size of the color blocks on screen in pixels
+#macro blockSize 12 // the size of the color blocks on screen in pixels
 #macro valueRange 10000 // the breadth of the features in the map, scale
 #macro bufferBlockCount 6
 
