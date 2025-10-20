@@ -1,7 +1,7 @@
 // MDL (model) scripts, prefeixed with script_mdl (local scope to mdl instances)
 
 function script_mdlGetSurf() {
-	if(!surface_exists(surf)) {
+	if(!surface_exists(mdlSurf)) {
 		mdlSurf = surface_create(mdlSurfWidth, mdlSurfHeight); // recreate if lost (no need to buffer store this since it's updating every frame anyway, (i think? Perhaps certain effects cause problems and need a more direct solution, doubt it though)
 	}
 	

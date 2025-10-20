@@ -19,6 +19,22 @@ yChange = 0;
 
 kneeAnglesDebug = [0, 0];
 
+sortFunc = function(elementCurrent, elementNext, originalOrder) { // sort drawing based on visual height
+	var _sortDif = (-dsin(directionFacing + elementCurrent.rotationRelative) * elementCurrent.distance) - (-dsin(directionFacing + elementNext.rotationRelative) * elementNext.distance) * 1;
+		
+	if(abs(_sortDif) > 1) {
+		return _sortDif;
+	}
+		
+	return elementCurrent.index - elementNext.index;
+		
+	//if(is_array(elementCurrent[0])) {
+	//	return elementCurrent[11][2][1] - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // the 11-2-1 is the y value of the 3rd node of the limb ( [11] )  ( limb component! )
+	//} else {
+	//	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // normal component
+	//}  // (sorting to the end the limb, instead of start (looks bad!)
+}
+
 #endregion
 
 surf = -1; // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO - done!

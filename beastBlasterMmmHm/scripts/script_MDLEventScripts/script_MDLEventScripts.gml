@@ -1,6 +1,7 @@
 function script_mdlCreateInit() {
 	bodySprite = spr_bodyVultureCoat;
 	bodyComponents = [];
+	bodyComponentNextIndex = 0;
 	
 	directionFacing = 0;
 	
@@ -291,15 +292,7 @@ function script_mdlDraw() {
 	#endregion
 	
 	
-	array_sort(bodyComponents, function(elementCurrent, elementNext, originalOrder) // sort drawing based on visual height
-	{             
-		return (-dsin(directionFacing + elementCurrent.rotationRelative) * elementCurrent.distance) - (-dsin(directionFacing + elementNext.rotationRelative) * elementNext.distance);
-		//if(is_array(elementCurrent[0])) {
-		//	return elementCurrent[11][2][1] - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // the 11-2-1 is the y value of the 3rd node of the limb ( [11] )  ( limb component! )
-		//} else {
-		//	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // normal component
-		//}  // (sorting to the end the limb, instead of start (looks bad!)
-	});
+	array_sort(bodyComponents, sortFunc);
 	
 	var _counter = 0; 
 	//draw the components in front
@@ -307,7 +300,7 @@ function script_mdlDraw() {
 	
 	
 	//draw the rest of the body components in front of body
-	script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, false);
+	_counter += script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, false);
 	
 	if(!gunDrawBehind) {
 		script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun behind if supposed to be behind

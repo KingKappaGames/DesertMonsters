@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"script_MDLBodyScripts",
+  "%Name":"script_MDLScripts",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"script_MDLBodyScripts",
+  "name":"script_MDLScripts",
   "parent":{
     "name":"Scripts",
     "path":"folders/Scripts.yy",

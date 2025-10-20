@@ -37,10 +37,11 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 	var _creatureId = id; // whatever calls this will get stored, ez 
 	var _directionSin = dsin(directionFacing);
 	
+	var _break = false;
 	for(var _i = startComponentI; _i < _componentCount; _i++) {
 		with(bodyComponents[_i]) { // with struct for component (variable scoping)
 			_ang = (_creatureId.directionFacing + rotationRelative) % 360;
-			if(!frontDraw || (_ang > 3 && _ang < 177)) { // so maybe I shouldn't but this puts them further back than flat, a slightly behind thing by 3 degrees will go in front, this is maybe to give them a bit of covering thickness? But I do kind of hate the canabalistic effect of forcing up here.
+			if(!frontDraw || (_ang > 0 && _ang < 180)) { // so maybe I shouldn't but this puts them further back than flat, a slightly behind thing by 3 degrees will go in front, this is maybe to give them a bit of covering thickness? But I do kind of hate the canabalistic effect of forcing up here.
 				
 				var _netAngle = moveDir + rotationRelative;
 				var _compress = 1;
@@ -102,7 +103,7 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 						//draw_text(180, 100, "dist " + string(_limbDist));
 						//draw_text(180, 140, "len " + string(_limbLen));
 						
-						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin, 1, _creatureId.directionFacing);
+						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin, 1, _creatureId.directionFacing, 1);
 						script_drawLimbSegIn3d(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY);
 					} else {
 						var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
@@ -113,9 +114,12 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 				}
 				_counter++;
 			} else {
+				_break = true;
 				break;
 			}
 		}
+		
+		if(_break) { break; } // can't bail two loops at once?
 	}
 	
 	return _counter; // just return to add
