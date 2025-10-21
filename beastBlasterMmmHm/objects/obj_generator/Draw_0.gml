@@ -61,8 +61,8 @@ gpu_set_texrepeat_ext(register, true);
 
 shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortTextureDimensions"), _distortionWidth, _distortionHeight);
 
-shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortScale"), 25.0);
-shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortAmount"), 120.0);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortScale"), 1.50);
+shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortAmount"), 38.0);
 shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_DistortOffset"), 0.0, 0.0);
 
 //Sand texture stuff

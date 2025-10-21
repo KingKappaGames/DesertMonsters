@@ -44,3 +44,19 @@ function script_mdlSetStepTimings(legIndex, duration, speedRef) {
 	
 	//msg("step timing sets: " + string(duration));
 }
+
+function script_mdlSortComponents(componentCurrent, componentNext) {
+	var _sortDif = sign(-dsin(directionFacing + componentCurrent.rotationRelative) * componentCurrent.distance) - (-dsin(directionFacing + componentNext.rotationRelative) * componentNext.distance);
+		
+	if(_sortDif != 0) {
+		return _sortDif;
+	}
+		
+	return componentCurrent.index - componentNext.index;
+		
+	//if(is_array(elementCurrent[0])) {
+	//	return elementCurrent[11][2][1] - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // the 11-2-1 is the y value of the 3rd node of the limb ( [11] )  ( limb component! )
+	//} else {
+	//	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // normal component
+	//}  // (sorting to the end the limb, instead of start (looks bad!)
+}

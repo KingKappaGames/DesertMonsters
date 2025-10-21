@@ -257,7 +257,7 @@ function script_mdlDraw() {
 	
 	#region bunch of things for general positioning, needs to be established first
 	//var _dirMoving = point_direction(x, y, mouse_x, mouse_y);
-	var _dirMoving = mouse_check_button(mb_right) ? point_direction(0, 0, xChange, yChange) : point_direction(x, y, mouse_x, mouse_y);
+	var _dirMoving = mouse_check_button(mb_right) ? point_direction(x, y, mouse_x, mouse_y) : point_direction(0, 0, xChange, yChange);
 	directionFacing = _dirMoving;
 	
 	var _viewCompress = .5 + abs(dsin(directionFacing) / 2);
@@ -292,7 +292,7 @@ function script_mdlDraw() {
 	#endregion
 	
 	
-	array_sort(bodyComponents, sortFunc);
+	array_sort(bodyComponents, script_mdlSortComponents);
 	
 	var _counter = 0; 
 	//draw the components in front

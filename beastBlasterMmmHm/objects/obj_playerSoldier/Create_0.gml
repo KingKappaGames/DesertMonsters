@@ -19,22 +19,6 @@ yChange = 0;
 
 kneeAnglesDebug = [0, 0];
 
-sortFunc = function(elementCurrent, elementNext, originalOrder) { // sort drawing based on visual height
-	var _sortDif = (-dsin(directionFacing + elementCurrent.rotationRelative) * elementCurrent.distance) - (-dsin(directionFacing + elementNext.rotationRelative) * elementNext.distance) * 1;
-		
-	if(abs(_sortDif) > 1) {
-		return _sortDif;
-	}
-		
-	return elementCurrent.index - elementNext.index;
-		
-	//if(is_array(elementCurrent[0])) {
-	//	return elementCurrent[11][2][1] - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // the 11-2-1 is the y value of the 3rd node of the limb ( [11] )  ( limb component! )
-	//} else {
-	//	return (-dsin(directionFacing + elementCurrent[2]) * elementCurrent[4]) - (-dsin(directionFacing + elementNext[2]) * elementNext[4]); // normal component
-	//}  // (sorting to the end the limb, instead of start (looks bad!)
-}
-
 #endregion
 
 surf = -1; // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO - done!
@@ -217,10 +201,6 @@ weaponControls = function() {
 						ammoCurrent--;
 						shotTimer = 0;
 					}
-				}
-				if(input_check_released("rightClick", playerIndex)) {
-					script_shootBullet(gunTipPosition[0], gunTipPosition[1], shotSpeed / 2, _aimDir, obj_basicBullet, gunTipPosition[2], shotSpeed / 2 * (gunTipPosition[2] / point_distance(gunTipPosition[0], gunTipPosition[1], input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.12);
-					shotTimer = 0;
 				}
 				if(input_check_released("middleClick", playerIndex)) {
 					script_shootBullet(gunTipPosition[0], gunTipPosition[1], shotSpeed / 4, _aimDir, obj_missile, gunTipPosition[2], shotSpeed / 4 * (gunTipPosition[2] / point_distance(gunTipPosition[0], gunTipPosition[1], input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.30);

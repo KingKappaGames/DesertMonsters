@@ -39,7 +39,8 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 					if(_rand > .999) {
 						instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
 					} else if(_rand < _heightVal) {
-						repeat(2) {
+						//repeat(2) {
+						if(irandom(2) == 0) {
 							var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
 		
 							_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
@@ -73,8 +74,8 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 					
 						if(_rand > .999) {
 							instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
-						} else if(_rand < _heightVal) {
-							//repeat(2) {
+						} else if(_rand < _heightVal) { // .5 to half the spawns
+							if(irandom(2) == 0) {
 								var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
 		
 								_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
@@ -87,7 +88,7 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 								} else {
 									_grass.image_blend = #FFC6C3;
 								}
-							//}
+							}
 						}
 					}
 			    }
@@ -109,7 +110,7 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 					if(_rand > .999) {
 						instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
 					} else if(_rand < sqr(_heightVal)) {
-						//repeat(2) {
+						if(irandom(2) == 0) {
 							var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
 		
 							_grass.height = random_range(_heightVal / 2 + .1, _heightVal) * sprite_get_height(_grass.sprite_index);
@@ -122,7 +123,7 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 							} else {
 								_grass.image_blend = #FFC6C3;
 							}
-						//}
+						}
 					}
 				}
 		    }
