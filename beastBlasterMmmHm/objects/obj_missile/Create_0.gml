@@ -26,7 +26,6 @@ hit = function() {
 	part_particles_create(sys, x, y, debris, bulletSize * 4 /* * bulletDamage*/);
 	
 	#region debris surface stuff..?
-	script_drawDebris(spr_sandSprayDecalCrater, 0, x, y, 2, 2, irandom(360), c_white, .4);
 	script_drawDebris(spr_wideCrater, 0, x, y, .4, .55, 0, c_white, .5);
 	#endregion
 	

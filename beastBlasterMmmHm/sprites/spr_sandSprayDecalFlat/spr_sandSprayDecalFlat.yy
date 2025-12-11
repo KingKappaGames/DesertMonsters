@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"spr_sandSprayDecalFlat",
   "bboxMode":0,
   "bbox_bottom":62,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"4eb268bf-aeb1-4f78-a515-b19d82b60878","name":"4eb268bf-aeb1-4f78-a515-b19d82b60878","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"4eb268bf-aeb1-4f78-a515-b19d82b60878","name":"4eb268bf-aeb1-4f78-a515-b19d82b60878","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

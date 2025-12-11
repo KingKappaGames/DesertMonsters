@@ -25,7 +25,6 @@ hit = function() {
 	part_particles_create(sys, x, y, shimmer, bulletSize * 9 /* * bulletDamage*/);
 	part_particles_create(sys, x, y, debris, bulletSize * 3 /* * bulletDamage*/);
 	
-	script_drawDebris(spr_sandSprayDecalCrater, 0, x, y, 1, 1, irandom(360), c_white, .4);
 	script_drawDebris(spr_crater, 0, x, y, .5, .6, 0, c_white, .8) 
 	
 	hitIds = ds_list_create();

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"spr_legParts",
   "bboxMode":0,
   "bbox_bottom":6,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"09e784a1-b0a0-49ce-81cd-26e411d78080","name":"09e784a1-b0a0-49ce-81cd-26e411d78080","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"28c5d6c4-c09c-4ccd-a593-8802b4c168a8","name":"28c5d6c4-c09c-4ccd-a593-8802b4c168a8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"09e784a1-b0a0-49ce-81cd-26e411d78080","name":"09e784a1-b0a0-49ce-81cd-26e411d78080","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"28c5d6c4-c09c-4ccd-a593-8802b4c168a8","name":"28c5d6c4-c09c-4ccd-a593-8802b4c168a8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

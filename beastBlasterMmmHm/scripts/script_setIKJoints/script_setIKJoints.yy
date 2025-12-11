@@ -6,7 +6,7 @@
   "name":"script_setIKJoints",
   "parent":{
     "name":"script_group_tormentJustRemake",
-    "path":"folders/Scripts/script_group_tormentJustRemake.yy",
+    "path":"folders/MDL bodies/script_group_tormentJustRemake.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

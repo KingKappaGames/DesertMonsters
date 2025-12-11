@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"spr_bombingPlane",
   "bboxMode":0,
   "bbox_bottom":61,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"23a34c2d-ec2a-41b0-ab66-0ccd9430ead7","name":"23a34c2d-ec2a-41b0-ab66-0ccd9430ead7","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"23a34c2d-ec2a-41b0-ab66-0ccd9430ead7","name":"23a34c2d-ec2a-41b0-ab66-0ccd9430ead7","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

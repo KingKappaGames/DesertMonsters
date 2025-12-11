@@ -1,5 +1,5 @@
 {
-  "$GMNotes":"",
+  "$GMNotes":"v1",
   "%Name":"note_effectsAndMethods",
   "name":"note_effectsAndMethods",
   "parent":{

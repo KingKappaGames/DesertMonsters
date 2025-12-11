@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"spr_bodyVultureCoat",
   "bboxMode":0,
   "bbox_bottom":48,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"743f177a-a96f-4d25-888d-6ea8e8a47fd5","name":"743f177a-a96f-4d25-888d-6ea8e8a47fd5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"743f177a-a96f-4d25-888d-6ea8e8a47fd5","name":"743f177a-a96f-4d25-888d-6ea8e8a47fd5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

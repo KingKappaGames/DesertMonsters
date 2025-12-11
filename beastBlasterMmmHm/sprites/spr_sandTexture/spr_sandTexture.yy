@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"spr_sandTexture",
   "bboxMode":0,
   "bbox_bottom":691,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":true,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"8f0e5271-3020-41da-8911-fdf5b2603d88","name":"8f0e5271-3020-41da-8911-fdf5b2603d88","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8f0e5271-3020-41da-8911-fdf5b2603d88","name":"8f0e5271-3020-41da-8911-fdf5b2603d88","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

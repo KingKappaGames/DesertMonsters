@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"script_calculate3dEndPoints",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/Scripts.yy",
+    "name":"MDL bodies",
+    "path":"folders/MDL bodies.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
