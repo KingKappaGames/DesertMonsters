@@ -11,6 +11,7 @@
   "defaultScriptType":1,
   "Folders":[
     {"$GMFolder":"","%Name":"MDL bodies","folderPath":"folders/MDL bodies.yy","name":"MDL bodies","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"script_group_tormentJustRemake","folderPath":"folders/MDL bodies/script_group_tormentJustRemake.yy","name":"script_group_tormentJustRemake","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Notes","folderPath":"folders/Notes.yy","name":"Notes","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Objects","folderPath":"folders/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"obj_group_enemies","folderPath":"folders/Objects/obj_group_enemies.yy","name":"obj_group_enemies","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -24,7 +25,6 @@
     {"$GMFolder":"","%Name":"Scripts","folderPath":"folders/Scripts.yy","name":"Scripts","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"bulletsAndWeapons","folderPath":"folders/Scripts/bulletsAndWeapons.yy","name":"bulletsAndWeapons","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"effectStuff","folderPath":"folders/Scripts/effectStuff.yy","name":"effectStuff","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"script_group_tormentJustRemake","folderPath":"folders/MDL bodies/script_group_tormentJustRemake.yy","name":"script_group_tormentJustRemake","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"utils","folderPath":"folders/Scripts/utils.yy","name":"utils","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Sounds","folderPath":"folders/Sounds.yy","name":"Sounds","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"soundsOfWeapons","folderPath":"folders/Sounds/soundsOfWeapons.yy","name":"soundsOfWeapons","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -602,6 +602,7 @@
     {"id":{"name":"spr_pistol","path":"sprites/spr_pistol/spr_pistol.yy",},},
     {"id":{"name":"spr_reeds","path":"sprites/spr_reeds/spr_reeds.yy",},},
     {"id":{"name":"spr_robeParts","path":"sprites/spr_robeParts/spr_robeParts.yy",},},
+    {"id":{"name":"spr_robePartsArchive","path":"sprites/spr_robePartsArchive/spr_robePartsArchive.yy",},},
     {"id":{"name":"spr_rpg","path":"sprites/spr_rpg/spr_rpg.yy",},},
     {"id":{"name":"spr_ruins","path":"sprites/spr_ruins/spr_ruins.yy",},},
     {"id":{"name":"spr_sandBG","path":"sprites/spr_sandBG/spr_sandBG.yy",},},

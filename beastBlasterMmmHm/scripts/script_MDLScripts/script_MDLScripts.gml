@@ -28,7 +28,7 @@ function script_mdlPlaceStepGoal(legIndex, currentX, currentY, goalX, goalY, mov
 	var _stepAhead = point_distance(_leg[0][0], _leg[0][1], _goalPos[0], _goalPos[1]);
 	//msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
-	var _stepTime = (_stepAhead + 3) / (moveSpeed + .05) * (game_get_speed(gamespeed_microseconds) / 1000) * 2; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
+	var _stepTime = (_stepAhead + 3) / (moveSpeed + .1) * (game_get_speed(gamespeed_microseconds) / 1000) * 2; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
 	
 	//msg("stepDuration: " + string(_stepTime));
 	
@@ -46,9 +46,9 @@ function script_mdlSetStepTimings(legIndex, duration, speedRef) {
 }
 
 function script_mdlSortComponents(componentCurrent, componentNext) {
-	var _sortDif = sign(-dsin(directionFacing + componentCurrent.rotationRelative) * componentCurrent.distance) - (-dsin(directionFacing + componentNext.rotationRelative) * componentNext.distance);
+	var _sortDif = (-dsin(directionFacing + componentCurrent.rotationRelative) * componentCurrent.distance) - (-dsin(directionFacing + componentNext.rotationRelative) * componentNext.distance) * 1;
 		
-	if(_sortDif != 0) {
+	if(abs(_sortDif) > 1) {
 		return _sortDif;
 	}
 		
