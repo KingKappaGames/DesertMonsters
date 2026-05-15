@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"assert",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"assert",
+  "parent":{
+    "name":"GMD3D11",
+    "path":"folders/utils/GMD3D11.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

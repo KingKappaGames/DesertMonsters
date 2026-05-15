@@ -26,8 +26,10 @@ hit = function() {
 	part_particles_create(sys, x, y, shimmer, bulletSize * 10 /* * bulletDamage*/);
 	part_particles_create(sys, x, y, debris, bulletSize * 3 /* * bulletDamage*/);
 	
-	script_drawDebris(spr_sandSprayDecalCrater, 0, x, y, 2, 2, irandom(360), c_white, .4) 
+	script_drawDebris(spr_sandSprayDecalCrater, 0, x, y, 2, 2, irandom(360), c_white, .4);
 	
+	obj_fog.drawRemoveFromFogSurf(1, x, y, spr_circleGradientHard, 0, .2, random(360), c_white);
+		
 	hitIds = ds_list_create();
 	#region collisions
 	

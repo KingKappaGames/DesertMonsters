@@ -4,6 +4,8 @@ if(updatePerlin) {
 
 	surface_set_target(getSurf()); //TODO draw the old perlin surface offset to the grid position then redraw the gaps like the generator but for drawing!!
 //old redrawing method 2.2 ms of lag for drawing the draw event (this event) in vm
+	gpu_set_ztestenable(false);
+	
 	for(var i = 0; i < width; i++) {
 	    for(var j = 0; j < height; j++) {
 			_height = grid[# i, j];
@@ -30,6 +32,8 @@ if(updatePerlin) {
 			}
 	    }
 	}
+	
+	gpu_set_ztestenable(true);
 	
 	surface_reset_target();
 
@@ -76,9 +80,11 @@ shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_sandText
 shader_set_uniform_f(shader_get_uniform(shd_desertDistortAndTexture, "g_sandTextureOpacity"), .32);
 #endregion ###############################################################################################################################
 
-
+gpu_set_ztestenable(false);
 
 draw_surface(getSurf(), updateLastX, updateLastY); // round draw positions to grid spaces
+
+gpu_set_ztestenable(true);
 
 gpu_set_texrepeat_ext(register, false);
 gpu_set_texrepeat_ext(_sandRegister, false); 

@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"shd_alphaToWhite",
+  "name":"shd_alphaToWhite",
+  "parent":{
+    "name":"beastBlasterMmmHm",
+    "path":"beastBlasterMmmHm.yyp",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

@@ -1,8 +1,8 @@
 //if (live_call()) return live_result;
 
-if(mouse_check_button_released(mb_middle)) {
-	global.players[0].y += 500;//choose(irandom(300), irandom(2000));
-}
+//if(mouse_check_button_released(mb_middle)) {
+	//global.players[0].y += 500;//choose(irandom(300), irandom(2000));
+//}
 
 if(keyboard_check_released(ord("R"))) {
 	global.players[0].y = 1000;

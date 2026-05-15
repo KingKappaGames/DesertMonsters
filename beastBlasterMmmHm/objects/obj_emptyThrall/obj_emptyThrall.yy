@@ -16,7 +16,10 @@
     "name":"obj_group_enemies",
     "path":"folders/Objects/obj_group_enemies.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_enemy",
+    "path":"objects/obj_enemy/obj_enemy.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -34,7 +37,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"spr_enemyHitBox",
+    "path":"sprites/spr_enemyHitBox/spr_enemyHitBox.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

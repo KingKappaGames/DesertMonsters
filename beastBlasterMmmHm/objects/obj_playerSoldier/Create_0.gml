@@ -146,7 +146,7 @@ setTurret = function(type) {
 
 		shotTimeLimit = 35; // frames per fire
 		reloadingDelay = 320;
-		ammoMax = 1;
+		ammoMax = 10;
 		gunAutomatic = 0;
 		
 		gunSprite = spr_rpg; //visual bits
@@ -213,6 +213,9 @@ weaponControls = function() {
 				} // , playerIndex
 			}
 		}
+		
+		aimingDownSights = input_check("rightClick", playerIndex);
+
 	}
 }
 #endregion
@@ -222,7 +225,7 @@ legSegLen = 32;
 #endregion
 
 #region NEW LEG STUFF, set up component functions and arrays for reference
-stepUpdateDistBase = 36;
+stepUpdateDistBase = 35;
 stepUpdateDist = stepUpdateDistBase;
 
 legArray = [  [[x, y, 0, legSegLen], [x, y, 0, legSegLen], [x, y, 0, legSegLen]], [[x, y, 0, legSegLen], [x, y, 0, legSegLen], [x, y, 0, legSegLen]]]; // 2 LEGS for now in nested structure, legs, nodes, coords (+ length, width) in that nesting
@@ -230,6 +233,8 @@ stepPositionsInitial = [ [x, y, 0], [x, y, 0] ]; // coords for each foot landed 
 stepPositionsGoal = [ [x, y, 0], [x, y, 0] ]; // coords for each foot to land at or go to during a step (aka 2 [x,y,z] for humans)
 
 stepTimings = [[0, current_time, current_time, 0], [0, current_time, current_time, 0]]; //[progress(updated by step), startTime, endTime, speedRef] (where speed reference is the speed that the thing was moving for that step to compare against for clipping a step on speed up or extending a step in slow down.
+
+ragdollLegNodesSpeed = [  [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]] ]; // xyz speed in each node of each leg...
 
 thighWidth = 20;
 shinWidth = 10; // reset down below for size of animal

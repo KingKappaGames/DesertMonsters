@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"shd_biomeNoise",
+  "name":"shd_biomeNoise",
+  "parent":{
+    "name":"beastBlasterMmmHm",
+    "path":"beastBlasterMmmHm.yyp",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

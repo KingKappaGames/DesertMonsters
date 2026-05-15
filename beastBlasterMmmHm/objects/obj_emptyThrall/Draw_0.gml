@@ -5,7 +5,7 @@ script_mdlDraw();
 
 
 
-
+draw_text(x, y - 50, agroId);
 
 
 

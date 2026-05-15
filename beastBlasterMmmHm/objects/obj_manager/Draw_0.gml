@@ -14,4 +14,4 @@ if(point_distance(debrisSurfaceLastX, debrisSurfaceLastY, _camX, _camY) > 50) {
 	debrisSurfaceDrawY = _camY + camera_get_view_height(view_camera[0]) * .5 - debrisSurfSize * .5;
 }
 
-draw_surface(getDebrisSurface(), debrisSurfaceDrawX, debrisSurfaceDrawY);
+//draw_surface(getDebrisSurface(), debrisSurfaceDrawX, debrisSurfaceDrawY);

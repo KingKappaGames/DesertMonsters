@@ -37,7 +37,7 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 					var _rand = random(1);
 					
 					if(_rand > .999) {
-						instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
+						generateStructure(i * blockSize + updateLastX, j * blockSize + updateLastY);
 					} else if(_rand < _heightVal) {
 						//repeat(2) {
 						if(irandom(2) == 0) {
@@ -73,7 +73,7 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 						var _rand = random(1);
 					
 						if(_rand > .999) {
-							instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
+							generateStructure(i * blockSize + updateLastX, j * blockSize + updateLastY);
 						} else if(_rand < _heightVal) { // .5 to half the spawns
 							if(irandom(2) == 0) {
 								var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
@@ -108,7 +108,7 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 					var _rand = random(1);
 					
 					if(_rand > .999) {
-						instance_create_layer(i * blockSize + updateLastX, j * blockSize + updateLastY, "Instances", obj_palmTree);
+						generateStructure(i * blockSize + updateLastX, j * blockSize + updateLastY);
 					} else if(_rand < sqr(_heightVal)) {
 						if(irandom(2) == 0) {
 							var _grass = instance_create_layer(i * blockSize + updateLastX + irandom_range(-blockSize, blockSize), j * blockSize + updateLastY + irandom_range(-blockSize, blockSize), "Instances", obj_grassBlade);
@@ -131,7 +131,30 @@ function generate(leftMargin = 0, topMargin = 0, rightMargin = 0, bottomMargin =
 	}
 }
 
-
+function generateStructure(xx, yy, object = undefined, sprite = undefined) {
+	if(is_undefined(object)) {
+		if(irandom(1) == 0) {
+			object = obj_mapVisual;
+			
+			if(is_undefined(sprite)) {
+				sprite = choose(spr_desertStructure, spr_ruins, spr_ruinsWander);
+			}
+		} else {
+			object = obj_palmTree;
+			sprite = -1;
+		}
+	} else {
+		sprite = -1;
+	}
+	
+	var _struct = instance_create_layer(xx, yy, "Instances", object);
+	if(sprite != -1) {
+		with(_struct) {
+			sprite_index = sprite;
+			image_index = irandom(image_number - 1);
+		}
+	}
+}
 
 
 /* info dump records (no code)

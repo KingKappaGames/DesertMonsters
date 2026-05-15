@@ -77,7 +77,7 @@ if(input_check_released("characterSwitch", playerIndex)) { // get in and out of 
 
 event_inherited();
 
-depth = -((y + feetOffY) - global.depthOffset);
+depth = -((y + feetOffY - 14) - global.depthOffset);
 
 #endregion
 
@@ -89,6 +89,17 @@ if(keyboard_check(ord("Y"))) {
 
 if(keyboard_check_released(vk_backspace)) {
 	instance_create_depth(mouse_x, mouse_y, depth, obj_emptyThrall);
+}
+
+if(keyboard_check(ord("U"))) {
+	var _dir = random(360);
+	var _power = sqr(random(.8));
+	stumbleXChange += lengthdir_x(_power, _dir);
+	stumbleYChange += lengthdir_y(_power, _dir);
+}
+
+if(keyboard_check_released(ord("J"))) {
+	script_mdlResetSkeleton();
 }
 
 debugClamp *= 1 + (keyboard_check(ord("U")) - keyboard_check(ord("J"))) * .0035;

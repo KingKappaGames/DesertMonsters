@@ -1,65 +1,170 @@
 if (live_call()) return live_result;
 
+if(irandom(12000) == 0) {
+	audio_play_sound_at(choose(snd_FaintIntervalShooting, snd_SoftExplosionSemiDistant, snd_EchoedDistantBurstFire, snd_SoftMachineFire), x, y, 0, 500, 1500, 1, 0, 0);
+}
 
-#region movement and move contols
-var _cursorX = input_cursor_x(0);
-var _cursorY = input_cursor_y(0);
-aimDir = point_direction(x, y, _cursorX, _cursorY);
-aimDist = point_distance(x, y, _cursorX, _cursorY);
-var _sprint = .75 + input_check("sprint", 0) * .8;
-var _inputs = [input_value("right", 0), input_value("left", 0), input_value("down", 0), input_value("up", 0)];
-var _dirMoveStick = point_direction(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]);
-var _distMoveStick = clamp(point_distance(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]), 0, 1);
-xChange += dcos(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick;
-yChange -= dsin(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick; // push in dir and distance of stick
+#region AI combat behaviors
+
+if(alive == 1 && !ragdolling) {
+	if(instance_exists(agroId) && agroId.alive) {
+		if(irandom(32) == 0) { // only update the intent and behavior 4 times a second			
+			if(irandom(2) == 0) {
+				aimingDownSights = irandom(1);
+				
+				var _agroList = ds_list_create();
+				collision_circle_list(x, y, 1000, obj_enemy, false, true, _agroList, true);
+				var _count = ds_list_size(_agroList);
+				for(var _i = 0; _i < _count; _i++) {
+					var _enemy = _agroList[| _i];
+					
+					if(_enemy.friendly != friendly && _enemy.alive) {
+						agroId = _enemy;
+						break;
+					}
+				}
+			}
+			
+			if(irandom(21) == 0) {
+				strafeDir *= -1;
+			}
+			
+			focusX = agroId.x;
+			focusY = agroId.y;
+			
+			var _dist = point_distance(x, y, focusX, focusY);
+			var _dir = point_direction(x, y, focusX, focusY);
+			
+			var _approachSpeed = clamp(sqrt(_dist / 370) - 1.5, -1, 1.3);
+			
+			var _approachAngle = (2 - _approachSpeed) * 32 * strafeDir;
+			
+			xChange = dcos(_dir + _approachAngle) * _approachSpeed;
+			yChange = -dsin(_dir + _approachAngle) * _approachSpeed;
+			
+			
+			
+			if(_dist < 750) {
+				if(irandom(1) == 0) {
+					aimingDownSights = true;
+					script_shootBulletScan(gunTipPosition[0], gunTipPosition[1], _dir, focusX, focusY, bulletType,, gunAccuracy + burstSpread, shotSound, gunDamageMult, true);
+					burstSpread += .02;
+					gunShakeX -= dcos(_dir) * gunRecoil;
+					gunShakeY -= dsin(_dir) * gunRecoil;
+					//if(ammoCurrent < 1) {
+					//	startReload(); // i don't like having the last shot auto reload, cooler if it just makes the bullet click and all
+					//}
+					shotTimer = 0;
+				}
+				if(irandom(120) == 0) {
+					script_shootBullet(x, y, 12 / 4, _dir, obj_missile,, 12 / 4 * (100 / point_distance(x, y, agroId.x, agroId.y)),,.40);
+				}
+			}
+		}
+	} else {
+		if(irandom(50) == 0) {
+			var _agroList = ds_list_create();
+			collision_circle_list(x, y, 1600, obj_enemy, false, true, _agroList, true);
+			var _count = ds_list_size(_agroList);
+			for(var _i = 0; _i < _count; _i++) {
+				var _enemy = _agroList[| _i];
+				if(_enemy.friendly != friendly && _enemy.alive) {
+					agroId = _enemy;
+				}
+			}
+		}
+		if(friendly) {
+			if(irandom(18) == 0) {
+				var _player = instance_nearest(x, y, obj_playerSoldier);
+				if(_player != noone) {
+					followId = _player;
+					
+					focusX = _player.x + _player.xChange * 16;
+					focusY = _player.y + _player.xChange * 16;
+					
+					var _dist = point_distance(x, y, focusX, focusY);
+					var _dir = point_direction(x, y, focusX, focusY);
+			
+					var _approachSpeed = clamp(_dist / 120 - 1, -1.8, 1.8);
+					
+					if(abs(_approachSpeed) < .3) {
+						_approachSpeed = 0;
+					}
+			
+					xChange = dcos(_dir) * _approachSpeed;
+					yChange = -dsin(_dir) * _approachSpeed;
+				
+					var _avoidXChange = 0;
+					var _avoidYChange = 0;
+			
+					var _avoidList = ds_list_create();
+					collision_circle_list(x, y, 30, obj_enemy, false, true, _avoidList, true);
+					var _count = ds_list_size(_avoidList);
+					if(_count > 0) {
+						var _avoidDir = 0;
+						var _avoidDist = 0;
+						for(var _i = 0; _i < _count; _i++) { 
+							var _enemy = _avoidList[| _i];
+							_avoidDir = point_direction(_enemy.x, _enemy.y, x, y);
+							_avoidDist = point_distance(_enemy.x, _enemy.y, x, y);
+							
+							_avoidXChange += dcos(_avoidDir) / sqrt(_avoidDist);
+							_avoidYChange -= dsin(_avoidDir) / sqrt(_avoidDist);
+						}
+			
+						_avoidXChange /= _count;
+						_avoidYChange /= _count; // push enemies away with normalized average / 100 for distance to speed
+				
+						xChange += _avoidXChange;
+						yChange += _avoidYChange;
+					}
+				
+					ds_list_destroy(_avoidList);
+				}
+			}
+		}
+		
+		if(!instance_exists(followId)) {
+			if(irandom(30) == 0 && (xChange != 0 || yChange != 0)) {
+				if(point_distance(x, y, travelToGoalX, travelToGoalY) < 20) {
+					xChange = 0;
+					yChange = 0;
+				} else if(irandom(360) == 0) {
+					startTravelToPoint(travelToGoalX, travelToGoalY); // reset direction and seeking because I don't calculate corrections to path otherwise
+				}
+			} else if(irandom(300) == 0) {
+				startTravelToPoint(x + choose(irandom_range(-1000, -200), irandom_range(200, 1000)), y + choose(irandom_range(-800, -200), irandom_range(200, 800)))
+			}
+		}
+	}
+}
+
+#endregion
+
+aimDir = point_direction(x, y, focusX, focusY);
+aimDist = point_distance(x, y, focusX, focusY);
 
 x += xChange;
 y += yChange;
-//depth = - (y + 60); // this project doesn't use depth... YET??? Maybe, I assume when i start making trees and walls and buildings I'll switch to -y depth but for now it's simpler to do surfaces with out any depth consideration. Especially the dust and debris... That'll be a pain with surfaces unless I go full layer stacking and do what main game does... Though I don't know if I have the height for it here... Too many layers required I think.
-xChange *= speedDecay;
-yChange *= speedDecay;
+z += zChange;
 
 previousSpeed = currentSpeed;
 currentSpeed = point_distance(0, 0, xChange, yChange);
 
 previousDir = currentDir;
 currentDir = point_direction(0, 0, xChange, yChange);
+if(is_nan(currentDir)) {
+	currentDir = 270;
+}
 
 script_mdlStep();
 
-#region player controls, camera, and info maintenance
-//
-//if(input_check_released("reload", playerIndex)) { // reload logic
-	//if(reloadingTimer > 0) {
-		//cancelReload();
-	//} else {
-		//startReload();
-	//}
-//}
-//
-//if(input_check_released("gunSwitch", playerIndex)) { // swap weapons
-	//setTurret(clamp((gunType + 1) % 4, 1, 99));
-//}
-
-//if(reloadingTimer > 0) { // reload timers and ammo logic
-	//reloadingTimer--;
-	//if(reloadingTimer == 0) {
-		//ammoCurrent = ammoMax;
-	//}
-//}
-
 	
-//ammoCurrent = ammoMax; // clean
+ammoCurrent = ammoMax; // clean
 
 depth = -((y + feetOffY) - global.depthOffset);
 
-#endregion
 
-if(keyboard_check(ord("Y"))) {
-	feetOffY += 1;
-} else if(keyboard_check(ord("H"))) { // move the spine up and down but not actually..? I'm not sure where the disconnect is
-	feetOffY -= 1;
-}
 
 debugClamp *= 1 + (keyboard_check(ord("U")) - keyboard_check(ord("J"))) * .0035;
 debugOverStep *= 1 + (keyboard_check(ord("I")) - keyboard_check(ord("K"))) * .0035;

@@ -8,7 +8,7 @@ window_set_cursor(cr_none);
 input_source_mode_set(INPUT_SOURCE_MODE.JOIN);
 input_join_params_set(1, 4, "escape", undefined, true)
 
-surface_depth_disable(true);
+surface_depth_disable(false);
 
 global.manager = id;
 global.players = []; // set below
@@ -360,6 +360,7 @@ deactivateThings = function() {
 	instance_activate_object(obj_weatherManager)
 	instance_activate_object(input_controller_object); // inputs controller
 	instance_activate_object(obj_camera);
+	instance_activate_object(obj_fog);
 	instance_activate_object(obj_particleLayerManager);
 	instance_activate_object(obj_generator);
 	

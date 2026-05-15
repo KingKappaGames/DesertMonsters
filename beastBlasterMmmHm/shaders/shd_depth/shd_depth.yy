@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"shd_depth",
+  "name":"shd_depth",
+  "parent":{
+    "name":"fogStuff",
+    "path":"folders/fogStuff.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

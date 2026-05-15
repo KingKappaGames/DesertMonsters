@@ -1,0 +1,11 @@
+{
+  "$GMNotes":"v1",
+  "%Name":"gmd3d11_license",
+  "name":"gmd3d11_license",
+  "parent":{
+    "name":"GMD3D11",
+    "path":"folders/utils/GMD3D11.yy",
+  },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
+}

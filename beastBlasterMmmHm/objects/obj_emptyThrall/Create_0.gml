@@ -1,9 +1,12 @@
 if (live_call()) return live_result;
 
+event_inherited();
+
+Health = 50;
+
 script_mdlCreateInit();
 
 #region player values
-directionFacing = 0;
 currentSpeed = 0;
 previousSpeed = 0;
 currentDir = 0;
@@ -12,15 +15,16 @@ previousDir = 0;
 moveSpeed = .024;
 speedDecay = .98;
 
+z = 0;
+
 xChange = 0;
 yChange = 0;
+zChange = 0;
 
-kneeAnglesDebug = [0, 0];
 
 #endregion
 
 surf = -1; // draw all your components to this surf and draw the surf to the screen (for shader and effect simplicity) //TODO - done!
-
 
 #region new body stuff
 feetOffYBase = 74;
@@ -29,6 +33,34 @@ feetOffX = 0; //??
 feetY = y + feetOffY;
 
 spineMain = new script_createSpine(x, y, 90, 50);
+#endregion
+
+#region AI and combat behaviors...
+
+friendly = choose(false, false, false, true, true);
+strafeDir = 1;
+agroId = noone;
+followId = noone;
+
+travelToGoalX = 0;
+travelToGoalY = 0;
+
+startTravelToPoint = function(goalX, goalY, speedTravel = moveSpeed) {
+	travelToGoalX = goalX;
+	travelToGoalY = goalY;
+	
+	var _dir = point_direction(x, y, goalX, goalY);
+	
+	xChange = dcos(_dir) * moveSpeed;
+	yChange = -dsin(_dir) * moveSpeed;
+}
+
+die = function() {
+	alive = 0;
+	recoveringLimpTimer = 4320; // 20 seconds, long enough to not be relevant, tbf they don't really need to deactivate anyway... it's not laggy or anything and they get deactivated just like normal. Idk
+	script_mdlRagdoll(); // take position data and use it to move legs and arms and body around? Fancy 3d stuff I haven't done yet
+}
+
 #endregion
 
 #region gun and bullet values
@@ -227,6 +259,8 @@ stepPositionsGoal = [ [x, y, 0], [x, y, 0] ]; // coords for each foot to land at
 
 stepTimings = [[0, current_time, current_time, 0], [0, current_time, current_time, 0]]; //[progress(updated by step), startTime, endTime, speedRef] (where speed reference is the speed that the thing was moving for that step to compare against for clipping a step on speed up or extending a step in slow down.
 
+ragdollLegNodesSpeed = [  [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]] ]; // xyz speed in each node of each leg...
+
 thighWidth = 20;
 shinWidth = 10; // reset down below for size of animal
 
@@ -244,10 +278,6 @@ limbArray = [  [[x, y, 0, limbLength], [x, y, 0, limbLength], [x, y, 0, limbLeng
 #region body components
 bodyComponents = [];
 
-#endregion
-
-
-#region components
 var _fu = 0;
 //                                              only if is limb
 //                                   target   spine        [limbType]       sprite(s)                 image(s)  rotRel  height   dist,  xscl          yscl     viewAng   viewComp    color          imgGetRotAdd   fixedAngDraw       limbArrRef     gunOffArrRef

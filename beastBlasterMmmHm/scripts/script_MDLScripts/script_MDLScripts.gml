@@ -45,6 +45,127 @@ function script_mdlSetStepTimings(legIndex, duration, speedRef) {
 	//msg("step timing sets: " + string(duration));
 }
 
+function script_mdlResetSkeleton() { // the reason this is all set existing instead of just array copy or something is because we don't want to break the pointers to the arrays! There are other ways to do this of course but this works for now
+	live_auto_call
+		
+	msg("HELLO RESETTING SKELETON")
+	
+	stumbleXChange = 0;
+	stumbleYChange = 0;
+	stumbleX = 0;
+	stumbleY = 0;
+	
+	var _limbArr = 0;
+	var _segArr = 0;
+	for(var _limb = array_length(legArray) - 1; _limb >= 0; _limb--) { // legs...
+		//_limbArr = legArray[_limb];
+		//
+		//for(var _node = 0; _node < 3; _node++) {
+			//_segArr = _limbArr[0];
+			//
+			//_segArr[0] = x;
+			//_segArr[1] = y;
+			//_segArr[2] = .5 * _node * feetOffY; // height is 0..? should be 0, .5, 1, * height no?
+		//}
+		
+		var _timings = stepTimings[_limb];
+		_timings[0] = 0;
+		_timings[1] = current_time;
+		_timings[2] = current_time;
+		_timings[3] = 0;
+		
+		//var _stepPosInit = stepPositionsInitial[_limb];
+		//_stepPosInit[0] = x;
+		//_stepPosInit[1] = y + feetOffY * .8;
+		//_stepPosInit[2] = 0;
+		
+		var _stepPosGoal = stepPositionsGoal[_limb];
+		_stepPosGoal[0] = x;
+		_stepPosGoal[1] = y + feetOffY * .8;
+		_stepPosGoal[2] = 0;
+	}
+	
+	for(var _limb = array_length(limbArray) - 1; _limb >= 0; _limb--) { // arms
+		_limbArr = limbArray[_limb];
+		
+		for(var _node = 0; _node < 3; _node++) {
+			_segArr = _limbArr[0];
+			
+			_segArr[0] = x;
+			_segArr[1] = y;
+			_segArr[2] = 0; // height is 0..? should be 0, .5, 1, * height no?
+		}
+	}
+}
+
+script_mdlRagdoll = function(duration = 212) {
+	recoveringLimpTimer = max(duration, recoveringLimpTimer);
+	if(!ragdolling) {
+		//turn torso rotation, arms elbow, hands, leg joint, and feet into points with their own x/y change. This x/y change would be the x/y and the hitbox would be recentered on the torso x/y as to avoid disconnects for big ragdolls. 
+		
+		//"height"change representing the vertical speed up and down the map, basically if you fly back or towards the camera your ground y value will increase or decrease as you travel and be clipped when you hit the ground, we're faking lateral movement to do horiztonal and height in the air movement with the x/y change values
+		//show_debug_message($"left shin values adding {jointLX}, {jointRX}, {footLX}, {footRY}");
+	
+		#region unused until ragdoll speed vars for joints... This is seeming like a worse and worse idea but at the same time I know this must be a thing because the joints need speeds so... Ugh
+		
+		var _leg = 0;
+		var _legPrev = 0;
+		var _nodesSpeed = 0;
+		var _nodeSpeeds = 0;
+		var _nodePos = 0;
+		var _nodePosPrev = 0;
+		for(var _i = array_length(legArray) - 1; _i >= 0; _i--) {
+			_leg = legArray[_i];
+			_legPrev = legArrayPrev[_i];
+			_nodesSpeed = ragdollLegNodesSpeed[_i];
+			
+			for(var _nodeI = array_length(_leg) - 1; _nodeI >= 0; _nodeI--) {
+				_nodeSpeeds = _nodesSpeed[_nodeI];
+				_nodePos = _leg[_nodeI];
+				_nodePosPrev = _legPrev[_nodeI];
+				
+				_nodeSpeeds[0] = _nodePos[0] - _nodePosPrev[0];
+				_nodeSpeeds[1] = _nodePos[1] - _nodePosPrev[1];
+				_nodeSpeeds[2] = _nodePos[2] - _nodePosPrev[2];
+			}
+		}
+		
+		xChange = spineMain.x - spineMain.xPrev;
+		yChange = spineMain.y - spineMain.yPrev;
+		zChange = spineMain.height - spineMain.zPrev;
+		
+		x = spineMain.x;
+		y = spineMain.y; // hips are projected during standing and not during rd so match them up during ragdolling
+		z = spineMain.height;
+		#endregion
+		
+		ragdolling = true;
+	}
+}
+
+function script_mdlRagdollStopMotion() {
+	stumbleX = 0;
+	stumbleY = 0; // not sure we even need this stuff (stuble vs ragdoll?) but it may keep lingering stuble strength from going into the next get up
+	stumbleXChange = 0;
+	stumbleYChange = 0;
+	
+	var _leg = 0;
+	var _nodeSpeed = 0;
+	for(var _legI = array_length(ragdollLegNodesSpeed) - 1; _legI >= 0; _legI--) {
+		_leg = ragdollLegNodesSpeed[_legI];
+		for(var _nodeI = array_length(_leg) - 1; _nodeI >= 0; _nodeI--) {
+			_nodeSpeed = _leg[_nodeI];
+			_nodeSpeed[0] = 0;
+			_nodeSpeed[1] = 0;
+			_nodeSpeed[2] = 0;
+		}
+	}
+	
+	xChange = 0;
+	yChange = 0;
+	zChange = 0;
+}
+
 function script_mdlSortComponents(componentCurrent, componentNext) {
 	var _sortDif = (-dsin(directionFacing + componentCurrent.rotationRelative) * componentCurrent.distance) - (-dsin(directionFacing + componentNext.rotationRelative) * componentNext.distance) * 1;
 		

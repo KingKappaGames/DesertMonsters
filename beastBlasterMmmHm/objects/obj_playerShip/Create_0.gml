@@ -75,25 +75,25 @@ weaponControls = function() {
 		script_shootBullet(x, y, shotSpeed / 2, _aimDir, obj_missile,, shotSpeed / 2 * (100 / point_distance(x, y, input_cursor_x(playerIndex), input_cursor_y(playerIndex))),,.22);
 		shotTimer = 0;
 	}
-	if(input_check_pressed("middleClick", playerIndex)) {
-		if(airStrikeCoolDown == 0) {
-			airStrikeCoolDown = 288;
-			airStrikeCharging = 1;
-			airStrikeBeginningX = input_cursor_x(playerIndex);
-			airStrikeBeginningY = input_cursor_y(playerIndex);
-		}
-	} else if(input_check_released("middleClick", playerIndex)) {
-		if(bulletType != obj_homingMissle) {
-			if(airStrikeCharging) {
-				airStrikeCharging = 0;
-				if(point_distance(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_x(playerIndex)) < 120) {
-					script_startAirStrike(input_cursor_x(playerIndex), input_cursor_y(playerIndex)); // point strike
-				} else {
-					script_startAirStrike(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_y(playerIndex), 2, 7,, 50, 288);
-				}
-			}
-		} else {
-			homingLock = instance_nearest(mouse_x, mouse_y, obj_enemy);
-		}
-	}
+	//if(input_check_pressed("middleClick", playerIndex)) {
+		//if(airStrikeCoolDown == 0) {
+			//airStrikeCoolDown = 288;
+			//airStrikeCharging = 1;
+			//airStrikeBeginningX = input_cursor_x(playerIndex);
+			//airStrikeBeginningY = input_cursor_y(playerIndex);
+		//}
+	//} else if(input_check_released("middleClick", playerIndex)) {
+		//if(bulletType != obj_homingMissle) {
+			//if(airStrikeCharging) {
+				//airStrikeCharging = 0;
+				//if(point_distance(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_x(playerIndex)) < 120) {
+					//script_startAirStrike(input_cursor_x(playerIndex), input_cursor_y(playerIndex)); // point strike
+				//} else {
+					//script_startAirStrike(airStrikeBeginningX, airStrikeBeginningY, input_cursor_x(playerIndex), input_cursor_y(playerIndex), 2, 7,, 50, 288);
+				//}
+			//}
+		//} else {
+			//homingLock = instance_nearest(mouse_x, mouse_y, obj_enemy);
+		//}
+	//}
 }
