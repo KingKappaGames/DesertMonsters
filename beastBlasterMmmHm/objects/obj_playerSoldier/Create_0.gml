@@ -45,9 +45,9 @@ gunType = 0;
 #region gun in hand values
 gunSprite = spr_pistol;
 weaponPosition = [x, y, feetOffY]; // use arrays (structs??) to store positions both for simplicty (i guess?) but more importantly for reference passing, being able to give the component system the item 
-gunHoldOffsets = [[0, 0, 0], [0, 0, 0]]; // the sub arrays here are hand locations relative to the x/y of the gun (must be rotated and scaled if applicable)
+weaponHoldOffsetss = [[0, 0, 0], [0, 0, 0]]; // the sub arrays here are hand locations relative to the x/y of the gun (must be rotated and scaled if applicable)
 gunHoldDistance = 30;
-gunHoldDirection = 0;
+weaponHoldDirection = 0;
 gunAimRange = 95;
 gunHeldDown = 0;
 gunLength = 10;
@@ -260,20 +260,20 @@ bodyComponents = [];
 var _fu = 0;
 //                                              only if is limb
 //                                   target   spine        [limbType]       sprite(s)                 image(s)  rotRel  height   dist,  xscl          yscl     viewAng   viewComp    color          imgGetRotAdd   fixedAngDraw       limbArrRef     gunOffArrRef
-_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  [8, 1],   0,     0,        0,     1.6,           2,         0,      .6,      #3D3D29,               0,      undefined);                                          // body
-head = new script_addBodyComponent(   id,    spineMain,                 spr_robeParts,                  [9, 3],   0,     31,       2,     1.6,           2,         0,      .6,      #ffaaaa,               0,      0);                                          // head
-_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        85,    17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        -85,   17,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    12,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], gunHoldOffsets[0]); // arm arrays
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   21,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], gunHoldOffsets[1]); // arm arrays
-_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   80,    -10,       7,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   -80,   -10,       7,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 1); // leg arrays
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_knightPartsDownresd,    [3, 5, 4, 5], 0,     -4,        0,     1.4,           1.4,         0,      .7,   #3D3D29,               -45,      undefined);                                          // body
+head = new script_addBodyComponent(   id,    spineMain,                 spr_knightPartsDownresd,    [1, 2, 0, 2], 0,     31,       2,     1.,            1,         0,      .6,      #ffaaaa,               -45,      0);                                          // head
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        85,    14,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        -85,   14,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    13,       15,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], weaponHoldOffsetss[0]); // arm arrays
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   13,       15,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], weaponHoldOffsetss[1]); // arm arrays
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   80,    -10,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   -80,   -10,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 1); // leg arrays
 
 //lag testing
 //repeat(5000) {
 	//new script_addBodyComponent(id, 0, spr_robeParts,  [9, 3],  irandom(360),    irandom_range(-40, 70),   irandom(50), 1.6,   2,      0,     .6,         #ffaaaa, 0); // head
-	//new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  irandom(360),  irandom_range(-20, 30),   irandom(40), [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[irandom(1)], gunHoldOffsets[irandom(1)]); // arm arrays
+	//new script_addLimbBodyComponent(id, 0, [spr_armParts, spr_armParts], [0, 0],  irandom(360),  irandom_range(-20, 30),   irandom(40), [1.6, 1.6],   [2, 2],      0,     1, [ #4D4D39, #4D4D39], 0, limbArray[irandom(1)], weaponHoldOffsetss[irandom(1)]); // arm arrays
 //}
 #endregion
 

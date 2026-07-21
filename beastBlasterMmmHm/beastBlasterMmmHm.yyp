@@ -123,7 +123,7 @@
     {"name":"sparkOrangeEnd","path":"particlelib/sparkOrangeEnd/sparkOrangeEnd.yy",},
   ],
   "MetaData":{
-    "IDEVersion":"2024.14.4.222",
+    "IDEVersion":"2026.0.0.16",
   },
   "name":"beastBlasterMmmHm",
   "resources":[
@@ -565,6 +565,7 @@
     {"id":{"name":"script_setHoldOffsets","path":"scripts/script_setHoldOffsets/script_setHoldOffsets.yy",},},
     {"id":{"name":"script_setIKJoints","path":"scripts/script_setIKJoints/script_setIKJoints.yy",},},
     {"id":{"name":"script_setIKJoints3D","path":"scripts/script_setIKJoints3D/script_setIKJoints3D.yy",},},
+    {"id":{"name":"script_setIKJoints3DLeg","path":"scripts/script_setIKJoints3DLeg/script_setIKJoints3DLeg.yy",},},
     {"id":{"name":"script_shootBullet","path":"scripts/script_shootBullet/script_shootBullet.yy",},},
     {"id":{"name":"script_shootBulletScan","path":"scripts/script_shootBulletScan/script_shootBulletScan.yy",},},
     {"id":{"name":"script_splitRandom","path":"scripts/script_splitRandom/script_splitRandom.yy",},},
@@ -615,6 +616,7 @@
     {"id":{"name":"forforforwhat","path":"sprites/forforforwhat/forforforwhat.yy",},},
     {"id":{"name":"spr_armParts","path":"sprites/spr_armParts/spr_armParts.yy",},},
     {"id":{"name":"spr_backpack","path":"sprites/spr_backpack/spr_backpack.yy",},},
+    {"id":{"name":"spr_bigKnightParts","path":"sprites/spr_bigKnightParts/spr_bigKnightParts.yy",},},
     {"id":{"name":"spr_blood","path":"sprites/spr_blood/spr_blood.yy",},},
     {"id":{"name":"spr_bodyVultureCoat","path":"sprites/spr_bodyVultureCoat/spr_bodyVultureCoat.yy",},},
     {"id":{"name":"spr_bombingPlane","path":"sprites/spr_bombingPlane/spr_bombingPlane.yy",},},
@@ -634,6 +636,7 @@
     {"id":{"name":"spr_fogOld","path":"sprites/spr_fogOld/spr_fogOld.yy",},},
     {"id":{"name":"spr_heliStack","path":"sprites/spr_heliStack/spr_heliStack.yy",},},
     {"id":{"name":"spr_jeep","path":"sprites/spr_jeep/spr_jeep.yy",},},
+    {"id":{"name":"spr_knightPartsDownresd","path":"sprites/spr_knightPartsDownresd/spr_knightPartsDownresd.yy",},},
     {"id":{"name":"spr_legParts","path":"sprites/spr_legParts/spr_legParts.yy",},},
     {"id":{"name":"spr_machineGun","path":"sprites/spr_machineGun/spr_machineGun.yy",},},
     {"id":{"name":"spr_meatPiece","path":"sprites/spr_meatPiece/spr_meatPiece.yy",},},

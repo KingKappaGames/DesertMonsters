@@ -2,25 +2,34 @@
 
 function script_mdlGetSurf() {
 	if(!surface_exists(mdlSurf)) {
+		
+		var _depthSetting = surface_get_depth_disable();
+		surface_depth_disable(false);
 		mdlSurf = surface_create(mdlSurfWidth, mdlSurfHeight); // recreate if lost (no need to buffer store this since it's updating every frame anyway, (i think? Perhaps certain effects cause problems and need a more direct solution, doubt it though)
+		surface_depth_disable(_depthSetting);
 	}
 	
 	return mdlSurf;
 }
 
-function script_mdlPlaceStepGoal(legIndex, currentX, currentY, goalX, goalY, moveSpeed = -1) { // goal here is the desired place to step to below the creature, not the ultimate target (with this goal added to prediction dist)
+/// @desc Function Places a steps goal and current values based on a target and auto sets the duration and dimensions of the step in the data arrays
+/// @param {any*} legIndex Which leg to set for
+/// @param {any*} currentX Current foot Y
+/// @param {any*} currentY Current foot X
+/// @param {any*} goalX The point x you'd like to step to (plus movement over time shift)
+/// @param {any*} goalY The point y you'd like to step to (plus shift)
+/// @param {real} [moveSpeed]=-1 The speed you're going
+/// @param {real} [speedChangeStrength]=0 The raw (not normalized) speed change this frame, so if you're slowing down a lot or speeding up a lot this will shorten the steps (value is second derivative of position, got it?)
+function script_mdlPlaceStepGoal(legIndex, currentX, currentY, goalX, goalY, moveSpeed = undefined, speedChangeStrength = 0) { // goal here is the desired place to step to below the creature, not the ultimate target (with this goal added to prediction dist)
 	//live_auto_call
 	var _goalPos = stepPositionsGoal[legIndex]; // this goal IS the actual step goal used to place the foot
 	var _previousStepPos = stepPositionsInitial[legIndex]; // this goal IS the actual step goal used to place the foot
 	var _leg = legArray[legIndex];
-	if(moveSpeed == -1) {
-		moveSpeed = point_distance(0, 0, xChange, yChange);
-	}
 	
-	_previousStepPos[0] = _goalPos[0];
-	_previousStepPos[1] = _goalPos[1];
+	moveSpeed ??= point_distance(0, 0, xChange, yChange);
 	
-	
+	_previousStepPos[0] = currentX;
+	_previousStepPos[1] = currentY;
 	
 	_goalPos[0] = _leg[0][0] + clamp((goalX - currentX) * debugOverStep, -legSegLen * debugClamp, legSegLen * debugClamp) + xChange * legSegLen * debugPushAhead; // this takes into acount the dist from previous step, the leg length, the duration of the step, add more for accuracy perhaps
 	_goalPos[1] = _leg[0][1] + clamp((goalY - currentY) * debugOverStep, -legSegLen * debugClamp, legSegLen * debugClamp) + yChange * legSegLen * debugPushAhead;
@@ -29,6 +38,8 @@ function script_mdlPlaceStepGoal(legIndex, currentX, currentY, goalX, goalY, mov
 	//msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
 	var _stepTime = (_stepAhead + 3) / (moveSpeed + .1) * (game_get_speed(gamespeed_microseconds) / 1000) * 2; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
+	
+	_stepTime *= 1 - (speedChangeStrength / /*maxSpeed*/3) * .25; // reduce the step length by a (small) fraction of the speed change, to mimick both that changing your speed requires a lot of angle adjustments for proper force application but also to prevent lagging limbs when shifting speed
 	
 	//msg("stepDuration: " + string(_stepTime));
 	
@@ -98,7 +109,7 @@ function script_mdlResetSkeleton() { // the reason this is all set existing inst
 	}
 }
 
-script_mdlRagdoll = function(duration = 212) {
+function script_mdlRagdoll(duration = 212) {
 	recoveringLimpTimer = max(duration, recoveringLimpTimer);
 	if(!ragdolling) {
 		//turn torso rotation, arms elbow, hands, leg joint, and feet into points with their own x/y change. This x/y change would be the x/y and the hitbox would be recentered on the torso x/y as to avoid disconnects for big ragdolls. 

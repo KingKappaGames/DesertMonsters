@@ -56,8 +56,8 @@ function script_addBodyComponent(creature, spineSet, spriteArr, imageArr, rotRel
 ///@param imgFromRotationAdjust The angle to add to the view angle when getting the image for angle based images
 ///@param fixedAngleToDraw The angle to draw the sprite for this item regardless of spine rotations, so for head looking angles or hanging things that always hang down.. ect this will force a draw angle, other wise it goes to 999 (999 means don't use, it's a bit hard to choose an int that represents no entry...)
 ///@param limbArrRef The array reference to get the nodes of drawing from, since arrays are ref passed you simply pass the [node1, node2, node3] limb array from wherever it is stored and this will sample from it
-///@param gunHoldOffsetArr The array reference of the offset values for this gun and hold index (a rifle has two holding locations, right? So pass the sub array of the hold positions at the desired coords)
-function script_addLimbBodyComponent(creature, spineSet, limbTypeSet, spriteArr, imageArr, rotRelative, heightSet, distanceSet, xscaleArr, yscaleArr, viewAngleSet, viewCompressionMinimum, colorArr = c_white, imgFromRotationAdjust = 0, fixedAngleToDraw = 999, limbArrRef = undefined, gunHoldOffsetArr = undefined) constructor { // these limbs still need to adhere to rotation and position values because the sorting will use it the same way for all, or I can change it but seems easy enough as is
+///@param weaponHoldOffsetsArr The array reference of the offset values for this gun and hold index (a rifle has two holding locations, right? So pass the sub array of the hold positions at the desired coords)
+function script_addLimbBodyComponent(creature, spineSet, limbTypeSet, spriteArr, imageArr, rotRelative, heightSet, distanceSet, xscaleArr, yscaleArr, viewAngleSet, viewCompressionMinimum, colorArr = c_white, imgFromRotationAdjust = 0, fixedAngleToDraw = 999, limbArrRef = undefined, weaponHoldOffsetsArr = undefined) constructor { // these limbs still need to adhere to rotation and position values because the sorting will use it the same way for all, or I can change it but seems easy enough as is
 	index = creature.bodyComponentNextIndex;
 	creature.bodyComponentNextIndex++;
 	source = creature;
@@ -76,7 +76,7 @@ function script_addLimbBodyComponent(creature, spineSet, limbTypeSet, spriteArr,
 	fixedDrawAngle = fixedAngleToDraw;
 	
 	limbArrayRef = limbArrRef; 
-	gunHoldOffset = gunHoldOffsetArr; // hand position (limb end) should be its own thing so that the creature can freely change what/how its hands are moved, linking the hand position directly to the gun is cool but not good long term, so I should create a intermediate value that can hold the gun array OR be set on its own, say to a swinging animation if you have a free hand
+	weaponHoldOffsets = weaponHoldOffsetsArr; // hand position (limb end) should be its own thing so that the creature can freely change what/how its hands are moved, linking the hand position directly to the gun is cool but not good long term, so I should create a intermediate value that can hold the gun array OR be set on its own, say to a swinging animation if you have a free hand
 	
 	limbType = limbTypeSet;
 	limb = true; // this component is a limb 0:

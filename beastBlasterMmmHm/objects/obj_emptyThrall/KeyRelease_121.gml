@@ -14,8 +14,8 @@ gmliveNull = new script_addBodyComponent(    id,    0,  spr_robeParts,          
 gmliveNull = new script_addBodyComponent(    id,    0,  spr_robeParts,                  [9, 3],    0,     22,       2,     1.6,           2,         0,      .6,      #ffaaaa,               0);                                        // head
 gmliveNull = new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,         85,    12,       10,    1.6,           2,         0,      .4,      #4D4D39,               0);                                        // shoulder
 gmliveNull = new script_addBodyComponent(    id,    0,  spr_robeParts,                  0,         -85,   12,       10,    1.6,           2,         0,      .4,      #4D4D39,               0);                                        // shoulder
-gmliveNull = new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],    80,    15,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,         undefined,   limbArray[0], gunHoldOffsets[0]); // arm arrays
-gmliveNull = new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],    -80,   15,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,         undefined,   limbArray[1], gunHoldOffsets[1]); // arm arrays
+gmliveNull = new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],    80,    15,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,         undefined,   limbArray[0], weaponHoldOffsetss[0]); // arm arrays
+gmliveNull = new script_addLimbBodyComponent(id,    0,  [spr_armParts,   spr_armParts], [0, 0],    -80,   15,       10,    [1.6, 1.6],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,         undefined,   limbArray[1], weaponHoldOffsetss[1]); // arm arrays
 gmliveNull = new script_addBodyComponent(    id,    0,  spr_robeParts,                  4,         0,     -2,       -6,    1.6,           2,         0,      .4,      #363622,               0);                                        // cape
 
 

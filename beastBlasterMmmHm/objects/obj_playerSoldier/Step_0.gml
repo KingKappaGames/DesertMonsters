@@ -102,6 +102,10 @@ if(keyboard_check_released(ord("J"))) {
 	script_mdlResetSkeleton();
 }
 
+if(keyboard_check_released(ord("L"))) {
+	script_mdlRagdoll();
+}
+
 debugClamp *= 1 + (keyboard_check(ord("U")) - keyboard_check(ord("J"))) * .0035;
 debugOverStep *= 1 + (keyboard_check(ord("I")) - keyboard_check(ord("K"))) * .0035;
 debugPushAhead *= 1 + (keyboard_check(ord("O")) - keyboard_check(ord("L"))) * .0035;

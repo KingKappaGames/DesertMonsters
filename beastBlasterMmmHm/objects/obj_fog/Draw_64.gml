@@ -1,5 +1,7 @@
 //shader_set(shd_depth);
 
+/*
+
 var _texture = surface_get_texture(getFogSurf());
 
 draw_primitive_begin_texture(pr_trianglestrip, _texture);

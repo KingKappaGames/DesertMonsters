@@ -1,5 +1,5 @@
 ///@desc Written to simply take the component count and use all the local variables but edit to a more modular system is neede, this basically is just a way to centralize the code and not have to duplicate it
-function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, cosFacing, moveDir, frontDraw){
+function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, moveDir, frontDraw){
 	live_auto_call
 	
 	#region spine value setting 
@@ -35,13 +35,14 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 	var _surfOffY = _spineY - _surfMidY;
 	 
 	var _creatureId = id; // whatever calls this will get stored, ez 
+	var _directionCos = dcos(directionFacing);
 	var _directionSin = dsin(directionFacing);
 	
 	var _break = false;
 	for(var _i = startComponentI; _i < _componentCount; _i++) {
 		with(bodyComponents[_i]) { // with struct for component (variable scoping)
 			_ang = (_creatureId.directionFacing + rotationRelative) % 360;
-			if(!frontDraw || (_ang > 0 && _ang < 180)) { // so maybe I shouldn't but this puts them further back than flat, a slightly behind thing by 3 degrees will go in front, this is maybe to give them a bit of covering thickness? But I do kind of hate the canabalistic effect of forcing up here.
+			if(!frontDraw || (_ang > 0 && _ang < 180)) {
 				
 				var _netAngle = moveDir + rotationRelative;
 				var _compress = 1;
@@ -85,30 +86,39 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 					var _limb = limbArrayRef; // store the reference to the array that holds the arrays at this index that holds the nodes of this limb for drawing with, specify the collection and where in that collection, basically
 			
 					#region place arms on gun via IK
-					_limb[0][0] = _surfOffX + _x;
-					_limb[0][1] = _surfOffY + _y; // WEAPON POSITION AND ECT SHOULD BE A STRUCT AS WELL, LIKE IN MAIN GAME (perhaps the weapon could store the animations for using it in its own struct data? Hm, probably just item curves and what not like the other items)
-					_limb[0][2] = _componentHeightNet; // * dsin(leanAngle); ??? height angle // set the two knowns, origin and gun position (the end)
+					var _socket = _limb[0];
+					
+					_socket[0] = _surfOffX + _x;
+					_socket[1] = _surfOffY + _y; // WEAPON POSITION AND ECT SHOULD BE A STRUCT AS WELL, LIKE IN MAIN GAME (perhaps the weapon could store the animations for using it in its own struct data? Hm, probably just item curves and what not like the other items)
+					_socket[2] = _componentHeightNet; // * dsin(leanAngle); ??? height angle // set the two knowns, origin and gun position (the end)
+					
+					var _extremity = _limb[2];
 					
 					if(limbType == limbTypes.arm) { // if arm apply arm movements or... something..
-						_limb[2][0] = _creatureId.weaponPosition[0] + gunHoldOffset[0] * dcos(_creatureId.gunHoldDirection); // x
-						_limb[2][1] = _creatureId.weaponPosition[1] + gunHoldOffset[1] * dsin(_creatureId.gunHoldDirection); // y (duh)
-						_limb[2][2] = _creatureId.weaponPosition[2] + gunHoldOffset[2]; // height //TODO height of gun is relevant but maybe y can do this ? But then it's faked and will surely break at some point
+						var _weaponPos = _creatureId.weaponPosition;
+						var _weaponHoldDir = _creatureId.weaponHoldDirection;
+						var _cos = dcos(_weaponHoldDir);
+						var _sin = -dsin(_weaponHoldDir);
+						
+						
+						_extremity[0] = _weaponPos[0] + weaponHoldOffsets[0] * _cos - weaponHoldOffsets[1] * _sin; // x
+						_extremity[1] = _weaponPos[1] + weaponHoldOffsets[1] * _cos - weaponHoldOffsets[0] * -_sin; // y (duh)
+						_extremity[2] = _weaponPos[2] + weaponHoldOffsets[2]; // height //TODO height of gun is relevant but maybe y can do this ? But then it's faked and will surely break at some point
 					}
 				
-					var _limbDir = point_direction(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
+					var _limbDir = point_direction(_socket[0], _socket[1], _extremity[0], _extremity[1]);
 					if(limbType == limbTypes.leg) {
-						var _limbDist = point_distance_3d(_limb[0][0], _limb[0][1], _limb[0][2], _limb[2][0], _limb[2][1], _limb[2][2]); // no respect for non 3 length limbs..
-						var _limbLen = _limb[0][limbNode.len];
+						var _limbDist = point_distance_3d(_socket[0], _socket[1], _socket[2], _extremity[0], _extremity[1], _extremity[2]); // no respect for non 3 length limbs..
+						var _limbLen = _socket[limbNode.len];
 						
-						//draw_text(180, 100, "dist " + string(_limbDist));
-						//draw_text(180, 140, "len " + string(_limbLen));
-						
-						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, cosFacing, _directionSin, 1, _creatureId.directionFacing, 1);
+						script_setIKJoints3DLeg(_limb, _limbLen, _limbDist, _limbDir, _directionCos, _directionSin);
 						script_drawLimbSegIn3d(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY);
 					} else {
-						var _limbDist = point_distance(_limb[0][0], _limb[0][1], _limb[2][0], _limb[2][1]);
-						script_setIKJoints(_limb, _limb[0][limbNode.len], _limbDist, _limbDir, cosFacing);
-						script_drawIKLimb(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY); // surf position top left at x
+						var _limbDist = point_distance_3d(_socket[0], _socket[1], _socket[2], _extremity[0], _extremity[1], _extremity[2]); // no respect for non 3 length limbs..
+						var _limbLen = _socket[limbNode.len];
+						
+						script_setIKJoints3D(_limb, _limbLen, _limbDist, _limbDir, _directionCos, 1 - _directionSin);
+						script_drawLimbSegIn3d(_limb, self, _creatureId.spineMain.x - _surfMidX, _creatureId.spineMain.y - _surfMidY,, true);
 					}
 					#endregion
 				}

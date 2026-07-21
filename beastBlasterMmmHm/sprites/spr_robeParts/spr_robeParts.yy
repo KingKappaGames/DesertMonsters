@@ -22,6 +22,8 @@
     {"$GMSpriteFrame":"v1","%Name":"c1861035-82ed-4790-9c2e-823dce012905","name":"c1861035-82ed-4790-9c2e-823dce012905","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
     {"$GMSpriteFrame":"v1","%Name":"b8b63440-d201-404c-988f-4342c754f181","name":"b8b63440-d201-404c-988f-4342c754f181","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
     {"$GMSpriteFrame":"v1","%Name":"fd0dc3ed-da3f-4cc7-a1cc-33bfc26ea9f9","name":"fd0dc3ed-da3f-4cc7-a1cc-33bfc26ea9f9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"7f998668-ae35-4f40-867d-b627d42af8fd","name":"7f998668-ae35-4f40-867d-b627d42af8fd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e0037548-d2d8-41cb-aa8c-4ad2be2da6e7","name":"e0037548-d2d8-41cb-aa8c-4ad2be2da6e7","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -58,7 +60,7 @@
     },
     "eventStubScript":null,
     "eventToFunction":{},
-    "length":10.0,
+    "length":12.0,
     "lockOrigin":false,
     "moments":{
       "$KeyframeStore<MomentsEventKeyframe>":"",
@@ -109,6 +111,12 @@
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
                 "0":{"$SpriteFrameKeyframe":"","Id":{"name":"fd0dc3ed-da3f-4cc7-a1cc-33bfc26ea9f9","path":"sprites/spr_robeParts/spr_robeParts.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
               },"Disabled":false,"id":"b024f384-abe0-47d0-9519-1e7b9618d9db","IsCreationKey":false,"Key":9.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7f998668-ae35-4f40-867d-b627d42af8fd","path":"sprites/spr_robeParts/spr_robeParts.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"1b6d70e4-fb0c-4f23-9e14-4b3c73fecef1","IsCreationKey":false,"Key":10.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"e0037548-d2d8-41cb-aa8c-4ad2be2da6e7","path":"sprites/spr_robeParts/spr_robeParts.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"21e622d5-6c5b-462b-a110-a4b872101a93","IsCreationKey":false,"Key":11.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

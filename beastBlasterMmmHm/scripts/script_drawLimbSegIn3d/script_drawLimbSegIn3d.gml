@@ -1,5 +1,5 @@
 ///@desc This function turns a bunch of limb data into start and end x/y coordinates on screen
-function script_drawLimbSegIn3d(limb, componentId, surfOffX, surfOffY, perspectiveAngleFromGroundDegrees = 45) { // I may want to default this to a magic number to save the sin and cos calls since... how often would the weapon angles change? Never..?
+function script_drawLimbSegIn3d(limb, componentId, surfOffX, surfOffY, perspectiveAngleFromGroundDegrees = 40, useDepthing = false) { // I may want to default this to a magic number to save the sin and cos calls since... how often would the weapon angles change? Never..?
 	live_auto_call
 	
 	var _segVisualLength = sprite_get_width(componentId.sprite[0]);//limb[0][3];

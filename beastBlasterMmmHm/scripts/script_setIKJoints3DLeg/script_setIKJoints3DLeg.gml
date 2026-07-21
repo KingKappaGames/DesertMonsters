@@ -5,9 +5,7 @@
 ///@param endDir Dir from start point to end point of limb
 ///@param facingCos The visual compression (as a -1-1 cos output) of the limb horizontally, if facing you for example any out will be irrelavent ect
 ///@param facingSin The visual compression (as a -1-1 cos output) of the limb vertically
-function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin) { // which direction they bend for up or down angles
-	live_auto_call
-	
+function script_setIKJoints3DLeg(nodeArray, segmentLength, endDist, endDir, facingCos, facingSin) { // which direction they bend for up or down angles
 	if(endDist > nodeArray[0][3] * 2) {
 		endDist = nodeArray[0][3] * 2; // [0][3] is length for this node of the limb, ergo check it as a max also this is stupid //TODO fix this nonsense with mismatching distances vs the draw and step
 	}
@@ -33,7 +31,7 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 	var _endFromOriginX = _originNode[0] - _endNode[0]; // TURNS OUT THIS IS DOT PRODUCT STUFF
 	var _endFromOriginY = _originNode[1] - _endNode[1];
 	
-	var _footAheadDist = dot_product(_endFromOriginX, _endFromOriginY, facingCos, -facingSin); // I DO NOT UNDERSTAND HOW TO BEND THESE ARMS, i thought that doing a dot product towards the body, instead of out towards facing would work since arms bend opposite legs but it doesn't. I also tried flipping the results but that didn't work either. So the main problem in this project atm is the arm / non-leg limb drawing math. Good luck. Legs look amazing though so there's that.                
+	var _footAheadDist = dot_product(_endFromOriginX, _endFromOriginY, facingCos, -facingSin);
 
 	var _kneeHeightAngle = (darctan2((_originNode[2] - _endNode[2]), _footAheadDist) - 90); 
 // first step is distance which is joint out dist, the second angle is direction facing, the third angle is vertical tilt which is a nightmare to get. How to convert tilt, direction, and out dist to points I'm not sure... 
@@ -41,7 +39,11 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 	var _kneeSin = dsin(_kneeHeightAngle); // this value could be gotten from a flipped x/y of the leg without needing to trig convert it.. maybe
 	var _kneeCos = dcos(_kneeHeightAngle);
 
-	nodeArray[1][0] = _jointX + facingCos * _jointOutDist * _kneeCos * 10;
-	nodeArray[1][1] = _jointY - facingSin * _jointOutDist * _kneeCos * 10; // final joint positions
-	nodeArray[1][2] = _jointZ + _kneeSin * _jointOutDist * 10;
+	nodeArray[1][0] = _jointX + facingCos * _jointOutDist * _kneeCos;
+	nodeArray[1][1] = _jointY - facingSin * _jointOutDist * _kneeCos; // final joint positions
+	nodeArray[1][2] = _jointZ + _kneeSin * _jointOutDist;
+	
+	//var _legIndex = array_get_index(global.players[0].legArray, nodeArray); // I should probably just pass this but who tf knows
+	
+	//global.players[0].kneeAnglesDebug[_legIndex] = _kneeHeightAngle;
 }

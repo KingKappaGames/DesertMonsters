@@ -262,11 +262,11 @@ else if(recoveringLimpTimer > 0 || alive == 0) { // ragdolling stuff
 	//var _sinFacing = dsin(_dirMoving); // hip stuff that isn't workable right now
 	
 	#region moving with speed and adding gravity
-	footLYChange += fallGravity;
-	footRYChange += fallGravity;
-	jointLYChange += fallGravity; // add gravities
-	jointRYChange += fallGravity;
-	yChange += fallGravity;
+	footLYChange += ragdollGravity;
+	footRYChange += ragdollGravity;
+	jointLYChange += ragdollGravity; // add gravities
+	jointRYChange += ragdollGravity;
+	yChange += ragdollGravity;
 	
 	#region ground contact for each of the five points in legs (do inbetween adding speeds because otherwise this will get overridden by the change being used later. Prevent movement, don't fix what's already happened. You know the deal.)
 	if(hasRF && (footRY + footRYChange > groundRFHeight)) { // cut all speeds for that piece, all of them

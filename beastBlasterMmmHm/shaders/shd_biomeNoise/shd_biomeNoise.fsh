@@ -42,7 +42,7 @@ float pNoise(vec2 p, int res) {
 }
 
 void main() {
-    vec3 col = vec3(pNoise(uv, 4));
+    vec3 col = vec3(pNoise(v_vTexcoord, 4));
 
     gl_FragColor = vec4(col,1.0);
 }

@@ -75,9 +75,9 @@ function script_mdlCreateInit() {
 
 	gunSprite = spr_pistol;
 	weaponPosition = [x, y, feetOffY]; // use arrays (structs??) to store positions both for simplicty (i guess?) but more importantly for reference passing, being able to give the component system the item 
-	gunHoldOffsets = [[0, 0, 0], [0, 0, 0]]; // the sub arrays here are hand locations relative to the x/y of the gun (must be rotated and scaled if applicable)
+	weaponHoldOffsetss = [[0, 0, 0], [0, 0, 0]]; // the sub arrays here are hand locations relative to the x/y of the gun (must be rotated and scaled if applicable)
 	gunHoldDistance = 30;
-	gunHoldDirection = 0;
+	weaponHoldDirection = 0;
 	gunAimRange = 95;
 	gunHeldDown = 0;
 	gunLength = 10;
@@ -122,7 +122,7 @@ function script_mdlStep() {
 		}
 		
 		var _prevOffY = feetOffY;
-		feetOffY = lerp(feetOffY, feetOffYBase * lerp(1, .89, power(currentSpeed * .75, 1.5)), .025) - min(sqrt((_speedChange + _dirChange) * 5) * 1.25, feetOffYBase * .2);
+		feetOffY = lerp(feetOffY, feetOffYBase * lerp(1, .89, power(currentSpeed * .75, 1.5)), .015) - min(sqrt((_speedChange + _dirChange) * 5) * 1.25, feetOffYBase * .2);
 		y -= feetOffY - _prevOffY;
 		feetY = y + feetOffY * .7;
 		spineMain.x = x + stumbleX;
@@ -137,7 +137,7 @@ function script_mdlStep() {
 		
 		#region NEW LEG STUFF
 		
-		stepUpdateDist = max(stepUpdateDistBase * sqrt(currentSpeed) * 1.1, 19 - clamp(sqrt(_dirChange) * 50, 0.0, 20));
+		stepUpdateDist = max(stepUpdateDistBase * sqrt(currentSpeed) * 1. * (1 - min(.01, _speedChange / 3/*maxSpeed*/) * 50.0), 14 - clamp(sqrt(_dirChange) * 50, 0.0, 14));
 		
 		//animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (basic overall positioning, then calculating step positions and goals and moving the legs, then calculating the animations based on the positions)
 		
@@ -176,8 +176,9 @@ function script_mdlStep() {
 		}
 		
 		//DO STEP AND PLACEMENTS (AFTER PROGRESSES ALL DONE)
-		var _maxFootDistFromNeutral = -1;
+		var _maxFootDistFromNeutral = -1; // hold var
 		var _maxDistLeg = -1;
+		var _forceLegUpdates = []; // if legs are super out of position then ommit the one leg at a time rule and update multiple (this stores leg index for those that should be forced if not already updating)
 		for(var _legI = 0; _legI < _legCount; _legI++) {
 			#region setting the local values from stored variables
 			var _hip = legArray[_legI][0];
@@ -199,16 +200,18 @@ function script_mdlStep() {
 			_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _progress); // move foot over range of movement according to time progress
 			_stepCurrent[1] = lerp(_stepInitial[1], _stepGoal[1], _progress);
 			
-			if(_allFeetOnGround && _progress == 1) { // there needs to be some way to deal with changing step lengths and repositions i think, for now just not stepping when already stepping works but has a bunch of issues
-				var _stepPlacementDist = point_distance(_stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1]); // add the height to the value but remove it when checking distance to step
-				if(_maxFootDistFromNeutral < _stepPlacementDist) {
-					_maxFootDistFromNeutral = _stepPlacementDist;
-					_maxDistLeg = _legI;
-				}
-				if(_stepPlacementDist > stepUpdateDist) {
-					script_mdlPlaceStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed);
-					_allFeetOnGround = false;
-				}
+			 // there needs to be some way to deal with changing step lengths and repositions i think, for now just not stepping when already stepping works but has a bunch of issues
+			var _stepPlacementDist = point_distance(_stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1]); // add the height to the value but remove it when checking distance to step
+			if(_maxFootDistFromNeutral < _stepPlacementDist) {
+				_maxFootDistFromNeutral = _stepPlacementDist;
+				_maxDistLeg = _legI;
+			}
+			if(_allFeetOnGround && _progress == 1 && _stepPlacementDist > stepUpdateDist) {
+				script_mdlPlaceStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed, _speedChange);
+				_allFeetOnGround = false;
+			} else if(_stepPlacementDist > legSegLen * 2.35) { // force update dist for really out of place limbs, maybe even trigger ragdolls if you screw it up enough?
+				script_mdlPlaceStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed, _speedChange); // super off legs don't trigger on ground bool, maybe?
+				audio_play_sound(snd_BasicShotWeak, 0, false);
 			}
 			
 			#endregion
@@ -217,7 +220,7 @@ function script_mdlStep() {
 			var _footDir = point_direction(_hip[0], _hip[1], _stepCurrent[0], _stepCurrent[1]);
 		
 			#region clamp the foot distance to leg length to create rounded extensions, more of a fix or QA check than a feature but does create mild angled foot movements too
-			if(_footDist > legSegLen * 2) {
+			if(_footDist > legSegLen * 2.) {
 				var _distOverMultiply = (legSegLen * 2) / _footDist;
 				
 				_stepCurrent[0] = lerp(_hip[0], _stepCurrent[0], _distOverMultiply);
@@ -233,16 +236,16 @@ function script_mdlStep() {
 			#endregion
 		}
 		
-		if(_allFeetOnGround) {
-			if(_maxFootDistFromNeutral > legSegLen * .4) {
-				var _leg = legArray[_maxDistLeg];
-				script_mdlPlaceStepGoal(_maxDistLeg, _leg[2][0], _leg[2][1], _leg[0][0], _leg[0][1]);
-			}
-		}
+		//if(_allFeetOnGround) {
+			//if(_maxFootDistFromNeutral > legSegLen * 2.) {
+				//var _leg = legArray[_maxDistLeg];
+				//script_mdlPlaceStepGoal(_maxDistLeg, _leg[2][0], _leg[2][1], _leg[0][0], _leg[0][1]);
+			//}
+		//}
 		
 		#region player control (aka move somewhere else and feed values)
 		var _aimToFacingDifference = angle_difference(aimDir, directionFacing);
-		gunHoldDirection = (directionFacing + clamp(_aimToFacingDifference, -gunAimRange, gunAimRange)) % 360; // limits aiming held range to facing direction plus aiming range 
+		weaponHoldDirection = (directionFacing + clamp(_aimToFacingDifference, -gunAimRange, gunAimRange)) % 360; // limits aiming held range to facing direction plus aiming range 
 		var _holdDistMult = 1;
 		if(abs(_aimToFacingDifference) >= gunAimRange) { // if aiming outside of range
 			gunHeldDown = 1; // dont aim the gun up if not possible to aim at a given target, meh.
@@ -254,15 +257,15 @@ function script_mdlStep() {
 		}
 		#endregion
 			
-		weaponPosition[0] = _spineX + dcos(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
-		weaponPosition[1] = _spineY - (dsin(gunHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7; // lower and bring in gun when not holding up
+		weaponPosition[0] = _spineX + dcos(weaponHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeX;
+		weaponPosition[1] = _spineY - (dsin(weaponHoldDirection) * gunHoldDistance * _holdDistMult + gunShakeY) * .7; // lower and bring in gun when not holding up
 		weaponPosition[2] = feetOffY - ((gunHeldDown * 6) + ((1 - gunHeldDown) * (22 - _holdDistMult * 22)));
 		if(point_distance(_spineX, _spineY, weaponPosition[0], weaponPosition[1]) > legSegLen * 2) {
-			weaponPosition[0] = _spineX + dcos(gunHoldDirection) * 20;
-			weaponPosition[1] = _spineY - dsin(gunHoldDirection) * 13;
+			weaponPosition[0] = _spineX + dcos(weaponHoldDirection) * 20;
+			weaponPosition[1] = _spineY - dsin(weaponHoldDirection) * 20;
 		}
 		
-		if(gunHoldDirection > 0 && gunHoldDirection < 180) {
+		if(weaponHoldDirection > 0 && weaponHoldDirection < 180) {
 			gunDrawBehind = 1;
 		} else {
 			gunDrawBehind = 0;
@@ -304,10 +307,10 @@ function script_mdlStep() {
 			for(var _nodeSpeedsZ = array_length(ragdollLegNodesSpeed) - 1; _nodeSpeedsZ >= 0; _nodeSpeedsZ--) {
 				var _leg = ragdollLegNodesSpeed[_nodeSpeedsZ];
 				for(var _node = array_length(_leg) - 1; _node >= 0; _node--) {
-					_leg[_node][2] += fallGravity;
+					_leg[_node][2] += ragdollGravity;
 				}
 			}
-			yChange += fallGravity;
+			yChange += ragdollGravity;
 			
 			#region ground contact for each of the five points in legs (do inbetween adding speeds because otherwise this will get overridden by the change being used later. Prevent movement, don't fix what's already happened. You know the deal.)
 			if(hasRF && (footRY + footRYChange > groundRFHeight)) { // cut all speeds for that piece, all of them
@@ -493,6 +496,9 @@ function script_mdlDraw() {
 	
 	surface_set_target(_mdlSurf);
 	
+	gpu_set_ztestenable(true);
+	gpu_set_zwriteenable(true);
+	
 	draw_clear_alpha(c_white, 0);
 	
 	#region bunch of things for general positioning, needs to be established first
@@ -508,8 +514,8 @@ function script_mdlDraw() {
 	#region draw gun
 	var _heldDownAngleAdjust = 0;
 	if(gunHeldDown) {
-		_heldDownAngleAdjust = (angle_difference(270, gunHoldDirection) / 3); // set the holding down effect if out of aim range (when aiming away hold gun down to side)
-		var _upAngleDiff = angle_difference(gunHoldDirection, 90);
+		_heldDownAngleAdjust = (angle_difference(270, weaponHoldDirection) / 3); // set the holding down effect if out of aim range (when aiming away hold gun down to side)
+		var _upAngleDiff = angle_difference(weaponHoldDirection, 90);
 		if(abs(_upAngleDiff) < 90) {
 			_heldDownAngleAdjust *= clamp(abs(_upAngleDiff) - 45, 0, 45) / 45; // reduce adjust as it approaches upward hold angle because pushing an up gun towards down doesn't make any sense
 		}
@@ -519,31 +525,23 @@ function script_mdlDraw() {
 	weaponPosition[1] += _leanAheadY + _jostle / 2; // position the gun with body movement variations
 	
 	if(gunDrawBehind) {
-		script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun in front if supposed to be in front
+		script_drawWeapon(gunSprite, weaponPosition, weaponHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun in front if supposed to be in front
 	}
 	
 	#endregion
-	
-	#region draw legs and feet and body
-	
-	var _cosFacing = dcos(_dirMoving);
-	var _sinFacing = dsin(_dirMoving);
-	
-	#endregion
-	
 	
 	array_sort(bodyComponents, script_mdlSortComponents);
 	
 	var _counter = 0; 
 	//draw the components in front
-	_counter += script_drawComponents(0, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, true);
+	_counter += script_drawComponents(0, _leanAheadX, _leanAheadY, _jostle, _dirMoving, true);
 	
 	
 	//draw the rest of the body components in front of body
-	_counter += script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _cosFacing, _dirMoving, false);
+	_counter += script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _dirMoving, false);
 	
 	if(!gunDrawBehind) {
-		script_drawWeapon(gunSprite, weaponPosition, gunHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun behind if supposed to be behind
+		script_drawWeapon(gunSprite, weaponPosition, weaponHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun behind if supposed to be behind
 	}
 	
 	surface_reset_target();
