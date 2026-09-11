@@ -316,6 +316,15 @@ enum E_step {
 	speedRef = 3
 }
 
+enum E_legInfo {
+	x,
+	y,
+	z,
+	length, 
+	connected, // severing
+	count
+}
+
 #endregion
 
 ///@desc This uses deactivation and object type deleting to clear all map visuals that don't fall within the generation area (generate in, delete out, this keeps a balanced border to the generator)

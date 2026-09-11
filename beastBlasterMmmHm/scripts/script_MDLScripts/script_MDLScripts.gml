@@ -34,7 +34,7 @@ function script_mdlPlaceStepGoal(legIndex, currentX, currentY, goalX, goalY, mov
 	_goalPos[0] = _leg[0][0] + clamp((goalX - currentX) * debugOverStep, -legSegLen * debugClamp, legSegLen * debugClamp) + xChange * legSegLen * debugPushAhead; // this takes into acount the dist from previous step, the leg length, the duration of the step, add more for accuracy perhaps
 	_goalPos[1] = _leg[0][1] + clamp((goalY - currentY) * debugOverStep, -legSegLen * debugClamp, legSegLen * debugClamp) + yChange * legSegLen * debugPushAhead;
 	
-	var _stepAhead = point_distance(_leg[0][0], _leg[0][1], _goalPos[0], _goalPos[1]);
+	var _stepAhead = point_distance(_leg[0][E_legInfo.x], _leg[0][E_legInfo.y], _goalPos[0], _goalPos[1]);
 	//msg(point_distance(currentX, currentY, _goalPos[0], _goalPos[0]));
 	
 	var _stepTime = (_stepAhead + 3) / (moveSpeed + .1) * (game_get_speed(gamespeed_microseconds) / 1000) * 2; // how many frames to reach this point (as the body/center) should put the foot at the end of it's step (in real life steps cross from behind and in front then pause for half the time, thus the step is 2x as fast or more than the body since it's only moving half the time) 
@@ -115,7 +115,7 @@ function script_mdlRagdoll(duration = 212) {
 		//turn torso rotation, arms elbow, hands, leg joint, and feet into points with their own x/y change. This x/y change would be the x/y and the hitbox would be recentered on the torso x/y as to avoid disconnects for big ragdolls. 
 		
 		//"height"change representing the vertical speed up and down the map, basically if you fly back or towards the camera your ground y value will increase or decrease as you travel and be clipped when you hit the ground, we're faking lateral movement to do horiztonal and height in the air movement with the x/y change values
-		//show_debug_message($"left shin values adding {jointLX}, {jointRX}, {footLX}, {footRY}");
+		//show_debug_message($"left shin values adding {legArray[1][1][0]}, {legArray[0][1][0]}, {legArray[1][2][0]}, {legArray[0][2][2]}");
 	
 		#region unused until ragdoll speed vars for joints... This is seeming like a worse and worse idea but at the same time I know this must be a thing because the joints need speeds so... Ugh
 		
@@ -143,11 +143,11 @@ function script_mdlRagdoll(duration = 212) {
 		
 		xChange = spineMain.x - spineMain.xPrev;
 		yChange = spineMain.y - spineMain.yPrev;
-		zChange = spineMain.height - spineMain.zPrev;
+		zChange = spineMain.z - spineMain.zPrev;
 		
 		x = spineMain.x;
 		y = spineMain.y; // hips are projected during standing and not during rd so match them up during ragdolling
-		z = spineMain.height;
+		z = spineMain.z;
 		#endregion
 		
 		ragdolling = true;
@@ -159,6 +159,10 @@ function script_mdlRagdollStopMotion() {
 	stumbleY = 0; // not sure we even need this stuff (stuble vs ragdoll?) but it may keep lingering stuble strength from going into the next get up
 	stumbleXChange = 0;
 	stumbleYChange = 0;
+	
+	spineMain.x = x;
+	spineMain.y = y;
+	spineMain.z = z;
 	
 	var _leg = 0;
 	var _nodeSpeed = 0;

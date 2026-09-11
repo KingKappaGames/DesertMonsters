@@ -36,7 +36,7 @@ feetOffY = feetOffYBase;
 feetOffX = 0; //??
 feetY = y + feetOffY;
 
-spineMain = new script_createSpine(x, y, 90, 50);
+spineMain = new script_createSpine(x, y, 50);
 #endregion
 
 #region gun and bullet values
@@ -220,31 +220,6 @@ weaponControls = function() {
 }
 #endregion
 
-#region leg variables
-legSegLen = 32;
-#endregion
-
-#region NEW LEG STUFF, set up component functions and arrays for reference
-stepUpdateDistBase = 35;
-stepUpdateDist = stepUpdateDistBase;
-
-legArray = [  [[x, y, 0, legSegLen], [x, y, 0, legSegLen], [x, y, 0, legSegLen]], [[x, y, 0, legSegLen], [x, y, 0, legSegLen], [x, y, 0, legSegLen]]]; // 2 LEGS for now in nested structure, legs, nodes, coords (+ length, width) in that nesting
-stepPositionsInitial = [ [x, y, 0], [x, y, 0] ]; // coords for each foot landed or come from during a step (aka 2 [x,y,z] for humans)
-stepPositionsGoal = [ [x, y, 0], [x, y, 0] ]; // coords for each foot to land at or go to during a step (aka 2 [x,y,z] for humans)
-
-stepTimings = [[0, current_time, current_time, 0], [0, current_time, current_time, 0]]; //[progress(updated by step), startTime, endTime, speedRef] (where speed reference is the speed that the thing was moving for that step to compare against for clipping a step on speed up or extending a step in slow down.
-
-ragdollLegNodesSpeed = [  [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]] ]; // xyz speed in each node of each leg...
-
-thighWidth = 20;
-shinWidth = 10; // reset down below for size of animal
-
-debugClamp = .09;
-debugOverStep = .1;
-debugPushAhead = .68;
-
-#endregion
-
 #region arm arrays, more of a loose structure to mirror the component settings
 limbLength = 20;
 limbArray = [  [[x, y, 0, limbLength], [x, y, 0, limbLength], [x, y, 0, limbLength]], [[x, y, 0, limbLength], [x, y, 0, limbLength], [x, y, 0, limbLength]]]; // 2 arms for now in nested structure, arms, nodes, coords in that nesting
@@ -260,13 +235,13 @@ bodyComponents = [];
 var _fu = 0;
 //                                              only if is limb
 //                                   target   spine        [limbType]       sprite(s)                 image(s)  rotRel  height   dist,  xscl          yscl     viewAng   viewComp    color          imgGetRotAdd   fixedAngDraw       limbArrRef     gunOffArrRef
-//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_knightPartsDownresd,    [3, 5, 4, 5], 0,     -4,        0,     1.4,           1.4,         0,      .7,   #3D3D29,               -45,      undefined);                                          // body
+_fu = new script_addBodyComponent(    id,    spineMain,                 spr_knightPartsDownresd,    [3, 5, 4, 5], 0,     -4,        -6,     1.4,           1.4,         0,      .7,   #3D3D29,               -45,      undefined);                                          // body
 head = new script_addBodyComponent(   id,    spineMain,                 spr_knightPartsDownresd,    [1, 2, 0, 2], 0,     31,       2,     1.,            1,         0,      .6,      #ffaaaa,               -45,      0);                                          // head
-//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        85,    14,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        -85,   14,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    13,       15,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], weaponHoldOffsetss[0]); // arm arrays
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   13,       15,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], weaponHoldOffsetss[1]); // arm arrays
-//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  4,        0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
+_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        85,    18,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  0,        -85,   18,       10,    1.6,           2,         0,      .4,      #4D4D39,               0,      undefined);                                          // shoulder
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    18,       10,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], weaponHoldOffsetss[0]); // arm arrays
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   18,       10,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], weaponHoldOffsetss[1]); // arm arrays
+//_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  4,      0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
 _fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   80,    -10,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
 _fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   -80,   -10,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 1); // leg arrays
 

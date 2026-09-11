@@ -30,6 +30,7 @@ function script_setIKJoints3DLeg(nodeArray, segmentLength, endDist, endDir, faci
 	
 	var _endFromOriginX = _originNode[0] - _endNode[0]; // TURNS OUT THIS IS DOT PRODUCT STUFF
 	var _endFromOriginY = _originNode[1] - _endNode[1];
+	var _endFromOriginZ = _originNode[2] - _endNode[2]; // i'm p sure i can replace this with the other limb drawer using cross products but ehhh, for now it works
 	
 	var _footAheadDist = dot_product(_endFromOriginX, _endFromOriginY, facingCos, -facingSin);
 

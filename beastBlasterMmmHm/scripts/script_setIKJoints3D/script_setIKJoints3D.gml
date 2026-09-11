@@ -30,18 +30,24 @@ function script_setIKJoints3D(nodeArray, segmentLength, endDist, endDir, facingC
 	var _jointY = ((_originNode[1] + _endNode[1]) / 2); // visual mid point simply between hip and foot (or other limb types)
 	var _jointZ = ((_originNode[2] + _endNode[2]) / 2);
 	
-	var _endFromOriginX = _originNode[0] - _endNode[0]; // TURNS OUT THIS IS DOT PRODUCT STUFF
+	var _endFromOriginX = _originNode[0] - _endNode[0];
 	var _endFromOriginY = _originNode[1] - _endNode[1];
+	var _endFromOriginZ = _originNode[2] - _endNode[2];
 	
-	var _footAheadDist = dot_product(_endFromOriginX, _endFromOriginY, facingCos, -facingSin); // I DO NOT UNDERSTAND HOW TO BEND THESE ARMS, i thought that doing a dot product towards the body, instead of out towards facing would work since arms bend opposite legs but it doesn't. I also tried flipping the results but that didn't work either. So the main problem in this project atm is the arm / non-leg limb drawing math. Good luck. Legs look amazing though so there's that.                
-
-	var _kneeHeightAngle = (darctan2((_originNode[2] - _endNode[2]), _footAheadDist) - 90); 
-// first step is distance which is joint out dist, the second angle is direction facing, the third angle is vertical tilt which is a nightmare to get. How to convert tilt, direction, and out dist to points I'm not sure... 
-
-	var _kneeSin = dsin(_kneeHeightAngle); // this value could be gotten from a flipped x/y of the leg without needing to trig convert it.. maybe
-	var _kneeCos = dcos(_kneeHeightAngle);
-
-	nodeArray[1][0] = _jointX + facingCos * _jointOutDist * _kneeCos * 10;
-	nodeArray[1][1] = _jointY - facingSin * _jointOutDist * _kneeCos * 10; // final joint positions
-	nodeArray[1][2] = _jointZ + _kneeSin * _jointOutDist * 10;
+	var _toHandDirHor = point_direction(_endFromOriginX, _endFromOriginY, 0, 0);
+	
+	var _jointBendAxisX = lengthdir_x(1, _toHandDirHor + 90); // add 90 to the horizontal axis to get the left right aspect of the otherwise straight "out" direction
+	var _jointBendAxisY = lengthdir_y(1, _toHandDirHor + 90); // the axis that runs horizontally through the elbow or whatever joint such that the bones go around it when they bend (this is the axel of the arm, like a wheel spins, for some reason im getting confused by which axis, excuse me)
+	
+	var _jointPointVector = cross(_jointBendAxisX, _jointBendAxisY, 0, _endFromOriginX, _endFromOriginY, _endFromOriginZ);
+	
+	var _jointPointVectorLen = point_distance_3d(_jointPointVector[0], _jointPointVector[1], _jointPointVector[2], 0, 0, 0);
+	
+	_jointPointVector[0] *= (_jointOutDist / _jointPointVectorLen);
+	_jointPointVector[1] *= (_jointOutDist / _jointPointVectorLen);
+	_jointPointVector[2] *= (_jointOutDist / _jointPointVectorLen);
+	
+	nodeArray[1][0] = _jointX + _jointPointVector[0];
+	nodeArray[1][1] = _jointY + _jointPointVector[1];
+	nodeArray[1][2] = _jointZ + _jointPointVector[2];
 }

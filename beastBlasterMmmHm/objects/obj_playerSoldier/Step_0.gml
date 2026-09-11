@@ -9,71 +9,72 @@ if(keyboard_check(vk_comma)) {
 } else {
 	game_set_speed(144, gamespeed_fps); // the legs are moving too fast which allows for them to both jump ahead then have dead time before either needs to move again, that's what's causing the clumping
 }
-
-#region movement and move contols
-var _cursorX = input_cursor_x(playerIndex);
-var _cursorY = input_cursor_y(playerIndex);
-aimDir = point_direction(x, y, _cursorX, _cursorY);
-aimDist = point_distance(x, y, _cursorX, _cursorY);
-var _sprint = .75 + input_check("sprint", playerIndex) * .8;
-var _inputs = [input_value("right", playerIndex), input_value("left", playerIndex), input_value("down", playerIndex), input_value("up", playerIndex)];
-var _dirMoveStick = point_direction(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]);
-var _distMoveStick = clamp(point_distance(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]), 0, 1);
-xChange += dcos(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick;
-yChange -= dsin(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick; // push in dir and distance of stick
-
-x += xChange;
-y += yChange;
-//depth = - (y + 60); // this project doesn't use depth... YET??? Maybe, I assume when i start making trees and walls and buildings I'll switch to -y depth but for now it's simpler to do surfaces with out any depth consideration. Especially the dust and debris... That'll be a pain with surfaces unless I go full layer stacking and do what main game does... Though I don't know if I have the height for it here... Too many layers required I think.
-xChange *= speedDecay;
-yChange *= speedDecay;
-
-previousSpeed = currentSpeed;
-currentSpeed = point_distance(0, 0, xChange, yChange);
-
-previousDir = currentDir;
-currentDir = point_direction(0, 0, xChange, yChange);
-
-script_mdlStep();
-
-#region player controls, camera, and info maintenance
-
-if(input_check_released("reload", playerIndex)) { // reload logic
-	if(reloadingTimer > 0) {
-		cancelReload();
-	} else {
-		startReload();
+if(!ragdolling) {
+	#region movement and move contols
+	var _cursorX = input_cursor_x(playerIndex);
+	var _cursorY = input_cursor_y(playerIndex);
+	aimDir = point_direction(x, y, _cursorX, _cursorY);
+	aimDist = point_distance(x, y, _cursorX, _cursorY);
+	var _sprint = .75 + input_check("sprint", playerIndex) * .8;
+	var _inputs = [input_value("right", playerIndex), input_value("left", playerIndex), input_value("down", playerIndex), input_value("up", playerIndex)];
+	var _dirMoveStick = point_direction(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]);
+	var _distMoveStick = clamp(point_distance(0, 0, _inputs[0] - _inputs[1], _inputs[2] - _inputs[3]), 0, 1);
+	xChange += dcos(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick;
+	yChange -= dsin(_dirMoveStick) * moveSpeed * _sprint * _distMoveStick; // push in dir and distance of stick
+	
+	x += xChange;
+	y += yChange;
+	//depth = - (y + 60); // this project doesn't use depth... YET??? Maybe, I assume when i start making trees and walls and buildings I'll switch to -y depth but for now it's simpler to do surfaces with out any depth consideration. Especially the dust and debris... That'll be a pain with surfaces unless I go full layer stacking and do what main game does... Though I don't know if I have the height for it here... Too many layers required I think.
+	xChange *= speedDecay;
+	yChange *= speedDecay;
+	
+	previousSpeed = currentSpeed;
+	currentSpeed = point_distance(0, 0, xChange, yChange);
+	
+	previousDir = currentDir;
+	currentDir = point_direction(0, 0, xChange, yChange);
+	
+	#region player controls, camera, and info maintenance
+	
+	if(input_check_released("reload", playerIndex)) { // reload logic
+		if(reloadingTimer > 0) {
+			cancelReload();
+		} else {
+			startReload();
+		}
 	}
-}
-
-if(input_check_released("gunSwitch", playerIndex)) { // swap weapons
-	setTurret(clamp((gunType + 1) % 4, 1, 99));
-}
-
-if(reloadingTimer > 0) { // reload timers and ammo logic
-	reloadingTimer--;
-	if(reloadingTimer == 0) {
-		ammoCurrent = ammoMax;
+	
+	if(input_check_released("gunSwitch", playerIndex)) { // swap weapons
+		setTurret(clamp((gunType + 1) % 4, 1, 99));
 	}
-}
-
-#region camera setting
-if(global.cameraSplitOption == true) {
-	camX = lerp(camX, ((x + x + _cursorX) / 3) - camera_get_view_width(view_camera[playerIndex]) / 2, .015);
-	camY = lerp(camY, ((y + _cursorY) / 2) - camera_get_view_height(view_camera[playerIndex]) / 2, .02);
-	camera_set_view_pos(view_camera[playerIndex], camX, camY);
-}
-#endregion
-
-if(input_check_released("characterSwitch", playerIndex)) { // get in and out of plane
-	var _player = instance_create_layer(x, y, "Instances", obj_playerCar);
-	_player.playerIndex = playerIndex;
-	instance_destroy();
-	_player.setCursorActive(_player.playerIndex); // in the destroy it sets mouse back to false so this needs to be after
-	exit;
+	
+	if(reloadingTimer > 0) { // reload timers and ammo logic
+		reloadingTimer--;
+		if(reloadingTimer == 0) {
+			ammoCurrent = ammoMax;
+		}
+	}
+	
+	#region camera setting
+	if(global.cameraSplitOption == true) {
+		camX = lerp(camX, ((x + x + _cursorX) / 3) - camera_get_view_width(view_camera[playerIndex]) / 2, .015);
+		camY = lerp(camY, ((y + _cursorY) / 2) - camera_get_view_height(view_camera[playerIndex]) / 2, .02);
+		camera_set_view_pos(view_camera[playerIndex], camX, camY);
+	}
+	#endregion
+	
+	if(input_check_released("characterSwitch", playerIndex)) { // get in and out of plane
+		var _player = instance_create_layer(x, y, "Instances", obj_playerCar);
+		_player.playerIndex = playerIndex;
+		instance_destroy();
+		_player.setCursorActive(_player.playerIndex); // in the destroy it sets mouse back to false so this needs to be after
+		exit;
+	}
 }
 	
 //ammoCurrent = ammoMax; // clean
+
+script_mdlStep();
 
 event_inherited();
 
@@ -92,10 +93,46 @@ if(keyboard_check_released(vk_backspace)) {
 }
 
 if(keyboard_check(ord("U"))) {
-	var _dir = random(360);
-	var _power = sqr(random(.8));
-	stumbleXChange += lengthdir_x(_power, _dir);
-	stumbleYChange += lengthdir_y(_power, _dir);
+	//var _dir = random(360);
+	//var _power = sqr(random(.8));
+	//stumbleXChange += lengthdir_x(_power, _dir);
+	//stumbleYChange += lengthdir_y(_power, _dir);
+	
+	//spineMain.x = random_range(10, 100);
+	//spineMain.y = random_range(10, 100);
+	//spineMain.z = random_range(10, 100);
+	
+	x = mouse_x;
+	y = mouse_y;
+	z = 60 + dsin(current_time * 1.) * 50;
+	
+	xChange = x - xprevious;
+	yChange = y - yprevious;
+	zChange = z - zprevious;
+	
+	//var _footR = legArray[0][2];
+	//_footR[0] = mouse_x;
+	//_footR[1] = mouse_y;
+	//_footR[2] = 40 + dsin(current_time * .05) * 40;
+	
+	//spineMain.y = random_range(10, 100);
+	//spineMain.z = random_range(10, 100);
+}
+if(keyboard_check_released(ord("U"))) {
+	spineMain.x = mouse_x;
+	spineMain.y = mouse_y;
+	spineMain.z = 40;
+	
+	//ragdollLegNodesSpeed[0][2][2] = 12;
+}
+
+//moveSpeed = .005;
+
+//recoveringLimpTimer = 10000;
+//ragdolling = true;
+
+if(irandom(50) == 0) {
+	ragdollLegNodesSpeed[irandom(1)][irandom(2)][irandom(2)] = random_range(-3, 3);
 }
 
 if(keyboard_check_released(ord("J"))) {
@@ -106,6 +143,6 @@ if(keyboard_check_released(ord("L"))) {
 	script_mdlRagdoll();
 }
 
-debugClamp *= 1 + (keyboard_check(ord("U")) - keyboard_check(ord("J"))) * .0035;
-debugOverStep *= 1 + (keyboard_check(ord("I")) - keyboard_check(ord("K"))) * .0035;
-debugPushAhead *= 1 + (keyboard_check(ord("O")) - keyboard_check(ord("L"))) * .0035;
+//debugClamp *= 1 + (keyboard_check(ord("U")) - keyboard_check(ord("J"))) * .0035;
+//debugOverStep *= 1 + (keyboard_check(ord("I")) - keyboard_check(ord("K"))) * .0035;
+//debugPushAhead *= 1 + (keyboard_check(ord("O")) - keyboard_check(ord("L"))) * .0035;

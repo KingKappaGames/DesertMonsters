@@ -13,6 +13,7 @@ function script_mdlCreateInit() {
 	aimDist = 0;
 	
 	z = 0;
+	zprevious = z;
 	
 	xChange = 0;
 	yChange = 0;
@@ -28,10 +29,12 @@ function script_mdlCreateInit() {
 	legSegLen = 32;
 	hipDir = 0;
 	
+	alive = true;
+	
 	ragdolling = false;
 	recoveringStandingTimer = 0;
 	recoveringLimpTimer = 0; // if dead then despawn or draw to surface when this expires other wise switch to standing behavior
-	ragdollGravity = .025; // adds speed to bob y when dead or rag dolling to give collapsing
+	ragdollGravity = -.08; // adds speed to bob y when dead or rag dolling to give collapsing
 	
 	stumbleXChange = 0;
 	stumbleYChange = 0;
@@ -46,14 +49,20 @@ function script_mdlCreateInit() {
 	stepUpdateDistBase = 36;
 	stepUpdateDist = stepUpdateDistBase;
 	
-	legArray = []; // nested structure, legs, nodes, coords (+ length, width) in that nesting
+	#region NEW LEG STUFF, set up component functions and arrays for reference
+	legSegLen = 32;
+
+	stepUpdateDistBase = 35;
+	stepUpdateDist = stepUpdateDistBase;
+	
+	legArray = [  [[x, y, 0, legSegLen, true], [x, y, 0, legSegLen, true], [x, y, 0, legSegLen, true]], [[x, y, 0, legSegLen, true], [x, y, 0, legSegLen, true], [x, y, 0, legSegLen, true]]]; // 2 LEGS for now in nested structure, legs, nodes, coords (+ length, width) in that nesting E_legInfo
 	legArrayPrev = [];
-	stepPositionsInitial = []; // coords for each foot landed or come from during a step (aka 2 [x,y,z] for humans)
-	stepPositionsGoal = []; // coords for each foot to land at or go to during a step (aka 2 [x,y,z] for humans)
+	stepPositionsInitial = [ [x, y, 0], [x, y, 0] ]; // coords for each foot landed or come from during a step (aka 2 [x,y,z] for humans)
+	stepPositionsGoal = [ [x, y, 0], [x, y, 0] ]; // coords for each foot to land at or go to during a step (aka 2 [x,y,z] for humans)
 	
 	stepTimings = [[0, current_time, current_time, 0], [0, current_time, current_time, 0]]; //[progress(updated by step), startTime, endTime, speedRef] (where speed reference is the speed that the thing was moving for that step to compare against for clipping a step on speed up or extending a step in slow down.
 	
-	ragdollLegNodesSpeed = [];
+	ragdollLegNodesSpeed = [  [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]] ]; // xyz speed in each node of each leg...
 	
 	thighWidth = 20;
 	shinWidth = 10; // reset down below for size of animal
@@ -62,13 +71,9 @@ function script_mdlCreateInit() {
 	debugOverStep = .1;
 	debugPushAhead = .68;
 	
-	kneeAnglesDebug = [0, 0]; // debug!
-	
-	#region prevVars for speed deduction
-	
-	prevHipsX = 0;
-	prevHipsY = 0;
 	#endregion
+	
+	kneeAnglesDebug = [0, 0]; // debug!
 	
 	#region weapon holding (the model animation parts of gun logic..)
 	holdingWeapon = true;
@@ -96,10 +101,12 @@ function script_mdlCreateInit() {
 function script_mdlStep() {
 	live_auto_call
 	
+	zprevious = z;
+	
 	with(spineMain) {
 		xPrev = x;
 		yPrev = y;
-		zPrev = height;
+		zPrev = z;
 	}
 	
 	legArrayPrev = variable_clone(legArray);
@@ -127,7 +134,7 @@ function script_mdlStep() {
 		feetY = y + feetOffY * .7;
 		spineMain.x = x + stumbleX;
 		spineMain.y = feetY + stumbleY;
-		spineMain.height = feetOffY; // spine represents center here, but with feet height center is not at feet, obviously
+		spineMain.z = feetOffY; // spine represents center here, but with feet height center is not at feet, obviously
 		
 		var _spineX = spineMain.x;
 		var _spineY = spineMain.y; // get which spine to use maybe? That would do the proper multiple spines to use functionality...
@@ -194,7 +201,7 @@ function script_mdlStep() {
 			
 			var _progress = stepTimings[_legI][E_step.progress];
 			
-			var _stepHeight = dsin(180 * _progress) * legSegLen * .9 * min(1, sqrt(currentSpeed / 2.0)); // TODO max speed comparison somehow
+			var _stepHeight = dsin(180 * _progress) * legSegLen * .9 * sqrt(clamp(currentSpeed / 1.5 - .5, 0, 1)); // TODO max speed comparison somehow
 			
 			_stepCurrent[2] = _stepHeight;
 			_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _progress); // move foot over range of movement according to time progress
@@ -211,7 +218,6 @@ function script_mdlStep() {
 				_allFeetOnGround = false;
 			} else if(_stepPlacementDist > legSegLen * 2.35) { // force update dist for really out of place limbs, maybe even trigger ragdolls if you screw it up enough?
 				script_mdlPlaceStepGoal(_legI, _stepCurrent[0], _stepCurrent[1], _stepPlacement[0], _stepPlacement[1], currentSpeed, _speedChange); // super off legs don't trigger on ground bool, maybe?
-				audio_play_sound(snd_BasicShotWeak, 0, false);
 			}
 			
 			#endregion
@@ -310,166 +316,107 @@ function script_mdlStep() {
 					_leg[_node][2] += ragdollGravity;
 				}
 			}
-			yChange += ragdollGravity;
+			zChange += ragdollGravity;
 			
 			#region ground contact for each of the five points in legs (do inbetween adding speeds because otherwise this will get overridden by the change being used later. Prevent movement, don't fix what's already happened. You know the deal.)
-			if(hasRF && (footRY + footRYChange > groundRFHeight)) { // cut all speeds for that piece, all of them
-				footRY = groundRFHeight;
-				footRYChange *= -.6;
-				footRXChange *= .7;
-				groundRFYChange *= .6;
-			}
-			if(hasLF && (footLY + footLYChange > groundLFHeight)) { // cut all speeds for that piece, all of them
-				footLY = groundLFHeight;
-				footLYChange *= -.6;
-				footLXChange *= .7;
-				groundLFYChange *= .6;
-			}
-			if(hasLJ && (jointLY + jointLYChange > groundLJHeight)) { // cut all speeds for that piece, all of them
-				jointLY = groundLJHeight;
-				jointLYChange *= -.6;
-				jointLXChange *= .7;
-				groundLJYChange *= .6;
-			}
-			if(hasRJ && (jointRY + jointRYChange > groundRJHeight)) { // cut all speeds for that piece, all of them
-				jointRY = groundRJHeight;
-				jointRYChange *= -.6;
-				jointRXChange *= .7;
-				groundRJYChange *= .6;
-			}
-			if(y + yChange > groundHeight) { // cut all speeds for that piece, all of them
-				y = groundHeight;
-				yChange *= -.6;
-				xChange *= .7;
-				groundYChange *= .6;
-			}
-			#endregion
 			
-			if(hasLF) {
-				footLX += footLXChange;
-				footLY += footLYChange;
-				groundLFHeight += groundLFYChange;
+			
+			var _leg, _node, _legNodeSpeeds;
+			for(var _legI = array_length(legArray) - 1; _legI >= 0; _legI--) {
+				_leg = legArray[_legI];
+				_legNodeSpeeds = ragdollLegNodesSpeed[_legI]; // does this currently grab the hip and knee speeds and not the knee and foot? I want severing to happen at the top of the segment but speeds are the ends... Hmm, idk if it's even broken tho TODO
+				for(var _nodeI = 1; _nodeI < 3; _nodeI++) { // note that this loop is weird because feet don't need to be checked for existance atm (only hip and knee can be severed, keeping foot severing open as an option but not used currently)  (( also it's hard coded for 3 joint segments, idk if i'll ever expand this to have wacky limbs but it's simple if so)
+					_node = _leg[_nodeI];
+					
+					if(!_leg[_nodeI - 1][E_legInfo.connected]) {
+						break; // abandon rest of node calculations for this limb since an upstream node is missing (and thus all after...)
+					} else {
+						var _nodeSpeed = _legNodeSpeeds[_nodeI];
+						if(_node[E_legInfo.z] + _nodeSpeed[2] < 0) { // z is ground height but since it is actually height 0 works fine, maybe switch to some kind of height mapped system in some crazy future case but for now nahh
+							_node[E_legInfo.z] = 0.1; // clamp to floor
+							_nodeSpeed[0] *= MDL_ragdollBounceFriction;
+							_nodeSpeed[1] *= MDL_ragdollBounceFriction;
+							_nodeSpeed[2] *= MDL_ragdollBounceStrength; // vertical component
+						}
+					
+						_node[E_legInfo.x] += _nodeSpeed[0];
+						_node[E_legInfo.y] += _nodeSpeed[1]; // with the node ahead of you pulling on next you are good to apply next nodes speed. This could also be sep out to it's own for loop but it's faster to leave it here until it needs to be sep
+						_node[E_legInfo.z] += _nodeSpeed[2];
+					}
+				}
 			}
-			if(hasRF) {
-				footRX += footRXChange; 
-				footRY += footRYChange; 
-				groundRFHeight += groundRFYChange;
+			
+			if(z + zChange < 0) { // cut all speeds for that piece, all of them
+				z = 0;
+				xChange *= MDL_ragdollBounceFriction;
+				yChange *= MDL_ragdollBounceFriction;
+				zChange *= MDL_ragdollBounceStrength;
 			}
-			if(hasLJ) {
-				jointLX += jointLXChange;
-				jointLY += jointLYChange;
-				groundLJHeight += groundLJYChange;
-			}
-			if(hasRJ) {
-				jointRX += jointRXChange;
-				jointRY += jointRYChange;
-				groundRJHeight += groundRJYChange;
-			}
+			
 			x += xChange;
-			y += yChange;
-			groundHeight += groundYChange;
+			y += yChange; // when ragdolling your xyz is the actual hip pos vs before xyz is standing pos and hip xyz are your hip pos.. duh
+			z += zChange;
 			#endregion
 			
-			#region set initial hip left and right positions
-			hipsX = x;
-			hipsY = y;
-			hipLX = hipsX - hipWidth;
-			hipLY = hipsY;
-			hipRX = hipsX + hipWidth;
-			hipRY = hipsY;
+			#region set initial hip left and right positions (i think this might be handled by the draw components draw? Because it manually sets the hip positions to the component position on the spine there and uses the joint and extremity positions that are already there. So.. hips are already covered?
+			//var _hipR = legArray[0][0];
+			//var _hipL = legArray[1][0];
+			//
+			//_hipR[0] = x + lengthdir_x(directionFacing, directionFacing); // should probably use spine direction once exists..?
+			//_hipR[1] = y + lengthdir_y(directionFacing, directionFacing); // this is not entirely correct! But i'm just placeholdering the hip rotation position setting because i'm not sure i want actual 3d position
+			//_hipR[2] = z; // TODO i think these values are supposed to be setting the hip node position to the spines position, but the overall xyz becomes spine xyz when ragdolling so use xyz
 			#endregion
 			
 			#region connecting the five points (distance wise) (4 checks, hip pulls knees in, then knees pull feet
-			if(hasLJ) {
-				var _leftThighDist = point_distance(hipLX, hipLY, jointLX, jointLY) - legSegLen; // over extension distance
-				if(_leftThighDist > 0) {
-					var _dir = point_direction(jointLX, jointLY, hipLX, hipLY);
-					jointLX += dcos(_dir) * _leftThighDist * .8;
-					jointLY -= dsin(_dir) * _leftThighDist * .8;
-					x -= dcos(_dir) * _leftThighDist * .2;
-					y += dsin(_dir) * _leftThighDist * .2;
-					groundLJYChange = lerp(groundLJYChange, groundYChange, .8);
-					groundYChange = groundLJYChange;
-				}
-				
-				if(hasLF) {
-					var _distLShin = point_distance(jointLX, jointLY, footLX, footLY) - legSegLen; // extension over max 0
-					if(_distLShin > 0) {
-						var _dir = point_direction(footLX, footLY, jointLX, jointLY);
-						footLX += dcos(_dir) * _distLShin * .5;
-						footLY -= dsin(_dir) * _distLShin * .5;
-						jointLX -= dcos(_dir) * _distLShin * .5;
-						jointLY += dsin(_dir) * _distLShin * .5;
-						groundLJYChange = (groundLJYChange + groundLFYChange) / 2;
-						groundLFYChange = groundLJYChange;
-					}
-					
-					footLXChange =  (footLX - prevFootLX);
-					footLYChange =  (footLY - prevFootLY); // if has FOOT then set speed differences
-				}
-				
-				jointLXChange = (jointLX - prevJointLX); // simple as yeah?
-				jointLYChange = (jointLY - prevJointLY); // if has JOINT then set speed differences
-				
-				#region //keep left joints close along height axis (not accurate but whatever)
-				if(abs(groundHeight - groundLJHeight) > legSegLen * .5) { // left thigh dif
-					groundHeight += (groundLJHeight - groundHeight) * .01;
-					groundLJHeight += (groundHeight - groundLJHeight) * .05;
-				}
-				if(abs(groundLFHeight - groundLJHeight) > legSegLen * .5) { // left shin dif
-					groundLJHeight += (groundLFHeight - groundLJHeight) * .03;
-					groundLFHeight += (groundLJHeight - groundLFHeight) * .02;
-				}
-				#endregion
-			}
-			if(hasRJ) {
-				var _rightThighDist = point_distance(hipRX, hipRY, jointRX, jointRY) - legSegLen;
-				if(_rightThighDist > 0) {
-					var _dir = point_direction(jointRX, jointRY, hipRX, hipRY);
-					jointRX += dcos(_dir) * _rightThighDist * .8;
-					jointRY -= dsin(_dir) * _rightThighDist * .8;
-					x -= dcos(_dir) * _rightThighDist * .2;
-					y += dsin(_dir) * _rightThighDist * .2;
-					groundRJYChange = lerp(groundRJYChange, groundYChange, .8);
-					groundYChange = groundRJYChange;
-				}
-				
-				if(hasRF) {
-					var _distRShin = point_distance(jointRX, jointRY, footRX, footRY) - legSegLen; // extension over max 0
-					if(_distRShin > 0) {
-						var _dir = point_direction(footRX, footRY, jointRX, jointRY);
-						footRX += dcos(_dir) * _distRShin * .5;
-						footRY -= dsin(_dir) * _distRShin * .5;
-						jointRX -= dcos(_dir) * _distRShin * .5;
-						jointRY += dsin(_dir) * _distRShin * .5;
-						groundRJYChange = (groundRJYChange + groundRFYChange) / 2;
-						groundRFYChange = groundRJYChange;
-					}
-					
-					footRXChange =  (footRX - prevFootRX); // if has FOOT then set speed differences
-					footRYChange =  (footRY - prevFootRY);
-				}
-				
-				jointRXChange = (jointRX - prevJointRX); // if has JOINT then set speed differences
-				jointRYChange = (jointRY - prevJointRY);
-				
-				#region //keep right joints close along height axis (not accurate but whatever)
-				if(abs(groundHeight - groundRJHeight) > legSegLen * .5) { // right thigh dif
-					groundHeight += (groundRJHeight - groundHeight) * .01;
-					groundRJHeight += (groundHeight - groundRJHeight) * .05;
-				}
-				if(abs(groundRFHeight - groundRJHeight) > legSegLen * .5) { // right shin dif
-					groundRJHeight += (groundRFHeight - groundRJHeight) * .03;
-					groundRFHeight += (groundRJHeight - groundRFHeight) * .02;
-				}
-				#endregion
-			}
-			#endregion
 			
-			xChange =  - prevHipsX; // last of the speed momentum sets (the others are above in the foot and joint positioner)
-			yChange = hipsY - prevHipsY;
-			zChange = hipsY - prevHipsY;
-		} 
+			for(var _legI = array_length(legArray) - 1; _legI >= 0; _legI--) { // these vars already exist, little awkward but eh
+				_leg = legArray[_legI];
+				_legNodeSpeeds = ragdollLegNodesSpeed[_legI]; // does this currently grab the hip and knee speeds and not the knee and foot? I want severing to happen at the top of the segment but speeds are the ends... Hmm, idk if it's even broken tho TODO
+				for(var _nodeI = 0; _nodeI < 2; _nodeI++) { // note that this loop ends one short because feet don't need to be checked for existance atm (only hip and knee can be severed, keeping foot severing open as an option but not used currently)  (( also it's hard coded for 3 joint segments, idk if i'll ever expand this to have wacky limbs but it's simple if so)
+					_node = _leg[_nodeI];
+					
+					if(!_node[E_legInfo.connected]) {
+						break; // abandon rest of node calculations for this limb since an upstream node is missing (and thus all after...)
+					} else {
+						var _nextNode = _leg[_nodeI + 1];
+						var _nodeSpeed = _legNodeSpeeds[_nodeI];
+						var _nextNodeSpeed = _legNodeSpeeds[_nodeI + 1];
+						
+						var _distConnection = point_distance_3d(_node[E_legInfo.x], _node[E_legInfo.y], _node[E_legInfo.z], _nextNode[E_legInfo.x], _nextNode[E_legInfo.y], _nextNode[E_legInfo.z]); // rebuld to be a position setting plus displacement to speed set up!!
+					
+						var _limbSegLen = _node[E_legInfo.length];
+					
+						if(_distConnection > _limbSegLen) {
+							var _nodeToNextVec = [_nextNode[E_legInfo.x] - _node[E_legInfo.x], _nextNode[E_legInfo.y] - _node[E_legInfo.y], _nextNode[E_legInfo.z] - _node[E_legInfo.z]];
+					 		var _distMult = _limbSegLen / _distConnection;
+							
+							var _nextNodePrev = [_nextNode[E_legInfo.x], _nextNode[E_legInfo.y], _nextNode[E_legInfo.z]];
+							
+							_nextNode[E_legInfo.x] = _node[E_legInfo.x] + (_nodeToNextVec[0] * _distMult);
+							_nextNode[E_legInfo.y] = _node[E_legInfo.y] + (_nodeToNextVec[1] * _distMult);
+							_nextNode[E_legInfo.z] = _node[E_legInfo.z] + (_nodeToNextVec[2] * _distMult);
+							
+							_legNodeSpeeds[_nodeI + 1] = [_nextNode[E_legInfo.x] - _nextNodePrev[E_legInfo.x], _nextNode[E_legInfo.y] - _nextNodePrev[E_legInfo.y], _nextNode[E_legInfo.z] - _nextNodePrev[E_legInfo.z]]; // set the speeds based on delta position after the shifting (which is what speed is, either speed creates delta pos or delta pos belies speed)
+						}
+					}
+				}
+			}
+			
+			//xChange = x - xprevious; // last of the speed momentum sets (the others are above in the foot and joint positioner)
+			//yChange = y - yprevious;
+			//zChange = z - zPrev;
+		} else if(recoveringStandingTimer > 0) {
+			recoveringStandingTimer--;
+			
+			if(recoveringStandingTimer == 0) {
+				//end ragdoll
+				ragdolling = false;
+			}
+		}
+			
+		spineMain.x = x;
+		spineMain.y = y;
+		spineMain.z = z;
 	}
 }
 
@@ -479,9 +426,15 @@ function script_mdlDraw() {
 	
 	//spine nonsense find a better place for this..
 	var _leanAheadX = xChange * 8; // keep consistent i suppose
-	var _leanAheadY = clamp(yChange, 0, 99) * 8; // keep consistent i suppose
-	var _leanAheadDir = point_direction(0, 0, xChange * 9, -spineMain.length + yChange); // the 30 here is the distance of the spine while standing straight up i guess? Needs to be standarized and set up proper
-	spineMain.angle = _leanAheadDir;
+	var _leanAheadY = yChange * 6; // keep consistent i suppose
+	
+	with(spineMain) {
+		updatePosTip(tipX + _leanAheadX, tipY + _leanAheadY, tipZ + length); // +5 is to return to standing straight sooner
+		lengthAssert();
+	}
+	
+	//var _leanAheadDir = point_direction(0, 0, xChange * 9, -spineMain.length + yChange); // the 30 here is the distance of the spine while standing straight up i guess? Needs to be standarized and set up proper
+	//spineMain.angle = _leanAheadDir;
 	
 	var _spineX = spineMain.x;
 	var _spineY = spineMain.y; // setting spine locals
@@ -539,7 +492,7 @@ function script_mdlDraw() {
 	
 	//draw the rest of the body components in front of body
 	_counter += script_drawComponents(_counter, _leanAheadX, _leanAheadY, _jostle, _dirMoving, false);
-	
+
 	if(!gunDrawBehind) {
 		script_drawWeapon(gunSprite, weaponPosition, weaponHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun behind if supposed to be behind
 	}
@@ -571,7 +524,7 @@ function script_mdlDraw() {
 	draw_circle_color(stepPositionsInitial[0][0], stepPositionsInitial[0][1], 3, c_dkgray, c_dkgray, false);
 	draw_circle_color(stepPositionsInitial[1][0], stepPositionsInitial[1][1], 3, c_dkgray, c_dkgray, false);
 	
-	draw_line(x + 200, spineMain.y - spineMain.height * .65, x + 200, feetY);
+	draw_line(x + 200, spineMain.y - spineMain.z * .65, x + 200, feetY);
 	draw_line_color(x + 180, y, x + 180, feetY, c_black, c_black);
 	
 	draw_line(x + dcos(currentDir) * 10, y - dsin(currentDir) * 10, x, y);
