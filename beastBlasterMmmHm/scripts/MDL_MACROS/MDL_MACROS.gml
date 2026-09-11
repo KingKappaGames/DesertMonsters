@@ -1,2 +1,2 @@
-#macro MDL_ragdollBounceStrength -.6
-#macro MDL_ragdollBounceFriction .7
+#macro MDL_ragdollBounceStrength -.65
+#macro MDL_ragdollBounceFriction .5

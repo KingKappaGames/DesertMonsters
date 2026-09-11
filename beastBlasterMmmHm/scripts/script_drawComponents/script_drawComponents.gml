@@ -108,8 +108,8 @@ function script_drawComponents(startComponentI, leanAheadX, leanAheadY, jostle, 
 					#region place arms on gun via IK
 					var _socket = _limb[0];
 					
-					_socket[0] = _surfOffX + _x;
-					_socket[1] = _surfOffY + _y; // WEAPON POSITION AND ECT SHOULD BE A STRUCT AS WELL, LIKE IN MAIN GAME (perhaps the weapon could store the animations for using it in its own struct data? Hm, probably just item curves and what not like the other items)
+					_socket[0] = _spineX + _surfOffX + _x - _spineVisualBaseX; // undo the visual trans
+					_socket[1] = _spineY + _surfOffY + _y - _spineVisualBaseY; // WEAPON POSITION AND ECT SHOULD BE A STRUCT AS WELL, LIKE IN MAIN GAME (perhaps the weapon could store the animations for using it in its own struct data? Hm, probably just item curves and what not like the other items)
 					_socket[2] = _spineZ + _spineZNorm * height; // * dsin(leanAngle); ??? height angle // set the two knowns, origin and gun position (the end)
 					
 					var _extremity = _limb[2];

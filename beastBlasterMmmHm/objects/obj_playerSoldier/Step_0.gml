@@ -9,10 +9,13 @@ if(keyboard_check(vk_comma)) {
 } else {
 	game_set_speed(144, gamespeed_fps); // the legs are moving too fast which allows for them to both jump ahead then have dead time before either needs to move again, that's what's causing the clumping
 }
+
+var _cursorX = input_cursor_x(playerIndex);
+var _cursorY = input_cursor_y(playerIndex);
+
 if(!ragdolling) {
 	#region movement and move contols
-	var _cursorX = input_cursor_x(playerIndex);
-	var _cursorY = input_cursor_y(playerIndex);
+	
 	aimDir = point_direction(x, y, _cursorX, _cursorY);
 	aimDist = point_distance(x, y, _cursorX, _cursorY);
 	var _sprint = .75 + input_check("sprint", playerIndex) * .8;
@@ -55,14 +58,6 @@ if(!ragdolling) {
 		}
 	}
 	
-	#region camera setting
-	if(global.cameraSplitOption == true) {
-		camX = lerp(camX, ((x + x + _cursorX) / 3) - camera_get_view_width(view_camera[playerIndex]) / 2, .015);
-		camY = lerp(camY, ((y + _cursorY) / 2) - camera_get_view_height(view_camera[playerIndex]) / 2, .02);
-		camera_set_view_pos(view_camera[playerIndex], camX, camY);
-	}
-	#endregion
-	
 	if(input_check_released("characterSwitch", playerIndex)) { // get in and out of plane
 		var _player = instance_create_layer(x, y, "Instances", obj_playerCar);
 		_player.playerIndex = playerIndex;
@@ -71,6 +66,16 @@ if(!ragdolling) {
 		exit;
 	}
 }
+
+#region camera setting
+if(global.cameraSplitOption == true) {
+	var _lerpRate = ragdolling ? .08 : .0175;
+	
+	camX = lerp(camX, ((x + x + _cursorX) / 3) - camera_get_view_width(view_camera[playerIndex]) / 2, _lerpRate);
+	camY = lerp(camY, ((y + _cursorY) / 2) - camera_get_view_height(view_camera[playerIndex]) / 2, _lerpRate);
+	camera_set_view_pos(view_camera[playerIndex], camX, camY);
+}
+#endregion
 	
 //ammoCurrent = ammoMax; // clean
 
@@ -140,7 +145,7 @@ if(keyboard_check_released(ord("J"))) {
 }
 
 if(keyboard_check_released(ord("L"))) {
-	script_mdlRagdoll();
+	script_mdlRagdoll(1000);
 }
 
 //debugClamp *= 1 + (keyboard_check(ord("U")) - keyboard_check(ord("J"))) * .0035;

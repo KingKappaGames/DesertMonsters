@@ -36,7 +36,7 @@ feetOffY = feetOffYBase;
 feetOffX = 0; //??
 feetY = y + feetOffY;
 
-spineMain = new script_createSpine(x, y, 50);
+//spineMain = new script_createSpine(x, y, 50);
 #endregion
 
 #region gun and bullet values
@@ -242,8 +242,8 @@ _fu = new script_addBodyComponent(    id,    spineMain,                 spr_robe
 _fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   80,    18,       10,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[0], weaponHoldOffsetss[0]); // arm arrays
 _fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.arm,  [spr_armParts,   spr_armParts], [0, 0],   -80,   18,       10,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         limbArray[1], weaponHoldOffsetss[1]); // arm arrays
 //_fu = new script_addBodyComponent(    id,    spineMain,                 spr_robeParts,                  4,      0,     -3,       -6,    1.6,           2,         0,      .4,      #363622,               0,      undefined);                                          // cape
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   80,    -10,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
-_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   -80,   -10,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 1); // leg arrays
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   80,    -2,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[0], 0); // leg arrays
+_fu = new script_addLimbBodyComponent(id,    spineMain, limbTypes.leg,  [spr_legParts,   spr_legParts], [0, 1],   -80,   -2,       7,    [1., 1.],    [2, 2],    0,      1,       [ #4D4D39, #4D4D39],   0,      undefined,         legArray[1], 1); // leg arrays
 
 //lag testing
 //repeat(5000) {

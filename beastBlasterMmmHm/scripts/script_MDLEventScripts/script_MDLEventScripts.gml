@@ -24,7 +24,7 @@ function script_mdlCreateInit() {
 	feetOffX = 0; //??
 	feetY = y + feetOffY;
 	
-	spineMain = new script_createSpine(x, y, 90, 50);
+	spineMain = new script_createSpine(x, y, 50, 0, 90);
 	
 	legSegLen = 32;
 	hipDir = 0;
@@ -201,7 +201,7 @@ function script_mdlStep() {
 			
 			var _progress = stepTimings[_legI][E_step.progress];
 			
-			var _stepHeight = dsin(180 * _progress) * legSegLen * .9 * sqrt(clamp(currentSpeed / 1.5 - .5, 0, 1)); // TODO max speed comparison somehow
+			var _stepHeight = dsin(180 * _progress) * legSegLen * .9 * sqrt(clamp(currentSpeed / 1.6 - .3, 0, 1)); // TODO max speed comparison somehow
 			
 			_stepCurrent[2] = _stepHeight;
 			_stepCurrent[0] = lerp(_stepInitial[0], _stepGoal[0], _progress); // move foot over range of movement according to time progress
@@ -356,6 +356,10 @@ function script_mdlStep() {
 			x += xChange;
 			y += yChange; // when ragdolling your xyz is the actual hip pos vs before xyz is standing pos and hip xyz are your hip pos.. duh
 			z += zChange;
+			
+			weaponPosition[0] = x;
+			weaponPosition[1] = y;
+			weaponPosition[2] = z;
 			#endregion
 			
 			#region set initial hip left and right positions (i think this might be handled by the draw components draw? Because it manually sets the hip positions to the component position on the spine there and uses the joint and extremity positions that are already there. So.. hips are already covered?
@@ -401,6 +405,12 @@ function script_mdlStep() {
 					}
 				}
 			}
+			
+			
+			var _ragdollMoveDir = point_direction(0, 0, xChange, yChange);
+			var _ragdollMoveHorSpd = point_distance(0, 0, xChange, yChange);
+			var _ragdollMovePitch = point_direction(0, 0, _ragdollMoveHorSpd, zChange + 10); // + 10 to keep it usually in the upright position and avoid jittering across origin
+			spineMain.setFromDirs(_ragdollMoveDir, _ragdollMovePitch);
 			
 			//xChange = x - xprevious; // last of the speed momentum sets (the others are above in the foot and joint positioner)
 			//yChange = y - yprevious;
@@ -474,8 +484,8 @@ function script_mdlDraw() {
 		}
 	}
 	
-	weaponPosition[0] += _leanAheadX;
-	weaponPosition[1] += _leanAheadY + _jostle / 2; // position the gun with body movement variations
+	weaponPosition[0] += clamp(_leanAheadX, -40, 40); // in theory should be arm length * 2 but eh
+	weaponPosition[1] += clamp(_leanAheadY, -40, 40) + _jostle / 2; // position the gun with body movement variations
 	
 	if(gunDrawBehind) {
 		script_drawWeapon(gunSprite, weaponPosition, weaponHoldDirection, _heldDownAngleAdjust, _spineX - _surfMidX, _spineY - _surfMidY); // draw gun in front if supposed to be in front
@@ -514,7 +524,7 @@ function script_mdlDraw() {
 	draw_circle(spineMain.x, spineMain.y, stepUpdateDist, true);
 	draw_set_color(c_white);
 	
-	draw_circle(spineMain.x, spineMain.y, 2, true)
+	draw_circle_color(spineMain.x, spineMain.y, 2, c_blue, c_blue, true)
 	draw_circle_color(x, y, 3, c_green, c_green, false)
 	draw_text(x + 170, y - 20, feetOffY)
 	

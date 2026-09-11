@@ -1,10 +1,11 @@
 /// @desc Returns a spine struct to place and manipulate components around, you must set everything yourself, this struct doesn't really *do* anything itself, just holds values neat and tidy
 /// @param {real} xx The x of the spine origin, will be changed as you go but set initial here I guess
 /// @param {real} yy The y of the spine origin, will be changed as you go but set initial here I guess
-/// @param {real} angle The angle of the spine, will be changed as you go but set initial here I guess
 /// @param {real} lengthSet The length of the spine, doesn't set the distance of the components or anything but is used sometimes for connecions or whole body calculations
+/// @param {real} angle The angle of the spine, will be changed as you go but set initial here I guess
+///@param {real} pitch The vertical pitch to have for this spine, 90 is straight up
 /// @returns {struct} Returns a spine struct
-function script_createSpine(xx, yy, lengthSet, angleSet = 0, pitchSet = 0) constructor {
+function script_createSpine(xx, yy, lengthSet, angleSet = 0, pitchSet = 90) constructor {
 	x = xx;
 	y = yy;
 	z = 0;
@@ -29,7 +30,7 @@ function script_createSpine(xx, yy, lengthSet, angleSet = 0, pitchSet = 0) const
 		z = zz;
 		
 		angle = point_direction(x, y, tipX, tipY);
-		pitch = point_direction(point_distance(x, y, tipX, tipY), z, 0, 0);
+		pitch = point_direction(point_distance(x, y, tipX, tipY), tipZ - z, 0, 0);
 	}
 	
 	static updatePosTip = function(xx, yy, zz) {
@@ -38,7 +39,7 @@ function script_createSpine(xx, yy, lengthSet, angleSet = 0, pitchSet = 0) const
 		tipZ = zz;
 		
 		angle = point_direction(x, y, tipX, tipY);
-		pitch = point_direction(point_distance(x, y, tipX, tipY), z, 0, 0);
+		pitch = point_direction(point_distance(x, y, tipX, tipY), tipZ - z, 0, 0);
 	}
 	
 	static updateCoords = function(xx, yy, zz, _tipX, _tipY, _tipZ) {
@@ -51,7 +52,7 @@ function script_createSpine(xx, yy, lengthSet, angleSet = 0, pitchSet = 0) const
 		tipZ = _tipZ;
 		
 		angle = point_direction(x, y, tipX, tipY);
-		pitch = point_direction(point_distance(x, y, tipX, tipY), z, 0, 0);
+		pitch = point_direction(point_distance(x, y, tipX, tipY), tipZ - z, 0, 0);
 	}
 	
 	///@description Sets the spine to be straight up
@@ -74,7 +75,7 @@ function script_createSpine(xx, yy, lengthSet, angleSet = 0, pitchSet = 0) const
 		angle = dir;
 		pitch = _pitch;
 		
-		var _off = translatePos(dir, _pitch);
+		var _off = translatePos(dir, length, _pitch);
 		
 		tipX = x + _off[0];
 		tipY = y + _off[1];
